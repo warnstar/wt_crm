@@ -49,4 +49,6 @@ class Medical_group_user extends \yii\db\ActiveRecord
             'create_time' => 'Create Time',
         ];
     }
+
+
 }
