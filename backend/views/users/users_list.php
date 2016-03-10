@@ -10,7 +10,7 @@
 <!-- 标题 -->
 <div class="row wrapper border-bottom white-bg page-heading title">
 	<div class="col-lg-10">
-		<h2>用户管理-职员列表</h2>
+		<h2>用户管理-客户列表</h2>
 	</div>
 
 </div>
@@ -22,9 +22,9 @@
 
 			<div class="ibox">
 				<div class="ibox-title">
-					<h5>所有职员</h5>
+					<h5>所有客户</h5>
 					<div class="ibox-tools">
-						<a href="<?=\yii\helpers\Url::toRoute("worker/detail")?>" class="btn btn-primary btn-xs">添加新职员</a>
+						<a href="<?=\yii\helpers\Url::toRoute("users/detail")?>" class="btn btn-primary btn-xs">添加新客户</a>
 					</div>
 				</div>
 				<div class="ibox-content">
@@ -37,7 +37,7 @@
 										<option value="0">请选择</option>
 										<option value="1">泰太美</option>
 										<option value="2">泰浪漫</option>
-关键字
+
 									</select>
 								</div>
 								<div  class="m-b-xs" style="float: left;width: 120px;margin-left: 10px;">
@@ -65,7 +65,7 @@
 								</div>
 							</div>
 							<div class="input-group">
-								<input style="width: 300px;margin-left: 30px;" type="text" placeholder="请输入手机号/姓名查询" class="input-sm form-control"> <span style="float:left" class="input-group-btn">
+								<input style="width: 300px;margin-left: 30px;" type="text" placeholder="请输入手机号/病历号/护照号/姓名查询" class="input-sm form-control"> <span style="float:left" class="input-group-btn">
                                         <button type="button"  class="btn btn-sm btn-primary"> 搜索</button> </span>
 							</div>
 
@@ -80,21 +80,21 @@
 							<tr align="center">
 								<td>姓名</td>
 								<td>性别</td>
-								<td>角色</td>
+								<td>年龄</td>
+								<td>护照号</td>
 								<td>品牌</td>
-								<td>区域</td>
-								<td>微信昵称</td>
+								<td>状态</td>
 								<td>操作</td>
 							</tr>
 							</thead>
 							<tbody align="center">
 							<tr>
-								<td class="project-status">张三</td>
+								<td class="project-status">张三四</td>
 								<td class="project-title">男</td>
-								<td class="project-title">品牌经理</td>
+								<td class="project-title">21</td>
+								<td class="project-title">H45612312</td>
 								<td class="project-title">泰太美</td>
-								<td class="project-title">广东</td>
-								<td class="project-title">你好啊</td>
+								<td class="project-title">疗程中</td>
 
 								<td >
 									<button class=" btn btn-white btn-sm">查看详情</button>
@@ -102,12 +102,12 @@
 								</td>
 							</tr>
 							<tr>
-								<td class="project-status">张三</td>
+								<td class="project-status">张三四</td>
 								<td class="project-title">男</td>
-								<td class="project-title">品牌经理</td>
+								<td class="project-title">21</td>
+								<td class="project-title">H45612312</td>
 								<td class="project-title">泰太美</td>
-								<td class="project-title">广东</td>
-								<td class="project-title">你好啊</td>
+								<td class="project-title">疗程中</td>
 
 								<td >
 									<button class=" btn btn-white btn-sm">查看详情</button>
@@ -122,7 +122,6 @@
 		</div>
 	</div>
 </div>
-
 
 <script type="text/javascript">
 	$('.btn-delete').on('click', function(){

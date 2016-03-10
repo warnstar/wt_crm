@@ -1,6 +1,7 @@
 <?php
 namespace backend\controllers;
 
+use app\models\Worker;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -13,6 +14,8 @@ use yii\filters\VerbFilter;
  */
 class SiteController extends Controller
 {
+
+
     /**
      * @inheritdoc
      */
@@ -23,20 +26,9 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login','signup', 'error'],
+                        'actions' => ['login','login_validate', 'error','logout'],
                         'allow' => true,
-                    ],
-                    [
-                        'actions' => ['logout', 'index'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
+                    ]
                 ],
             ],
         ];
@@ -82,23 +74,35 @@ class SiteController extends Controller
 
     public function actionLogin()
     {
-        if (!\Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        } else {
-            return $this->render('login', [
-                'model' => $model,
-            ]);
-        }
+        return $this->renderPartial('login');
     }
 
+    public function actionLogin_validate(){
+        $worker = new Worker();
+
+        $data = Yii::$app->request->post();
+
+        $worker->phone =Yii::$app->request->post("phone");
+        $worker->password = md5(Yii::$app->request->post("password"));
+
+
+        $msg['status'] = 0;
+        if ($worker = $worker->login()) {
+            $session = Yii::$app->session;
+            $session->set('worker',$worker);
+
+            $msg['status'] = 1;
+        } else {
+            $msg['status'] = 0;
+        }
+
+        return json_encode($msg);
+    }
     public function actionLogout()
     {
-        Yii::$app->user->logout();
+        $session = Yii::$app->session;
+        $session->open();
+        $session->destroy();
 
         return $this->goHome();
     }

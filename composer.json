@@ -18,7 +18,8 @@
         "yiisoft/yii2": ">=2.0.6",
         "yiisoft/yii2-bootstrap": "*",
         "yiisoft/yii2-swiftmailer": "*",
-	"callmez/yii2-wechat-sdk": "dev-master"
+	"callmez/yii2-wechat-sdk": "dev-master",
+        "symfony/var-dumper": "^3.0"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

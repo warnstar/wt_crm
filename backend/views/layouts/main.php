@@ -78,18 +78,18 @@
                 <li >
                     <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">品牌管理</span> </a>
                     <ul class="nav nav-second-level">
-                        <li><a href="品牌管理-添加品牌.html">添加品牌</a>
+                        <li><a href="<?=Url::toRoute("brand/add")?>">添加品牌</a>
                         </li>
-                        <li><a href="品牌管理-品牌列表.html">品牌列表</a>
+                        <li><a href="<?=Url::toRoute("brand/list")?>">品牌列表</a>
                         </li>
 
                     </ul>
                 </li>
 
-                <li class="active">
+                <li>
                     <a href="index.html#"><i class="fa fa fa-globe"></i> <span class="nav-label">用户管理</span></a>
                     <ul class="nav nav-second-level">
-                        <li><a href="用户管理-客户列表.html">客户列表</a>
+                        <li><a href="<?=Url::toRoute('users/list')?>">客户列表</a>
                         </li>
                         <li><a href="<?=Url::toRoute('worker/list')?>">职员列表</a>
                         </li>
@@ -130,9 +130,9 @@
                 <li>
                     <a href="index.html#"><i class="fa fa-edit"></i> <span class="nav-label">区域管理</span></a>
                     <ul class="nav nav-second-level">
-                        <li><a href="区域管理-区域列表.html">区域列表</a>
+                        <li><a href="<?=Url::toRoute("area/list")?>">区域列表</a>
                         </li>
-                        <li><a href="区域列表-添加区域.html">添加区域</a>
+                        <li><a href="<?=Url::toRoute("area/add")?>">添加区域</a>
                         </li>
 
                     </ul>
@@ -163,12 +163,10 @@
                     <ul class="nav nav-second-level">
                         <li><a href="系统设置-修改密码.html">修改密码</a>
                         </li>
-                        <li><a href="#">退出登录</a>
+                        <li><a href="<?=Url::toRoute("site/logout")?>">退出登录</a>
                         </li>
-
                     </ul>
                 </li>
-
 
             </ul>
 

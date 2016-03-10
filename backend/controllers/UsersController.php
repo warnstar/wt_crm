@@ -1,8 +1,8 @@
 <?php
 namespace backend\controllers;
 
-use app\controllers\CommonController;
 use Yii;
+use app\controllers\CommonController;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use common\models\LoginForm;
@@ -11,9 +11,8 @@ use yii\filters\VerbFilter;
 /**
  * Site controller
  */
-class WorkerController extends CommonController
+class UsersController extends CommonController
 {
-
 
     /**
      * @inheritdoc
@@ -57,14 +56,14 @@ class WorkerController extends CommonController
 
     public function  actionList(){
 
-        return $this->render('worker_list');
+        return $this->render('users_list');
     }
 
     public function actionDetail(){
-        return $this->render('worker_detail');
+        return $this->render('users_detail');
     }
 
-    public function actionAdd_worker(){
-        return $this->render('worker_add');
+    public function actionAdd(){
+        return $this->render('users_add');
     }
 }
