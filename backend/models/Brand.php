@@ -52,4 +52,20 @@ class Brand extends \yii\db\ActiveRecord
     }
 
 
+    public function search(){
+        $query = $this->find();
+
+        $select = [
+            'brand.*',
+            'worker.name'=>'worker_name',
+        ];
+        $query->select($select);
+
+        $query->leftJoin(['worker'],'brand.manager_id=worker_id');
+
+        $res = $query->asArray()->all();
+
+        return $res;
+    }
+
 }

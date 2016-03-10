@@ -1,35 +1,67 @@
-<?php
+<!DOCTYPE html>
+<html>
 
-/* @var $this yii\web\View */
-/* @var $form yii\bootstrap\ActiveForm */
-/* @var $model \common\models\LoginForm */
+<head>
 
-use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="renderer" content="webkit">
 
-$this->title = 'Login';
-$this->params['breadcrumbs'][] = $this->title;
-?>
-<div class="site-login">
-    <h1><?= Html::encode($this->title) ?></h1>
+    <title>登录</title>
+    <meta name="keywords" >
+    <meta name="description" >
 
-    <p>Please fill out the following fields to login:</p>
+    <link href="css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css?v=4.3.0" rel="stylesheet">
 
-    <div class="row">
-        <div class="col-lg-5">
-            <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css?v=2.2.0" rel="stylesheet">
 
-                <?= $form->field($model, 'username') ?>
+</head>
 
-                <?= $form->field($model, 'password')->passwordInput() ?>
+<body class="gray-bg">
 
-                <?= $form->field($model, 'rememberMe')->checkbox() ?>
+    <div class="middle-box text-center loginscreen  animated fadeInDown">
+        <div>
+            <div>
 
+                <h1 class="logo-name">H+</h1>
+
+            </div>
+            <h3>登录页面</h3>
+
+            <form class="m-t" role="form" >
                 <div class="form-group">
-                    <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+                    <input   class="form-control login_phone" placeholder="请输入手机号" required="">
                 </div>
-
-            <?php ActiveForm::end(); ?>
+                <div class="form-group">
+                    <input type="password" class="form-control login_password" placeholder="密码" required="">
+                </div>
+                <a id="submit" class="btn btn-primary block full-width ">登 录</a>
+            </form>
         </div>
     </div>
-</div>
+
+    <!-- Mainly scripts -->
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="js/bootstrap.min.js?v=3.4.0"></script>
+    <script>
+        $("body").on("click","#submit",function(){
+
+            var url = "<?=\yii\helpers\Url::toRoute("site/login_validate")?>";
+            var data ={
+                phone       :   $(".login_phone").val(),
+                password    :   $(".login_password").val()
+            };
+
+            $.post(url,data,function(msg){
+                if(msg.status){
+                   location.href = "<?=\yii\helpers\Url::toRoute("users/list")?>";
+                }else{
+                    alert("账户名或密码错误！");
+                }
+            },'json');
+        })
+    </script>
+</body>
+
+</html>
