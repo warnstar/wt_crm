@@ -1,288 +1,142 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="renderer" content="webkit">
-
-    <title></title>
-    <meta name="keywords" >
-
-    <link href="css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
-  
-
-    <!-- Morris -->
-    <link href="css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
-
-    <!-- Gritter -->
-    <link href="js/plugins/gritter/jquery.gritter.css" rel="stylesheet">
-
-    <link href="css/animate.css" rel="stylesheet">
-    <link href="css/style.css?v=2.2.0" rel="stylesheet">
-
-</head>
 <style type="text/css">
     .form-control{
         width: 30%;
     }
 </style>
-<body>
-    <div id="wrapper">
-        <nav class="navbar-default navbar-static-side" role="navigation">
-            <div class="sidebar-collapse">
-                <ul class="nav" id="side-menu">
-                    <li class="nav-header">
-
-                        <div class="dropdown profile-element"> <span>
-                            <img alt="image" class="img-circle" src="img/profile_small.jpg" />
-                             </span>
-                            <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
-                                <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">Beaut-zihan</strong>
-                             </span> <span class="text-muted text-xs block">超级管理员 <b class="caret"></b></span> </span>
-                            </a>
-                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                <li><a href="form_avatar.html">修改头像</a>
-                                </li>
-                                <li><a href="profile.html">个人资料</a>
-                                </li>
-                                <li><a href="contacts.html">联系我们</a>
-                                </li>
-                                <li><a href="mailbox.html">信箱</a>
-                                </li>
-                                <li class="divider"></li>
-                                <li><a href="login.html">安全退出</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="logo-element">
-                            H+
-                        </div>
-
-                    </li>
-                    <li class="active">
-                        <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">品牌管理</span> </a>
-                        <ul class="nav nav-second-level">
-                            <li><a href="品牌管理-添加品牌.html">添加品牌</a>
-                            </li>
-                            <li><a href="品牌管理-品牌列表.html">品牌列表</a>
-                            </li>
-                           
-                        </ul>
-                    </li>
-                   
-                    <li>
-                        <a href="index.html#"><i class="fa fa fa-globe"></i> <span class="nav-label">用户管理</span></a>
-                        <ul class="nav nav-second-level">
-                            <li><a href="用户管理-客户列表.html">客户列表</a>
-                            </li>
-                            <li><a href="用户管理-职员列表.html">职员列表</a>
-                            </li>
-                           
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="index.html#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">出团管理</span></a>
-                        <ul class="nav nav-second-level">
-                            <li><a href="出团管理-出团列表.html">出团列表</a>
-                            </li>
-                            <li><a href="出团列表-添加出团.html">添加出团</a>
-                            </li>
-                           
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="mailbox.html"><i class="fa fa-envelope"></i> <span class="nav-label">角色管理 </span></a>
-                        <ul class="nav nav-second-level">
-                            <li><a href="角色管理-角色列表.html">角色列表</a>
-                            </li>
-                            <li><a href="角色列表-添加角色.html">添加角色</a>
-                            </li>
-                            
-                        </ul>
-                    </li>
-                   
-                    <li>
-                        <a href="index.html#"><i class="fa fa-edit"></i> <span class="nav-label">区域管理</span></a>
-                        <ul class="nav nav-second-level">
-                            <li><a href="区域管理-区域列表.html">区域列表</a>
-                            </li>
-                            <li><a href="区域列表-添加区域.html">添加区域</a>
-                            </li>
-                          
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="index.html#"><i class="fa fa-desktop"></i> <span class="nav-label">回访管理</span></a>
-                        <ul class="nav nav-second-level">
-                            <li><a href="回访管理-回访记录.html">回访记录</a>
-                            </li>
-                            <li><a href="回访记录-备注设置.html">备注设置</a>
-                            </li>
-                           
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="index.html#"><i class="fa fa-files-o"></i> <span class="nav-label">管理员管理</span></a>
-                        <ul class="nav nav-second-level">
-                            <li><a href="管理员管理-管理员列表.html">管理员列表</a>
-                            </li>
-                            <li><a href="管理员列表-添加管理员.html">添加管理员</a>
-                            </li>
-                           
-                        </ul>
-                    </li>
-
-                    <li>
-                        <a href="index.html#"><i class="fa fa-flask"></i> <span class="nav-label">系统设置</span></a>
-                        <ul class="nav nav-second-level">
-                            <li><a href="系统设置-修改密码.html">修改密码</a>
-                            </li>
-                            <li><a href="#">退出登录</a>
-                            </li>
-                          
-                        </ul>
-                    </li>
-                   
-                  
-                </ul>
-
-            </div>
-        </nav>
-
-        <div id="page-wrapper" class="gray-bg dashbard-1">
-            <!-- 标题 -->
-            <div class="row wrapper border-bottom white-bg page-heading title">
-                <div class="col-lg-10">
-                    <h2>品牌管理-添加品牌</h2>   
-                </div>
-               
-            </div>
-            <!-- 标题 -->
-
-            <div class="row">
-                    <div class="col-lg-12 animated fadeInRight">
-                        <div class="ibox float-e-margins">
-
-                            <div class="ibox-title">
-                                <h5>添加品牌</h5> 
-                            </div>
-
-                            <div class="ibox-content">
-                                <form method="post" class="form-horizontal" id="signupForm" >
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label">品牌名称</label>
-
-                                        <div class="col-sm-10">
-                                            <input type="text" class="form-control"  name="name" >
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label">品牌介绍</label>
-                                        <div class="col-sm-10">
-                                            <textarea type="text" class="form-control" style="height:68px;"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                   <div class="form-group">
-                                        <label class="col-sm-2 control-label">注意事项</label>
-                                        <div class="col-sm-10">
-                                            <textarea type="text" class="form-control" name="notice" style="height:68px;"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label">品牌经理</label>
-
-                                        <div class="col-sm-10">
-                                           <select class="form-control m-b" name="manager">
-                                               <option>空</option>
-                                               <option>张三</option>
-                                               <option>李四</option>
-                                               <option>王五</option>
-                                           </select>
-                                        </div>
-                                        
-                                     
-                                    </div>
-                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label">创建时间</label>
-                                        <div class="col-sm-10">
-                                            <input disabled type="text" class="form-control"  value="2015-11-11 11:11:11" name="name" >
-                                        </div>
-                                    </div>
-                                   
-                                   
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group">
-                                        <div class="col-sm-4 col-sm-offset-3">
-                                            <button class="btn btn-primary" type="submit">提交</button>
-                                         
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-        </div>
+<!-- 标题 -->
+<div class="row wrapper border-bottom white-bg page-heading title">
+    <div class="col-lg-10">
+        <h2>品牌管理-品牌详情</h2>
     </div>
 
-    <!-- Mainly scripts -->
-    <script src="js/jquery-2.1.1.min.js"></script>
-    <script src="js/bootstrap.min.js?v=3.4.0"></script>
-    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+</div>
+<!-- 标题 -->
 
-    <!-- Custom and plugin javascript -->
-    <script src="js/hplus.js?v=2.2.0"></script>
-    <script src="js/plugins/pace/pace.min.js"></script>
-      <!-- jQuery Validation plugin javascript-->
-    <script src="js/plugins/validate/jquery.validate.min.js"></script>
-    <script src="js/plugins/validate/messages_zh.min.js"></script>
-    <script type="text/javascript">
+<div class="row">
+    <div class="col-lg-12 animated fadeInRight">
+        <div class="ibox float-e-margins">
+
+            <div class="ibox-title">
+                <h5>品牌详情</h5>
+            </div>
+
+            <div class="ibox-content">
+                <form method="post" class="form-horizontal" id="brand_add_form" >
+                    <input type="hidden" value="<?=$brand['id']?>" class="id_data">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">品牌名称</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control name_data"  name="name" value="<?=$brand['name']?>" >
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">品牌介绍</label>
+                        <div class="col-sm-10">
+                            <textarea maxlength="200" type="text" class="form-control desc_data" style="height:68px;" name="desc" ><?=$brand['desc']?></textarea>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">注意事项</label>
+                        <div class="col-sm-10">
+                            <textarea maxlength="200" type="text" class="form-control attention_data" name="notice" style="height:68px;"><?=$brand['attention']?></textarea>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">品牌经理</label>
+
+                        <div class="col-sm-10">
+                            <select class="form-control m-b manager_data" name="manager">
+                                <option value="<?=$brand['manager_id']?>"><?=$brand['worker_name']?></option>
+                                <?php if($workers) foreach($workers as $v):?>
+                                    <option  value="<?=$v['id']?>"><?=$v['name']?></option>
+                                <?php endforeach;?>
+
+
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-offset-3">
+                            <a class="btn btn-primary submit" type="submit">更新</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- jQuery Validation plugin javascript-->
+<script src="js/plugins/validate/jquery.validate.min.js"></script>
+<script src="js/plugins/validate/messages_zh.min.js"></script>
+<script type="text/javascript">
     //以下为修改jQuery Validation插件兼容Bootstrap的方法，没有直接写在插件中是为了便于插件升级
     //以下是数据验证
-        $.validator.setDefaults({
-            highlight: function (element) {
-                $(element).closest('.form-group').removeClass('has-success').addClass('has-error');
-            },
-            success: function (element) {
-                element.closest('.form-group').removeClass('has-error').addClass('has-success');
-            },
-            errorElement: "span",
-            errorClass: "help-block m-b-none",
-            validClass: "help-block m-b-none"
+    $.validator.setDefaults({
+        highlight: function (element) {
+            $(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+        },
+        success: function (element) {
+            element.closest('.form-group').removeClass('has-error').addClass('has-success');
+        },
+        errorElement: "span",
+        errorClass: "help-block m-b-none",
+        validClass: "help-block m-b-none"
 
 
+    });
+
+    //以下为官方示例
+    $().ready(function () {
+        // validate the comment form when it is submitted
+
+
+        // validate signup form on keyup and submit
+        $("#brand_add_form").validate({
+            rules: {
+                name: "required",
+                notice: "required"
+            },
+            messages: {
+                name: "请输入品牌名称",
+
+                notice: "请输入该品牌的注意事项"
+
+            }
         });
 
-         //以下为官方示例
-        $().ready(function () {
-            // validate the comment form when it is submitted
-           
 
-            // validate signup form on keyup and submit
-            $("#signupForm").validate({
-                rules: {
-                    name: "required",
-                    notice: "required"
-                 
-                },
-                messages: {
-                    name: "请输入品牌名称",
-              
-                    notice: "请输入该品牌的注意事项"
-               
-                }
-            });
+    });
 
-          
-        });
-    
-    </script>
-</body>
+</script>
+<script>
+    $(".submit").change(function(){
 
-</html>
+    });
+    $("body").on('click','.submit',function(){
+        var url = "<?=\yii\helpers\Url::toRoute("brand/save")?>";
+        var data = {
+            id      :   $(".id_data").val(),
+            name    :   $(".name_data").val(),
+            desc    :   $(".desc_data").val(),
+            attention:  $(".attention_data").val(),
+            manager_id: $(".manager_data").val()
+        };
+        $.post(url,data,function(msg){
+            if(msg.status){
+                alert("操作成功！");
+                location.href = "<?=\yii\helpers\Url::toRoute("brand/list")?>";
+            }else{
+                alert(msg.error);
+            }
+        },'json')
+    })
+</script>

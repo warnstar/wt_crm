@@ -4,6 +4,8 @@ namespace app\models;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\data\Pagination;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "worker".
@@ -84,25 +86,28 @@ class Worker extends \yii\db\ActiveRecord
 
         $select = [
             'worker.*',
-            'b.name'=>'brand_name',
-            'c.name'=>'city_name'
+            'brand_name'=>'b.name',
+            'area_name'=>'a.name',
+            'role_name'=>'r.name'
         ];
         $query->select($select);
 
+        $query->andWhere("worker.role_id > :role_id",[':role_id'=>1]);
 
         if($option){
 
             //筛选品牌
             if(isset($option['brand_id']) && $option['brand_id']){
-                $query->andWhere(['worker.id'=>(int)$option['brand_id']]);
+                $query->andWhere(['worker.brand_id'=>(int)$option['brand_id']]);
             }
             //筛选区域
             if(isset($option['area_id']) && $option['area_id']){
                 $query->andWhere(['worker.area_id'=>(int)$option['area_id']]);
             }
-            //筛选省份
-            if(isset($option['city_id']) && $option['city_id']){
-                $query->andWhere(['worker.city_id'=>(int)$option['city_id']]);
+            //筛选上级区域
+            if(isset($option['area_higher_id']) && $option['area_higher_id']){
+                $area_higher_id = $option['area_higher_id'];
+                $query->andWhere("worker.area_id in (select id FROM area WHERE parent_id = $area_higher_id)");
             }
             //筛选角色
             if(isset($option['role_id']) && $option['role_id']){
@@ -115,33 +120,61 @@ class Worker extends \yii\db\ActiveRecord
             if(isset($option['search']) && $option['search']){
                 $search = $option['search'];
                 //$search_num = (int)$search;
-                $query->andWhere("worker.phone  LIKE '%$search%' OR users.name LIKE '%$search%'");
+                $query->andWhere("worker.phone  LIKE '%$search%' OR worker.name LIKE '%$search%'");
             }
         }
 
 
-        $query->leftJoin(['c'=>'city'],'worker.city_id=c.id')
-            ->leftJoin(['b'=>'brand'],'worker.brand_id=b.id');
+        $query->leftJoin(['a'=>'area'],'worker.area_id=a.id')
+            ->leftJoin(['b'=>'brand'],'worker.brand_id=b.id')
+            ->leftJoin(['r'=>'worker_role'],'worker.role_id=r.id');
 
 
-        if($is_provider){
-            $data = new ActiveDataProvider([
-                'query' => $query,
-                'pagination' => [
-                    'pageSize' => 10,
-                ],
-                'sort' => [
-                    'defaultOrder' => [
-                        'create_time' => SORT_DESC,
-                    ]
-                ],
-            ]);
-        }else{
-            $data = $query->asArray()->all();
-        }
+        $pages = new Pagination([
+            'totalCount' => $query->count(),
+            'pageSize'  => 9,
+            'route' => "worker/list"
+        ]);
+        $query->offset($pages->offset)
+            ->limit($pages->limit);
 
 
+        $list = $query->asArray()->all();
+
+        $data['list'] = $list;
+        $data['pages'] = $pages;
+        return $data;
+    }
+
+    public function find_by_phone($phone){
+        $worker = $this->find()->where(['phone'=>$phone])->asArray()->one();
+        return $worker;
+    }
+    public function detail($id){
+        $query = $this->find();
+        $select = [
+            'worker.*'
+        ];
+        $query->select($select);
+
+        $query->where(['id'=>$id]);
+
+        $data = $query->asArray()->one();
 
         return $data;
+    }
+    public function exist(){
+        $worker = $this->findOne(['phone'=>$this->phone]);
+
+        if($worker){
+            if($this->id){
+                if($worker->id == $this->id){
+                    return false;
+                }
+            }
+            return true;
+        }else{
+            return false;
+        }
     }
 }

@@ -3,6 +3,7 @@ namespace backend\controllers;
 
 use app\controllers\CommonController;
 use app\models\Area;
+use app\models\City;
 use Yii;
 
 /**
@@ -26,16 +27,85 @@ class AreaController extends CommonController
 
     public function  actionList(){
 
-        $data['area_list'] = (new Area())->find()->asArray()->all();
+        $data['areas'] = (new Area())->get_lower(null);
 
         return $this->render('area_list',$data);
     }
 
+    public function actionList_ajax(){
+        $id = Yii::$app->request->get('id');
+        $search = Yii::$app->request->get('search');
+
+        $option['parent_id'] = $id;
+        $option['search'] = $search;
+        $data['areas'] = (new Area())->search($option);
+
+        return $this->renderPartial("area_list_ajax",$data);
+    }
     public function actionDetail(){
         return $this->render('area_detail');
     }
 
     public function actionAdd(){
-        return $this->render('area_add');
+        $data['area_higher'] = (new Area())->get_lower(0);
+        return $this->render('area_add',$data);
+    }
+
+    /**
+     * 区域下拉菜单（无条件）
+     * @return string
+     */
+    public function actionArea_select(){
+        $get = Yii::$app->request->get();
+
+        $option = [];
+        if(isset($get['id']) && $get['id'] >= 0){
+            $option['parent_id'] = (int)$get['id'];
+        }
+
+        $data['areas'] = (new Area())->search($option);
+
+        return $this->renderPartial("area_select",$data);
+    }
+    public function actionArea_select_role_brand(){
+        $get = Yii::$app->request->get();
+        //角色id和品牌id
+        $data = [];
+        if(isset($get['id']) && $get['id'] >= 0){
+            $option['parent_id'] = (int)$get['id'];
+        }
+        if(isset($get['role_id']) && $get['role_id'] && isset($get['brand_id']) && $get['brand_id']){
+            $option['role_id'] = $get['role_id'];
+            $option['brand_id'] = $get['brand_id'];
+            $data['areas'] = (new Area())->unset_area_manager($option);
+        }
+        return $this->renderPartial("area_select",$data);
+    }
+    public function actionSave(){
+        $post = Yii::$app->request->post();
+        $area = new Area();
+
+        if(isset($post['id']) && $post['id']){
+            $area = (new Area())->findOne($post['id']);
+        }
+
+        $area->name = isset($post['name']) ? $post['name'] : null;
+        $area->parent_id = isset($post['parent_id']) ? $post['parent_id'] : null;
+        if(!$area->id){
+            $area->create_time = time();
+        }
+        $msg['status'] = 0;
+        $msg['error'] = "操作失败！";
+
+        if($area->exist()){
+            $msg['error'] = "区域名称不能重复！";
+        }else{
+            if($area->save()){
+                $msg['status'] = 1;
+                unset($msg['error']);
+            }
+        }
+
+        return json_encode($msg);
     }
 }

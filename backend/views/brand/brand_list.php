@@ -21,7 +21,7 @@
                 <div class="ibox-content">
                     <div class="row m-b-sm m-t-sm">
                         <div class="col-md-1">
-                            <button type="button" id="loading-example-btn" class="btn btn-white btn-sm"><i class="fa fa-refresh"></i> 刷新</button>
+                            <a  type="button" href="javascript:location.reload()" id="loading-example-btn" class="btn btn-white btn-sm"><i class="fa fa-refresh"></i> 刷新</a>
                         </div>
 
                     </div>
@@ -39,66 +39,18 @@
                             </tr>
                             </thead>
                             <tbody align="center">
+                            <?php if($brand_list) foreach($brand_list as $v):?>
                             <tr>
-                                <td class="project-status">1</td>
-                                <td class="project-title">泰太美</td>
-                                <td class="project-title">这个是品牌介绍，太长了建议隐藏一下</td>
-                                <td class="project-title">张三</td>
+                                <td class="project-status"><?=$v['id']?></td>
+                                <td class="project-title"><?=$v['name']?></td>
+                                <td class="project-title"><?=$v['desc']?></td>
+                                <td class="project-title"><?=$v['worker_name']?></td>
                                 <td >
-                                    <button class=" btn btn-white btn-sm">查看详情</button>
+                                    <a class=" btn btn-white btn-sm" href="<?=\yii\helpers\Url::toRoute("brand/detail") . "&id=" . $v['id']?>">查看详情</a>
                                     <button class="btn-delete btn btn-white btn-sm">删除</button>
                                 </td>
                             </tr>
-                            <tr>
-                                <td class="project-status">1</td>
-                                <td class="project-title">泰太美</td>
-                                <td class="project-title">这个是品牌介绍，太长了建议隐藏一下</td>
-                                <td class="project-title">张三</td>
-                                <td >
-                                    <button class=" btn btn-white btn-sm">查看详情</button>
-                                    <button class="btn-delete btn btn-white btn-sm">删除</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="project-status">1</td>
-                                <td class="project-title">泰太美</td>
-                                <td class="project-title">这个是品牌介绍，太长了建议隐藏一下</td>
-                                <td class="project-title">张三</td>
-                                <td >
-                                    <button class=" btn btn-white btn-sm">查看详情</button>
-                                    <button class="btn-delete btn btn-white btn-sm">删除</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="project-status">1</td>
-                                <td class="project-title">泰太美</td>
-                                <td class="project-title">这个是品牌介绍，太长了建议隐藏一下</td>
-                                <td class="project-title">张三</td>
-                                <td >
-                                    <button class=" btn btn-white btn-sm">查看详情</button>
-                                    <button class="btn-delete btn btn-white btn-sm">删除</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="project-status">1</td>
-                                <td class="project-title">泰太美</td>
-                                <td class="project-title">这个是品牌介绍，太长了建议隐藏一下</td>
-                                <td class="project-title">张三</td>
-                                <td >
-                                    <button class=" btn btn-white btn-sm">查看详情</button>
-                                    <button class="btn-delete btn btn-white btn-sm">删除</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="project-status">1</td>
-                                <td class="project-title">泰太美</td>
-                                <td class="project-title">这个是品牌介绍，太长了建议隐藏一下</td>
-                                <td class="project-title">张三</td>
-                                <td >
-                                    <button class=" btn btn-white btn-sm">查看详情</button>
-                                    <button class="btn-delete btn btn-white btn-sm">删除</button>
-                                </td>
-                            </tr>
+                            <?php endforeach;?>
                             </tbody>
                         </table>
                     </div>

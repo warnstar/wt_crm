@@ -3,18 +3,18 @@
 namespace app\models;
 
 use Yii;
-
+use yii\data\Pagination;
 /**
  * This is the model class for table "users".
  *
  * @property integer $id
- * @property string $nickname
+ * @property string $name
  * @property string $passport
  * @property integer $birth
  * @property string $phone
  * @property integer $sex
  * @property integer $status
- * @property integer $city_id
+ * @property integer $cases_code
  * @property integer $area_id
  * @property string $wchat
  * @property integer $create_time
@@ -35,9 +35,9 @@ class Users extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nickname', 'passport'], 'required'],
-            [['birth', 'sex', 'status', 'city_id', 'area_id', 'create_time'], 'integer'],
-            [['nickname', 'passport', 'phone', 'wchat'], 'string', 'max' => 255]
+            [['name', 'passport'], 'required'],
+            [['birth', 'sex', 'status', 'area_id', 'create_time'], 'integer'],
+            [['name', 'passport','cases_code', 'phone', 'wchat'], 'string', 'max' => 255]
         ];
     }
 
@@ -48,13 +48,13 @@ class Users extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'nickname' => 'Nickname',
+            'name' => 'Name',
             'passport' => 'Passport',
             'birth' => 'Birth',
             'phone' => 'Phone',
             'sex' => 'Sex',
+            'cases_code'=>'Cases_code',
             'status' => 'Status',
-            'city_id' => 'City ID',
             'area_id' => 'Area ID',
             'wchat' => 'Wchat',
             'create_time' => 'Create Time',
@@ -73,12 +73,12 @@ class Users extends \yii\db\ActiveRecord
         $query = $this->find();
 
         $select = [
-            'user.*',
-            'mgu.end_time'      =>  'end_time_mgu',
-            'mgu.start_time'    =>  'start_time_mgu',
-            'mg.name'           =>  'group_name',
-            'b.id'              =>  'brand_id',
-            'b.name'            =>  'brand_name',
+            'users.*',
+            'end_time_mgu'          => 'mgu.end_time',
+            'start_time_mgu'        =>  'mgu.start_time',
+            'group_name'            =>  'mgu.start_time',
+            'brand_id'              =>  'b.id',
+            'brand_name'            =>  'b.name'
         ];
         $query->select($select);
 
@@ -93,10 +93,6 @@ class Users extends \yii\db\ActiveRecord
             if(isset($option['area_id']) && $option['area_id']){
                 $query->andWhere(['users.area_id'=>(int)$option['area_id']]);
             }
-            //筛选省份
-            if(isset($option['city_id']) && $option['city_id']){
-                $query->andWhere(['users.city_id'=>(int)$option['city_id']]);
-            }
             //筛选医疗团
             if(isset($option['medical_group_id']) && $option['medical_group_id']){
                 $query->andWhere(['mg.id'=>(int)$option['medical_group_id']]);
@@ -108,17 +104,45 @@ class Users extends \yii\db\ActiveRecord
             if(isset($option['search']) && $option['search']){
                 $search = $option['search'];
                 //$search_num = (int)$search;
-                $query->andWhere("users.passport  LIKE '%$search%' OR users.phone LIKE '%$search%' OR users.cases_code LIKE '%$search%'");
+                $query->andWhere("users.passport  LIKE '%$search%' OR users.name LIKE '%$search%' OR users.phone LIKE '%$search%' OR users.cases_code LIKE '%$search%'");
             }
         }
 
 
-        $query->leftJoin(['mgu'=>'medical_group_user'],'user.last_mgu=mgu.id')
+        $query->leftJoin(['mgu'=>'medical_group_user'],'users.last_mgu=mgu.id')
             ->leftJoin(['mg'=>'medical_group'],'mgu.medical_group_id=mg.id')
             ->leftJoin(['b'=>'brand'],'mg.brand_id=b.id');
 
-        $res = $query->asArray()->all();
+        $data = $query->asArray()->all();
+        $pages = new Pagination([
+            'totalCount' => $query->count(),
+            'pageSize'  => 9,
+            'route' => "users/list"
+        ]);
+        $query->offset($pages->offset)
+            ->limit($pages->limit);
 
-        return $res;
+
+        $list = $query->asArray()->all();
+
+        $data['list'] = $list;
+        $data['pages'] = $pages;
+
+        return $data;
+    }
+
+    public function exist(){
+        $data = $this->findOne(['passport'=>$this->passport]);
+
+        if($data){
+            if($this->id){
+                if($data->id == $this->id){
+                    return false;
+                }
+            }
+            return true;
+        }else{
+            return false;
+        }
     }
 }

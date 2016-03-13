@@ -10,7 +10,8 @@ use Yii;
  * @property string $id
  * @property string $name
  * @property integer $start_time
- * @property string $greetings
+ * @property string $greeting
+ * @property integer $create_time
  */
 class Festival extends \yii\db\ActiveRecord
 {
@@ -28,9 +29,9 @@ class Festival extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'name', 'start_time', 'greetings'], 'required'],
-            [['id', 'start_time'], 'integer'],
-            [['name', 'greetings'], 'string', 'max' => 255]
+            [['name', 'start_time', 'greeting'], 'required'],
+            [['start_time', 'create_time'], 'integer'],
+            [['name', 'greeting'], 'string', 'max' => 255]
         ];
     }
 
@@ -43,7 +44,28 @@ class Festival extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
             'start_time' => 'Start Time',
-            'greetings' => 'Greetings',
+            'greeting' => 'Greeting',
+            'create_time' => 'Create Time',
         ];
+    }
+    public function search($option = null){
+        $query = $this->find();
+        $select = [
+            'festival.*'
+        ];
+        $query->select($select);
+
+        if($option){
+
+        }
+
+        $order = [
+            'start_time'    =>  SORT_ASC
+        ];
+        $query->orderBy($order);
+
+        $data = $query->asArray()->all();
+
+        return $data;
     }
 }

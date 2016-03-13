@@ -51,21 +51,69 @@ class Brand extends \yii\db\ActiveRecord
         ];
     }
 
+     public function detail($id){
+         if($id){
+             $query = $this->find();
 
-    public function search(){
+             $select = [
+                 'brand.*',
+                 'worker_name'=>'worker.name'
+             ];
+             $query->select($select);
+
+             $query->where(['brand.id'=>$id]);
+
+             $query->leftJoin(['worker'],'brand.manager_id=worker.id');
+             $res = $query->asArray()->one();
+
+             return $res;
+         }else{
+             return null;
+         }
+     }
+
+     public function exist(){
+         $brand = $this->findOne(['name'=>$this->name]);
+
+         if($brand){
+
+             if($this->id){
+                 if($brand->id == $this->id){
+                     return false;
+                 }
+             }
+             return true;
+         }else{
+             return false;
+         }
+     }
+     public function search($option = null){
         $query = $this->find();
 
         $select = [
             'brand.*',
-            'worker.name'=>'worker_name',
+            'worker_name'=>'worker.name'
         ];
         $query->select($select);
 
-        $query->leftJoin(['worker'],'brand.manager_id=worker_id');
+         if($option){
+             if(isset($option['unset_manager']) && $option['unset_manager']){
+                 $query->andWhere(['brand.manager_id'=>0]);
+             }
+         }
 
+        $query->leftJoin(['worker'],'brand.manager_id=worker.id');
         $res = $query->asArray()->all();
 
         return $res;
+    }
+
+    public function delete_this($id = null)
+    {
+        if(!$id){
+            $id = $this->id;
+        }
+
     }
 
 }

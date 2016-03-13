@@ -1,3 +1,8 @@
+<style type="text/css">
+    .form-control{
+        width: 30%;
+    }
+</style>
 <!-- 标题 -->
 <div class="row wrapper border-bottom white-bg page-heading title">
     <div class="col-lg-10">
@@ -16,26 +21,26 @@
             </div>
 
             <div class="ibox-content">
-                <form method="post" class="form-horizontal" id="signupForm" >
+                <form method="post" class="form-horizontal" id="brand_add_form" >
                     <div class="form-group">
                         <label class="col-sm-2 control-label">品牌名称</label>
 
                         <div class="col-sm-10">
-                            <input type="text" class="form-control"  name="name" >
+                            <input type="text" class="form-control name_data"  name="name" >
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">品牌介绍</label>
                         <div class="col-sm-10">
-                            <textarea type="text" class="form-control" style="height:68px;"></textarea>
+                            <textarea maxlength="200" type="text" class="form-control desc_data" style="height:68px;" name="desc"></textarea>
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">注意事项</label>
                         <div class="col-sm-10">
-                            <textarea type="text" class="form-control" name="notice" style="height:68px;"></textarea>
+                            <textarea maxlength="200" type="text" class="form-control attention_data" name="notice" style="height:68px;"></textarea>
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>
@@ -43,23 +48,19 @@
                         <label class="col-sm-2 control-label">品牌经理</label>
 
                         <div class="col-sm-10">
-                            <select class="form-control m-b" name="manager">
-                                <option>空</option>
-                                <option>张三</option>
-                                <option>李四</option>
-                                <option>王五</option>
+                            <select class="form-control m-b manager_data" name="manager">
+                                <option value="0">无</option>
+                                <?php if($workers) foreach($workers as $v):?>
+                                <option value="<?=$v['id']?>"><?=$v['name']?></option>
+                                <?php endforeach;?>
                             </select>
                         </div>
-
-
                     </div>
-
 
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <div class="col-sm-4 col-sm-offset-3">
-                            <button class="btn btn-primary" type="submit">提交</button>
-
+                            <a class="btn btn-primary submit" type="submit">提交</a>
                         </div>
                     </div>
                 </form>
@@ -95,11 +96,10 @@
 
 
         // validate signup form on keyup and submit
-        $("#signupForm").validate({
+        $("#brand_add_form").validate({
             rules: {
                 name: "required",
                 notice: "required"
-
             },
             messages: {
                 name: "请输入品牌名称",
@@ -112,4 +112,23 @@
 
     });
 
+</script>
+<script>
+    $("body").on('click','.submit',function(){
+        var url = "<?=\yii\helpers\Url::toRoute("brand/save")?>";
+        var data = {
+            name    :   $(".name_data").val(),
+            desc    :   $(".desc_data").val(),
+            attention:  $(".attention_data").val(),
+            manager_id: $(".manager_data").val()
+        };
+        $.post(url,data,function(msg){
+            if(msg.status){
+                alert("操作成功！");
+                location.href = "<?=\yii\helpers\Url::toRoute("brand/list")?>";
+            }else{
+                alert(msg.error);
+            }
+        },'json')
+    })
 </script>

@@ -30,19 +30,19 @@
 
 			<div class="ibox-content">
 				<form method="post" class="form-horizontal form_data" id="signupForm" >
-					<input type="hidden" value="<?=$worker['id']?>" class="id_data">
+
 					<div class="form-group">
 						<label class="col-sm-2 control-label">姓名</label>
 
 						<div class="col-sm-10">
-							<input type="text" class="form-control name_data" value="<?=$worker['name']?>"  name="name" >
+							<input type="text" class="form-control name_data"  name="name" >
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">性别</label>
 						<div class="col-sm-9">
-							<label class="radio-inline"><input type="radio" class="sex_data" checked="<?=$worker['sex'] == 1 ? true : false?>" value="1"  name="sex">男</label>
-							<label class="radio-inline"><input type="radio" class="sex_data" checked="<?=$worker['sex'] == 1 ? true : false?>" value="2"  name="sex">女</label>
+							<label class="radio-inline"><input type="radio" class="sex_data" checked="" value="1"  name="sex">男</label>
+							<label class="radio-inline"><input type="radio" class="sex_data" value="2"  name="sex">女</label>
 						</div>
 					</div>
 
@@ -50,7 +50,7 @@
 						<label class="col-sm-2 control-label">手机号</label>
 
 						<div class="col-sm-10">
-							<input type="text" class="form-control phone_data" value="<?=$worker['phone']?>" name="phone" >
+							<input type="text" class="form-control phone_data"  name="phone" >
 						</div>
 					</div>
 
@@ -60,8 +60,8 @@
 						<div class="col-sm-10"  >
 							<select style="width: 120px;float: left;" class="form-control m-b role_data" name="role_id">
 								<option value="0">请选择</option>
-								<?php if($roles) foreach ($roles as $role):?>
-								<option <?=$role['id'] == $worker['role_id'] ? 'selected=true' : ''?> value="<?=$role['id']?>"><?=$role['name']?></option>
+								<?php if($roles) foreach($roles as $v):?>
+								<option value="<?=$v['id']?>"><?=$v['name']?></option>
 								<?php endforeach;?>
 							</select>
 
@@ -74,9 +74,6 @@
 						<div class="col-sm-10"  >
 							<select style="width: 120px;float: left;" class="form-control m-b brand_data" name="brand_id">
 								<option value="0">请选择</option>
-								<?php if($brands) foreach ($brands as $brand):?>
-									<option <?=$brand['id'] == $worker['brand_id'] ? 'selected=true' : ''?>  value="<?=$brand['id']?>"><?=$brand['name']?></option>
-								<?php endforeach;?>
 							</select>
 
 						</div>
@@ -88,14 +85,9 @@
 						<div class="col-sm-10"  >
 							<select style="width: 90px;float: left;" class="form-control m-b area_data" name="">
 								<option value="0">请选择</option>
-								<?php if($area_higher) foreach ($area_higher as $higher):?>
-									<option <?=$higher['id'] == $worker['area_higher_id'] ? 'selected=true' : ''?>  value="<?=$higher['id']?>"><?=$higher['name']?></option>
-								<?php endforeach;?>
 							</select>
 							<select style="width: 90px;float: left;margin-left: 10px;" class="form-control m-b area_lower_data" name="area_id">
-								<?php if($area_lower) foreach ($area_lower as $lower):?>
-									<option <?=$lower['id'] == $worker['area_id'] ? 'selected=true' : ''?>  value="<?=$lower['id']?>"><?=$lower['name']?></option>
-								<?php endforeach;?>
+								<option value="0">请选择</option>
 							</select>
 						</div>
 
@@ -229,7 +221,6 @@
 	function add_commit(){
 		var url = "<?=\yii\helpers\Url::toRoute("worker/save")?>";
 		var data = {
-			id      :   $(".id_data").val(),
 			name    :   $(".name_data").val(),
 			sex     :   $(".sex_data:checked").val(),
 			phone   :   $(".phone_data").val(),

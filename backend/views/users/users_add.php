@@ -20,7 +20,7 @@
 <!-- 标题 -->
 <div class="row wrapper border-bottom white-bg page-heading title">
 	<div class="col-lg-10">
-		<h2>用户管理-客户详情</h2>
+		<h2>用户管理-添加客户</h2>
 	</div>
 
 </div>
@@ -31,7 +31,7 @@
 		<div class="ibox float-e-margins">
 
 			<div class="ibox-title">
-				<h5>客户详情</h5>
+				<h5>添加客户</h5>
 			</div>
 
 			<div class="ibox-content">
@@ -40,102 +40,68 @@
 						<label class="col-sm-2 control-label">姓名</label>
 
 						<div class="col-sm-10">
-							<input type="text" class="form-control"  name="name" >
+							<input type="text" class="form-control name_data"  name="name" >
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">性别</label>
 						<div class="col-sm-9">
-							<label class="radio-inline"><input type="radio" checked="" value="男"  name="sex">男</label>
-							<label class="radio-inline"><input type="radio" value="女"  name="sex">女</label>
+							<label class="radio-inline"><input type="radio" class="sex_data" checked="" value="1"  name="sex">男</label>
+							<label class="radio-inline"><input type="radio" class="sex_data" value="2"  name="sex">女</label>
 						</div>
 					</div>
-					<div class="form-group">
-						<label class="col-sm-2 control-label">年龄</label>
 
-						<div class="col-sm-10">
-							<input type="text" class="form-control"  name="age" >
-						</div>
-					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">手机号</label>
 
 						<div class="col-sm-10">
-							<input type="text" class="form-control"  name="phone" >
+							<input type="text" class="form-control phone_data"  name="phone" >
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">护照号</label>
 
 						<div class="col-sm-10">
-							<input type="text" class="form-control"  name="passport" >
+							<input type="text" class="form-control passport_data"  name="passport" >
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">出生日期</label>
 
 						<div class="col-sm-10">
-							<input type="text" class="form-control date"  name="birth" >
+							<input type="text" class="form-control date birth_data"  name="birth" >
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">病历号(HN)</label>
 
 						<div class="col-sm-10">
-							<input type="text" class="form-control"  name="hn" >
+							<input type="text" class="form-control cases_data"  name="hn" >
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">所属区域</label>
 
 						<div class="col-sm-10"  >
-							<select style="width: 90px;float: left;" class="form-control m-b" name="">
+							<select style="width: 90px;float: left;" class="form-control m-b area_data" name="">
 								<option>请选择</option>
-								<option>南区</option>
-								<option>北区</option>
+								<?php if(isset($areas) && $areas) foreach($areas as $l):?>
+									<option value="<?=$l['id']?>"><?=$l['name']?></option>
+								<?php endforeach;?>
 							</select>
-							<select style="width: 90px;float: left;margin-left: 10px;" class="form-control m-b" name="area">
+							<select style="width: 90px;float: left;margin-left: 10px;" class="form-control m-b area_lower_data" name="area">
 								<option value="0">请选择</option>
-								<option>广东</option>
-								<option>广西</option>
-								<option>山东</option>
-								<option>山西</option>
 
 							</select>
 						</div>
 
 					</div>
-					<div class="form-group">
-						<label class="col-sm-2 control-label" >疗程开始时间</label>
-
-						<div class="col-sm-10">
-							<input type="text" class="form-control date"  name="star_time" >
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-sm-2 control-label">疗程结束时间</label>
-
-						<div class="col-sm-10">
-							<input type="text" class="form-control date"  name="end_time" >
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-sm-2 control-label">状态</label>
-
-						<div class="col-sm-10">
-							<input disabled type="text" class="form-control"  name="status" >
-						</div>
-					</div>
-
 
 					<div class="hr-line-dashed"></div>
 					<div class="form-group">
 						<div class="col-sm-4 col-sm-offset-3">
-							<a class="btn btn-primary" type="submit">返回</a>
-							<button class="btn btn-primary" type="submit">修改</button>
-							<a class="btn btn-primary" >查看当前疗程</a>
-							<a class="btn btn-primary" >查看健康足迹</a>
-
+							<a href="<?=\yii\helpers\Url::toRoute("users/list")?>" class="btn btn-primary" type="submit">返回</a>
+							<button class="btn btn-primary form_commit">添加</button>
 						</div>
 					</div>
 				</form>
@@ -175,7 +141,6 @@
 		$("#signupForm").validate({
 			rules: {
 				name: "required",
-				age: "required",
 				phone: {
 					required:true,
 					phone:true
@@ -188,14 +153,7 @@
 				},
 				area:{
 					myarea:true,
-				},
-				star_time:{
-					mydate:true,
-				},
-				end_time:{
-					mydate:true,
-				},
-
+				}
 			},
 			messages: {
 				name: "请输入客户姓名",
@@ -204,13 +162,16 @@
 					required: "请选择出生日期",
 				},
 
+			},
+			submitHandler:function(){
+				add_commit()
 			}
 		});
 
 
 	});
 	$(document).ready(function() {
-		var mydate = new Date();
+		var mydate = new Date('01/01/1980');
 		var str = "" + (mydate.getMonth()+1) + "/";
 		str += mydate.getDate() + "/";
 		str += mydate.getFullYear();
@@ -225,4 +186,45 @@
 				});
 	});
 
+
+	//联动变化次级区域
+	$("body").on("change",".area_data",function(){
+		var area_id = $(this).val();
+		var url = "<?=\yii\helpers\Url::toRoute("area/area_select")?>";
+		var data = {
+			id          :   area_id
+		};
+		if(data.id != 0){
+			$.get(url,data,function(msg){
+				$(".area_lower_data").val(0);
+				$(".area_lower_data").empty();
+				$(".area_lower_data").html(msg);
+			})
+		}else{
+			$(".area_lower_data").val(0);
+			$(".area_lower_data").empty();
+		}
+	});
+
+	function add_commit(){
+		var url = "<?=\yii\helpers\Url::toRoute("users/save")?>";
+		var data = {
+			name    :   $(".name_data").val(),
+			sex     :   $(".sex_data:checked").val(),
+			phone   :   $(".phone_data").val(),
+			passport :   $(".passport_data").val(),
+			birth   :      $(".birth_data").val(),
+			cases_code :   $(".cases_data").val(),
+			area_id     :   $(".area_lower_data").val()
+		};
+
+		$.post(url,data,function(msg){
+			if(msg.status){
+				//alert("操作成功！");
+				//location.href = "<?=\yii\helpers\Url::toRoute("worker/list")?>";
+			}else{
+				alert(msg.error);
+			}
+		},'json')
+	}
 </script>

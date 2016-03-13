@@ -5,7 +5,6 @@
  * Date: 2016/3/8
  * Time: 22:19
  */
-
 ?>
 <!-- 标题 -->
 <div class="row wrapper border-bottom white-bg page-heading title">
@@ -24,7 +23,7 @@
 				<div class="ibox-title">
 					<h5>所有职员</h5>
 					<div class="ibox-tools">
-						<a href="<?=\yii\helpers\Url::toRoute("worker/detail")?>" class="btn btn-primary btn-xs">添加新职员</a>
+						<a href="<?=\yii\helpers\Url::toRoute("worker/add")?>" class="btn btn-primary btn-xs">添加新职员</a>
 					</div>
 				</div>
 				<div class="ibox-content">
@@ -33,48 +32,46 @@
 							<button style="float:left;" type="button" id="loading-example-btn" class=" btn btn-white btn-sm"><i class="fa fa-refresh"></i> 刷新</button>
 							<div style="overflow: hidden;float: left;">
 								<div  class="m-b-xs" style="float: left;width: 120px;margin-left: 10px;">
-									<select class="input-sm form-control input-s-sm inline">
-										<option value="0">请选择</option>
-										<option value="1">泰太美</option>
-										<option value="2">泰浪漫</option>
-关键字
+									<select class="input-sm form-control input-s-sm inline brand_data worker_filter">
+										<option value="0">品牌</option>
+										<?php foreach($brands as $b):?>
+										<option value="<?=$b['id']?>"><?=$b['name']?></option>
+										<?php endforeach;?>
 									</select>
 								</div>
 								<div  class="m-b-xs" style="float: left;width: 120px;margin-left: 10px;">
-									<select class="input-sm form-control input-s-sm inline">
-										<option value="0">请选择</option>
-										<option value="1">南区</option>
-										<option value="2">北区</option>
+									<select class="input-sm form-control input-s-sm inline area_data worker_filter">
+										<option value="0">区域</option>
+										<?php foreach($areas as $a):?>
+											<option value="<?=$a['id']?>"><?=$a['name']?></option>
+										<?php endforeach;?>
 
 									</select>
 								</div>
 								<div  class="m-b-xs" style="float: left;width: 120px;margin-left: 10px;">
-									<select class="input-sm form-control input-s-sm inline">
-										<option value="0">请选择</option>
-										<option value="1">广东</option>
-										<option value="2">广西</option>
+									<select class="input-sm form-control input-s-sm inline area_lower_data worker_filter">
+										<option value="0">次级区域</option>
 
 									</select>
 								</div>
 								<div  class="m-b-xs" style="float: left;width: 120px;margin-left: 10px;">
-									<select class="input-sm form-control input-s-sm inline">
-										<option value="0">请选择</option>
+									<select class="input-sm form-control input-s-sm inline worker_filter">
+										<option value="0">医疗团</option>
 										<option value="1">第十期</option>
 										<option value="2">第十一期</option>
 									</select>
 								</div>
 							</div>
 							<div class="input-group">
-								<input style="width: 300px;margin-left: 30px;" type="text" placeholder="请输入手机号/姓名查询" class="input-sm form-control"> <span style="float:left" class="input-group-btn">
-                                        <button type="button"  class="btn btn-sm btn-primary"> 搜索</button> </span>
+								<input style="width: 300px;margin-left: 30px;" type="text" placeholder="请输入手机号/姓名查询" class="input-sm form-control search_data"> <span style="float:left" class="input-group-btn">
+                                        <button type="button"  class="btn btn-sm btn-primary search_click"> 搜索</button> </span>
 							</div>
 
 						</div>
 
 					</div>
 
-					<div class="project-list">
-
+					<div class="project-list list_data">
 						<table class="table table-hover">
 							<thead>
 							<tr align="center">
@@ -87,35 +84,34 @@
 								<td>操作</td>
 							</tr>
 							</thead>
+
 							<tbody align="center">
+							<?php foreach($workers as $w):?>
 							<tr>
-								<td class="project-status">张三</td>
-								<td class="project-title">男</td>
-								<td class="project-title">品牌经理</td>
-								<td class="project-title">泰太美</td>
-								<td class="project-title">广东</td>
-								<td class="project-title">你好啊</td>
+								<td class="project-status"><?=$w['name']?></td>
+								<td class="project-title"><?=$w['sex'] == 1 ? "男":"女"?></td>
+								<td class="project-title"><?=$w['role_name']?></td>
+								<td class="project-title"><?=$w['brand_name']?></td>
+								<td class="project-title"><?=$w['area_name']?></td>
+								<td class="project-title"><?=$w['wchat']?></td>
 
 								<td >
-									<button class=" btn btn-white btn-sm">查看详情</button>
+									<a href="<?=\yii\helpers\Url::toRoute("worker/detail") . "&id=" . $w['id']?>" class=" btn btn-white btn-sm">查看详情</a>
 									<button class="btn-delete btn btn-white btn-sm">删除</button>
 								</td>
 							</tr>
-							<tr>
-								<td class="project-status">张三</td>
-								<td class="project-title">男</td>
-								<td class="project-title">品牌经理</td>
-								<td class="project-title">泰太美</td>
-								<td class="project-title">广东</td>
-								<td class="project-title">你好啊</td>
-
-								<td >
-									<button class=" btn btn-white btn-sm">查看详情</button>
-									<button class="btn-delete btn btn-white btn-sm">删除</button>
-								</td>
-							</tr>
+							<?php endforeach;?>
 							</tbody>
 						</table>
+						<div class="pages" style="width:80%;margin:0 auto;text-align: center;">
+							<?=
+							\yii\widgets\LinkPager::widget([
+									'pagination' => $pages,
+									'options' => ['class' => 'pagination pull-center', 'style' => 'margin:0px']
+							]);
+							?>
+
+						</div>
 					</div>
 				</div>
 			</div>
@@ -154,6 +150,57 @@
 			}
 		});
 	});
+</script>
+<script>
+	//联动变化次级区域
+	$(".area_data").change(function(){
+		var area_id = $(this).val();
+		var url = "<?=\yii\helpers\Url::toRoute("area/area_select")?>";
+		var data = {
+			id  :   area_id
+		};
+		$(".area_lower_data").val(0);
+		if(data.id != 0){
+			$.get(url,data,function(msg){
+				$(".area_lower_data").empty();
+				$(".area_lower_data").html(msg);
+			})
+		}
+
+	});
+	$(".search_click").click(function(){
+		var url = "<?=\yii\helpers\Url::toRoute("worker/list_ajax")?>";
+		var data = {
+			search  :   $(".search_data").val()
+		};
+		$.get(url,data,function(msg){
+			$(".list_data").empty();
+
+			$(".list_data").html(msg);
+		})
+	});
+	//筛选
+	$(".worker_filter").change(function(){
+		var url = "<?=\yii\helpers\Url::toRoute("worker/list_ajax")?>";
+
+		var data = {
+			brand_id        :   $(".brand_data").val(),
+			area_id         :   $(".area_lower_data").val(),
+			area_higher_id  :   $(".area_data").val()
+		};
+
+		if(data.area_id == 0){
+			delete data.area_id;
+		}
+		if(data.area_higher_id == 0){
+			delete data.area_higher_id;
+		}
 
 
+		$.get(url,data,function(msg){
+			$(".list_data").empty();
+
+			$(".list_data").html(msg);
+		})
+	})
 </script>

@@ -39,6 +39,15 @@
     <!-- layer javascript -->
     <script src="js/plugins/layer/layer.min.js"></script>
 
+    <!-- jQuery Validation plugin javascript-->
+    <script src="js/plugins/validate/jquery.validate.min.js"></script>
+    <script src="js/plugins/validate/messages_zh.min.js"></script>
+    <script type="text/javascript" src="js/moment.min.js"></script>
+    <script type="text/javascript" src="js/daterangepicker.js"></script>
+
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" media="all" href="css/daterangepicker-bs3.css"/>
 
 </head>
 
@@ -99,9 +108,9 @@
                 <li>
                     <a href="index.html#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">节日管理</span></a>
                     <ul class="nav nav-second-level">
-                        <li><a href="出团管理-节日列表.html">节日列表</a>
+                        <li><a href="<?=Url::toRoute("festival/list")?>">节日列表</a>
                         </li>
-                        <li><a href="出团列表-添加节日.html">添加节日</a>
+                        <li><a href="<?=Url::toRoute("festival/add")?>">添加节日</a>
                         </li>
 
                     </ul>
@@ -116,12 +125,13 @@
 
                     </ul>
                 </li>
+
                 <li>
-                    <a href="mailbox.html"><i class="fa fa-envelope"></i> <span class="nav-label">角色管理 </span></a>
+                    <a href="index.html#"><i class="fa fa-desktop"></i> <span class="nav-label">回访管理</span></a>
                     <ul class="nav nav-second-level">
-                        <li><a href="角色管理-角色列表.html">角色列表</a>
+                        <li><a href="回访管理-回访记录.html">回访记录</a>
                         </li>
-                        <li><a href="角色列表-添加角色.html">添加角色</a>
+                        <li><a href="<?=Url::toRoute("note/note_type_list")?>">备注设置</a>
                         </li>
 
                     </ul>
@@ -137,26 +147,7 @@
 
                     </ul>
                 </li>
-                <li>
-                    <a href="index.html#"><i class="fa fa-desktop"></i> <span class="nav-label">回访管理</span></a>
-                    <ul class="nav nav-second-level">
-                        <li><a href="回访管理-回访记录.html">回访记录</a>
-                        </li>
-                        <li><a href="回访记录-备注设置.html">备注设置</a>
-                        </li>
 
-                    </ul>
-                </li>
-                <li>
-                    <a href="index.html#"><i class="fa fa-files-o"></i> <span class="nav-label">管理员管理</span></a>
-                    <ul class="nav nav-second-level">
-                        <li><a href="管理员管理-管理员列表.html">管理员列表</a>
-                        </li>
-                        <li><a href="管理员列表-添加管理员.html">添加管理员</a>
-                        </li>
-
-                    </ul>
-                </li>
 
                 <li>
                     <a href="index.html#"><i class="fa fa-flask"></i> <span class="nav-label">系统设置</span></a>

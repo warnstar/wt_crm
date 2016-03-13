@@ -23,7 +23,7 @@ class CommonController extends Controller {
         $worker = $session->get('worker');
 
         //已登陆
-        if ($worker && $worker->role_id && $worker->id) {
+        if ($worker && $worker->role_id && $worker->id >= -1) {
             return true;
         }else{
             $this->goHome();

@@ -14,7 +14,7 @@ use yii\filters\VerbFilter;
  */
 class SiteController extends Controller
 {
-
+    public $enableCsrfValidation = false;
 
     /**
      * @inheritdoc
@@ -80,7 +80,6 @@ class SiteController extends Controller
     public function actionLogin_validate(){
         $worker = new Worker();
 
-        $data = Yii::$app->request->post();
 
         $worker->phone =Yii::$app->request->post("phone");
         $worker->password = md5(Yii::$app->request->post("password"));
