@@ -20,6 +20,8 @@
 		max-height: 100px;
 	}
 </style>
+
+
 <!-- 标题 -->
 <div class="row wrapper border-bottom white-bg page-heading title">
 	<div class="col-lg-10">
@@ -43,10 +45,10 @@
 						<label class="col-sm-2 control-label">备注项目</label>
 
 						<div class="col-sm-10"  >
-							<select style="width: auto;float: left;" class="form-control " name="type">
+							<select style="width: auto;float: left;" class="form-control note_type " name="type">
 								<option value="0">请选择</option>
 								<?php if($types) foreach($types as $v):?>
-								<option value="<?=$v['id']?>"><?=$v['name']?></option>
+									<option value="<?=$v['id']?>"><?=$v['name']?></option>
 								<?php endforeach;?>
 							</select>
 
@@ -54,11 +56,11 @@
 					</div>
 					<input type="hidden" id="leixing" value="1">
 					<div class="form-group" >
-						<label class="col-sm-2 control-label">类型</label>
+						<label class="col-sm-2 control-label ">类型</label>
 						<div class="col-sm-9">
-							<label class="radio-inline"><input type="radio" checked="" value="1"  name="type_id">文字</label>
-							<label class="radio-inline"><input type="radio" value="2"  name="type_id">图片</label>
-							<label class="radio-inline"><input type="radio" value="3"  name="type_id">文件</label>
+							<label class="radio-inline"><input class="content_type" type="radio" checked="" value="1"  name="type_id">文字</label>
+							<label class="radio-inline"><input class="content_type" type="radio" value="2"  name="type_id">图片</label>
+							<label class="radio-inline"><input class="content_type" type="radio" value="3"  name="type_id">文件</label>
 						</div>
 					</div>
 
@@ -68,7 +70,7 @@
 
 							<div class="col-sm-10">
 
-								<textarea class="form-control" id="n_1" name="n_text"></textarea>
+								<textarea class="form-control text_data" id="n_1" name="n_text" ></textarea>
 							</div>
 						</div>
 
@@ -79,7 +81,7 @@
 
 							<div class="col-sm-10">
 
-								<input type="file" name="n_file" id="n_3">
+								<input type="file" name="n_file" id="n_3" class="file_data">
 							</div>
 						</div>
 						<div class="form-group">
@@ -96,7 +98,7 @@
 
 							<div class="col-sm-10">
 
-								<input type="file" name="n_pic" id="n_2" multiple class="bro_name">
+								<input type="file" name="n_pic" id="n_2" multiple class="bro_name img_data">
 							</div>
 						</div>
 						<div class="form-group">
@@ -112,7 +114,7 @@
 					<div class="form-group">
 						<div class="col-sm-4 col-sm-offset-3">
 
-							<button class="btn btn-primary" type="submit">添加</button>
+							<button class="btn btn-primary commit_click" type="submit">添加</button>
 							<a href="javascript:history.go(-1)" class="btn btn-primary" >取消</a>
 
 						</div>
@@ -122,7 +124,6 @@
 		</div>
 	</div>
 </div>
-
 <script type="text/javascript">
 
 	//以下为修改jQuery Validation插件兼容Bootstrap的方法，没有直接写在插件中是为了便于插件升级
@@ -146,17 +147,22 @@
 		// validate signup form on keyup and submit
 		$("#signupForm").validate({
 			rules: {
+				type: "required",
 				n_text: {beizhu:true,},
 				n_file: {beizhu:true,},
-				n_pic: {beizhu:true,},
+				n_pic: {beizhu:true,}
 
 
 			},
 			messages: {
-				n_text: {beizhu:"备注内容不能空",},
-				n_file: {beizhu:"请选择要上传的文件",},
-				n_pic: {beizhu:"请选择要上传的图片",},
+				type  : "备注项目不能为空",
+				n_text: {beizhu:"备注内容不能空"},
+				n_file: {beizhu:"请选择要上传的文件"},
+				n_pic: {beizhu:"请选择要上传的图片"}
 
+			},
+			submitHandler:function(){
+				add_commit()
 			}
 		});
 
@@ -171,41 +177,32 @@
 					singleDatePicker: true,
 					startDate: str,
 				},
-				function(start, end, label) {
-
-
-
-				});
+				function(start, end, label) {});
 	});
 
 	$(function(){
+		var h_load;
 		var formdata = new FormData();
 		$(".bro_name").on("change", function(){
+			$('#show_img').html("");
+
 			var files = !!this.files ? this.files : [];
 			if (!files.length || !window.FileReader) return;
-			for(var i=0;i<files.length;i++){
-				if (!/^image/.test( files[i].type)){
-					$(".bro_name").val("");
-					alert("请选择图片文件上传！");
-					return;
-				}
-			}
+
 			for(var i=0;i<files.length;i++){
 
 				if (/^image/.test( files[i].type)){
 
 					var reader = new FileReader();
 					reader.readAsDataURL(files[i]);
-
-					formdata.append("img[]", this.files[i]);
-
 					reader.onloadend = function(){
 
-						$('#show_img').append("<img src='" + this. result +"' />");
+						$('#show_img').append("<img style='margin-right:3px;' src='" + this. result +"' />");
 					}
 				}
 
 			}
+
 		}); });
 	$('input[type=radio]').click(function(event) {
 
@@ -215,4 +212,54 @@
 			case '3': $('#bei_file').css('display', 'block');$('#bei_pic').css('display', 'none');$('#bei_text').css('display', 'none');$('#leixing').val('3');break;
 		}
 	});
+
+
+
+	function add_commit(){
+		var formdata = new FormData();
+		var url = "<?=\yii\helpers\Url::toRoute("visit/visit_note_save")?>";
+		var content_type = $(".content_type:checked").val();
+
+		formdata.append('mgu_id',"<?=$mgu_id?>");
+		formdata.append('general_note_type', $(".note_type").val());
+		formdata.append('content_type', content_type);
+
+		//获取备注内容
+		if(content_type == 1){
+			formdata.append('content_text',$(".text_data").val());
+		}else if(content_type == 2){
+			var img_data = document.getElementsByClassName("img_data")[0];
+
+			var files = !!img_data.files ? img_data.files : [];
+			for(var i=0;i<files.length;i++){
+				formdata.append('content_img_'+ i, img_data.files[i]);
+			}
+		}else if(content_type == 3){
+			var file_data = document.getElementsByClassName("file_data")[0];
+			formdata.append('content_file', file_data.files[0]);
+		}
+		$.ajax({
+			url:url,
+			type:'POST',
+			data:formdata,
+			dataType:'json',
+			processData: false,  // 告诉jQuery不要去处理发送的数据
+			contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
+			success:function(msg){
+				if(msg.status){
+					alert("创建成功！");
+					history.go(-1);
+				}else{
+					alert(msg.error);
+				}
+			},
+			error:function(XmlHttpRequest,textStatus,errorThrown){
+
+//				alert('添加失败!');
+//				console.log(XmlHttpRequest);
+//				console.log(textStatus);
+//				console.log(errorThrown);
+			}
+		})
+	}
 </script>

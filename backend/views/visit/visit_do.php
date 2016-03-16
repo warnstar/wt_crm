@@ -125,7 +125,7 @@
 							<a class="btn btn-primary" >查看健康足迹</a>
 							<a href="<?=\yii\helpers\Url::toRoute("visit/visit_error")?>"  class="btn btn-primary" >处理与异常</a>
 							<a class="btn btn-primary visit_complete" >回访完成</a>
-							<a href="<?=\yii\helpers\Url::toRoute("visit/visit_note_add")?>"  class="btn btn-primary" type="submit">添加备注</a>
+							<a href="<?=\yii\helpers\Url::toRoute("visit/visit_note_add") . "&mgu_id=" . $mgu_id?>"  class="btn btn-primary" type="submit">添加备注</a>
 
 						</div>
 					</div>
@@ -141,7 +141,13 @@
 		var data = {
 			id      :   "<?=$mgu_id?>"
 		};
-		$.post(url,data,function(){
+		$.post(url,data,function(msg){
+			if(msg.status){
+				alert("回访完成！");
+				location.href = "<?=\yii\helpers\Url::toRoute("visit/un_visit_list")?>";
+			}else{
+				alert("操作失败");
+			}
 
 		},'json');
 	});

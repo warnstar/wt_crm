@@ -2,13 +2,11 @@
 namespace backend\controllers;
 
 use app\models\Area;
-use app\models\Brand;
-use app\models\Medical_group;
 use app\models\Medical_group_user;
+use app\models\Note;
+use app\models\Note_resource;
 use app\models\Note_type;
-use app\models\Users;
 use app\models\Visit;
-use yii\base\ErrorException;
 use Yii;
 use app\controllers\CommonController;
 
@@ -102,11 +100,73 @@ class VisitController extends CommonController
 
     //添加备注
     public function actionVisit_note_add(){
-        $data['types'] = (new Note_type())->find()->asArray()->all();
+        $mgu_id = Yii::$app->request->get("mgu_id");
+        if($mgu_id){
+            $data['types'] = (new Note_type())->find()->asArray()->all();
+            $data['mgu_id'] = $mgu_id;
 
-        return $this->render("visit_note_add",$data);
+            return $this->render("visit_note_add",$data);
+        }else{
+            return "疗程错误！";
+        }
+
     }
-    public function actionVisit_note_add_save(){
 
+    /**
+     * 创建备注（普通备注）
+     * @return string
+     * @throws \Exception
+     */
+    public function actionVisit_note_save(){
+        $post = Yii::$app->request->post();
+        $note = new Note();
+
+        $note->mgu_id = isset($post['mgu_id']) ? $post['mgu_id'] : null;
+        $note->general_note_type = isset($post['general_note_type']) ? $post['general_note_type'] : null;
+        $note->content_type = isset($post['content_type']) ? $post['content_type'] : null;
+        $note->type = 1;//普通备注
+        $note->worker_id = $this->worker_id;
+        $note->create_time = time();
+
+        $msg['status'] = 0;
+
+        if($note->save()){
+
+            //存储备注内容--上传文件
+            if($note->content_type == 1){
+                //存入文字
+                $note->content = isset($post['content_text']) ? $post['content_text'] : null;
+                $note->save();
+            }else if($note->content_type == 2 || $note->content_type == 3 ){
+                //存入文件（可多文件）
+                if($_FILES){
+                    $res_url = [];
+                    foreach($_FILES as $name=>$v){
+                        $res_url[] = (new \common\lib\oss\Oss())->file_upload($name);
+                    }
+                    if($res_url){
+                        $note->content = json_encode($res_url);
+                    }
+
+                }
+            }
+
+            //存储备注内容
+            if($note->content){
+                if($note->save()){
+                    $msg['status'] = 1;
+                }else{
+                    $note->delete();
+                    $msg['error'] = "备注资料上传失败";
+                }
+            }else{
+                $note->delete();
+                $msg['error'] = "备注资料上传失败";
+            }
+        }else{
+            $msg['error'] = "创建备注失败";
+        }
+
+        return json_encode($msg);
     }
 }

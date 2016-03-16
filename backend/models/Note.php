@@ -35,7 +35,9 @@ class Note extends \yii\db\ActiveRecord
     {
         return [
             [['visit_id', 'mgu_id', 'type', 'content_type', 'general_note_type', 'worker_id', 'create_time'], 'integer'],
-            [['content', 'notify_user'], 'string', 'max' => 255]
+            [['mgu_id', 'type', 'content_type'], 'required'],
+            [['content'], 'string'],
+            [['notify_user'], 'string', 'max' => 255]
         ];
     }
 
