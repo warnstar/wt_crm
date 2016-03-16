@@ -55,6 +55,14 @@
 					</div>
 
 					<div class="form-group">
+						<label class="col-sm-2 control-label">密码</label>
+
+						<div class="col-sm-10">
+							<input type="text" value="123456" class="form-control password_data"  name="password" >
+						</div>
+					</div>
+
+					<div class="form-group">
 						<label class="col-sm-2 control-label">角色</label>
 
 						<div class="col-sm-10"  >
@@ -144,12 +152,15 @@
 					required:true,
 					phone:true
 				},
+				password: {
+					required:true
+				},
 				brand_id: {
 					notling:true
 				},
 				area_id:{
-					myarea:true,
-				},
+					myarea:true
+				}
 			},
 			messages: {
 				name: "请输入客户姓名",
@@ -224,6 +235,7 @@
 			name    :   $(".name_data").val(),
 			sex     :   $(".sex_data:checked").val(),
 			phone   :   $(".phone_data").val(),
+			password   :   $(".password_data").val(),
 			role_id :   $(".role_data").val(),
 			brand_id:   $(".brand_data").val(),
 			area_id :   $(".area_lower_data").val()

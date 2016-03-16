@@ -36,7 +36,7 @@ class Users extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'passport'], 'required'],
-            [['birth', 'sex', 'status', 'area_id', 'create_time'], 'integer'],
+            [['birth', 'sex', 'status', 'area_id', 'create_time','brand_id'], 'integer'],
             [['name', 'passport','cases_code', 'phone', 'wchat'], 'string', 'max' => 255]
         ];
     }
@@ -55,6 +55,7 @@ class Users extends \yii\db\ActiveRecord
             'sex' => 'Sex',
             'cases_code'=>'Cases_code',
             'status' => 'Status',
+            'brand_id'=>'Brand_id',
             'area_id' => 'Area ID',
             'wchat' => 'Wchat',
             'create_time' => 'Create Time',
@@ -76,7 +77,7 @@ class Users extends \yii\db\ActiveRecord
             'users.*',
             'end_time_mgu'          => 'mgu.end_time',
             'start_time_mgu'        =>  'mgu.start_time',
-            'group_name'            =>  'mgu.start_time',
+            'group_name'            =>  'mg.name',
             'brand_id'              =>  'b.id',
             'brand_name'            =>  'b.name'
         ];
@@ -87,18 +88,21 @@ class Users extends \yii\db\ActiveRecord
 
             //筛选品牌
             if(isset($option['brand_id']) && $option['brand_id']){
-                $query->andWhere(['b.id'=>(int)$option['brand_id']]);
+                $query->andWhere(['users.brand_id'=>(int)$option['brand_id']]);
             }
             //筛选区域
             if(isset($option['area_id']) && $option['area_id']){
                 $query->andWhere(['users.area_id'=>(int)$option['area_id']]);
             }
-            //筛选医疗团
+            //筛选上级区域
+            if(isset($option['area_higher_id']) && $option['area_higher_id']){
+                $area_higher_id = $option['area_higher_id'];
+                $query->andWhere("users.area_id in (select id FROM area WHERE parent_id = $area_higher_id)");
+            }
+            //筛选医疗团(最后一次参加）
             if(isset($option['medical_group_id']) && $option['medical_group_id']){
                 $query->andWhere(['mg.id'=>(int)$option['medical_group_id']]);
             }
-
-
 
             //搜索(护照号，手机号，病历号）
             if(isset($option['search']) && $option['search']){
@@ -106,12 +110,19 @@ class Users extends \yii\db\ActiveRecord
                 //$search_num = (int)$search;
                 $query->andWhere("users.passport  LIKE '%$search%' OR users.name LIKE '%$search%' OR users.phone LIKE '%$search%' OR users.cases_code LIKE '%$search%'");
             }
+
+            //未参加某医疗团
+            if(isset($option['un_join_group']) && $option['un_join_group']){
+                $un_join_group = (int)$option['un_join_group'];
+                $query->andWhere("users.id NOT IN ( select user_id from medical_group_user WHERE medical_group_id = $un_join_group)");
+            }
         }
 
 
         $query->leftJoin(['mgu'=>'medical_group_user'],'users.last_mgu=mgu.id')
             ->leftJoin(['mg'=>'medical_group'],'mgu.medical_group_id=mg.id')
-            ->leftJoin(['b'=>'brand'],'mg.brand_id=b.id');
+            ->leftJoin(['mgu_all'=>'medical_group_user'],'users.id=mgu_all.user_id')
+            ->leftJoin(['b'=>'brand'],'users.brand_id=b.id');
 
         $data = $query->asArray()->all();
         $pages = new Pagination([

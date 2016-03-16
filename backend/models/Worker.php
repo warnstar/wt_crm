@@ -62,11 +62,35 @@ class Worker extends \yii\db\ActiveRecord
         ];
     }
 
+    public function detail($id){
+        $query = $this->find();
+
+        $select = [
+            'worker.*',
+            'brand_name'=>'b.name',
+            'area_name'=>'a.name',
+            'role_name'=>'r.name'
+        ];
+        $query->select($select);
+
+        $query->andWhere("worker.id = :id",[':id'=>$id]);
+
+
+        $query->leftJoin(['a'=>'area'],'worker.area_id=a.id')
+            ->leftJoin(['b'=>'brand'],'worker.brand_id=b.id')
+            ->leftJoin(['r'=>'worker_role'],'worker.role_id=r.id');
+
+
+        $data = $query->asArray()->one();
+
+        return $data;
+    }
 
     public function login(){
         $worker = (new Worker())->findOne(['phone'=>$this->phone]);
 
         if($worker && $worker->password == $this->password){
+
             return $worker;
         }else{
             false;
@@ -150,25 +174,12 @@ class Worker extends \yii\db\ActiveRecord
         $worker = $this->find()->where(['phone'=>$phone])->asArray()->one();
         return $worker;
     }
-    public function detail($id){
-        $query = $this->find();
-        $select = [
-            'worker.*'
-        ];
-        $query->select($select);
 
-        $query->where(['id'=>$id]);
-
-        $data = $query->asArray()->one();
-
-        return $data;
-    }
     public function exist(){
-        $worker = $this->findOne(['phone'=>$this->phone]);
-
-        if($worker){
+        $data = $this->findOne(['phone'=>$this->phone]);
+        if($data){
             if($this->id){
-                if($worker->id == $this->id){
+                if($data->id == $this->id){
                     return false;
                 }
             }

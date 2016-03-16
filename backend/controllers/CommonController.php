@@ -15,6 +15,11 @@ class CommonController extends Controller {
 
     public $enableCsrfValidation = false;
 
+    //当前登录用户的权限属性
+    public $role_id     = 0;
+    public $brand_id    = 0;
+    public $area_id     = 0;
+
     public function beforeAction($event) {
 
         $auth   = Yii::$app->authManager;
@@ -23,7 +28,12 @@ class CommonController extends Controller {
         $worker = $session->get('worker');
 
         //已登陆
-        if ($worker && $worker->role_id && $worker->id >= -1) {
+        if ($worker && $worker['role_id'] > 0 && $worker['role_id'] < 4 && $worker['id'] >= -1) {
+            //设置当前登录用户的权限属性
+            $this->role_id      = $worker['role_id'];
+            $this->brand_id     = $worker['brand_id'];
+            $this->area_id      = $worker['area_id'];
+
             return true;
         }else{
             $this->goHome();

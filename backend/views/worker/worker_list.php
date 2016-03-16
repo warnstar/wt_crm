@@ -55,10 +55,11 @@
 									</select>
 								</div>
 								<div  class="m-b-xs" style="float: left;width: 120px;margin-left: 10px;">
-									<select class="input-sm form-control input-s-sm inline worker_filter">
-										<option value="0">医疗团</option>
-										<option value="1">第十期</option>
-										<option value="2">第十一期</option>
+									<select style="width: 120px;float: left;" class="form-control m-b role_data worker_filter" name="role_id">
+										<option value="0">角色</option>
+										<?php if($roles) foreach($roles as $v):?>
+											<option value="<?=$v['id']?>"><?=$v['name']?></option>
+										<?php endforeach;?>
 									</select>
 								</div>
 							</div>
@@ -110,7 +111,6 @@
 									'options' => ['class' => 'pagination pull-center', 'style' => 'margin:0px']
 							]);
 							?>
-
 						</div>
 					</div>
 				</div>
@@ -186,7 +186,8 @@
 		var data = {
 			brand_id        :   $(".brand_data").val(),
 			area_id         :   $(".area_lower_data").val(),
-			area_higher_id  :   $(".area_data").val()
+			area_higher_id  :   $(".area_data").val(),
+			role_id       :   $(".role_data").val()
 		};
 
 		if(data.area_id == 0){

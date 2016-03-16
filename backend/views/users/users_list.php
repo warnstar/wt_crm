@@ -5,7 +5,7 @@
  * Date: 2016/3/8
  * Time: 22:19
  */
-
+$privilege = Yii::$app->session->get("worker");
 ?>
 <!-- 标题 -->
 <div class="row wrapper border-bottom white-bg page-heading title">
@@ -15,7 +15,6 @@
 
 </div>
 <!-- 标题 -->
-
 <div class="row">
 	<div class="col-lg-12">
 		<div class="wrapper wrapper-content animated fadeInUp">
@@ -32,7 +31,7 @@
 						<div class="col-md-1"style="width: 100%;">
 							<button style="float:left;" type="button" id="loading-example-btn" class=" btn btn-white btn-sm"><i class="fa fa-refresh"></i> 刷新</button>
 							<div style="overflow: hidden;float: left;">
-								<div  class="m-b-xs" style="float: left;width: 120px;margin-left: 10px;">
+								<div <?php if($privilege['role_id'] != 1) echo "hidden=hidden";?>  class="m-b-xs" style="float: left;width: 120px;margin-left: 10px;">
 									<select class="input-sm form-control input-s-sm inline brand_data worker_filter">
 										<option value="0">品牌</option>
 										<?php foreach($brands as $b):?>
@@ -41,7 +40,7 @@
 									</select>
 								</div>
 								<div  class="m-b-xs" style="float: left;width: 120px;margin-left: 10px;">
-									<select class="input-sm form-control input-s-sm inline area_data worker_filter">
+									<select  class="input-sm form-control input-s-sm inline area_data worker_filter">
 										<option value="0">区域</option>
 										<?php foreach($areas as $a):?>
 											<option value="<?=$a['id']?>"><?=$a['name']?></option>
@@ -56,10 +55,12 @@
 									</select>
 								</div>
 								<div  class="m-b-xs" style="float: left;width: 120px;margin-left: 10px;">
-									<select class="input-sm form-control input-s-sm inline worker_filter">
+									<select class="input-sm form-control input-s-sm inline group_data worker_filter">
 										<option value="0">医疗团</option>
-										<option value="1">第十期</option>
-										<option value="2">第十一期</option>
+										<?php if(isset($groups) && $groups) foreach($groups as $v):?>
+											<option value="<?=$v['id']?>"><?=$v['name']?></option>
+										<?php endforeach;?>
+
 									</select>
 								</div>
 							</div>
@@ -94,8 +95,7 @@
 								<td class="project-title"><?=date('Y',time())-date('Y',$v['birth'])?></td>
 								<td class="project-title"><?=$v['passport']?></td>
 								<td class="project-title"><?=$v['brand_name']?></td>
-								<td class="project-title">疗程中</td>
-
+								<td class="project-title"><?php if(!$v['last_mgu']) echo "无疗程";else echo  ($v['end_time_mgu'] - $v['start_time_mgu'] > 0) ? "疗程中" : "疗程结束";?></td>
 								<td >
 									<button class=" btn btn-white btn-sm">查看详情</button>
 									<button class="btn-delete btn btn-white btn-sm">删除</button>
@@ -150,7 +150,22 @@
 		});
 	});
 
+	//品牌--》医疗团联动变化
+	$(".brand_data").change(function(){
+		var brand_id = $(this).val();
+		var url = "<?=\yii\helpers\Url::toRoute("group/group_select")?>";
+		var data = {
+			brand_id  :   brand_id
+		};
+		$(".group_data").val(0);
+		if(data.brand_id != 0){
+			$.get(url,data,function(msg){
+				$(".group_data").empty();
+				$(".group_data").html(msg);
+			})
+		}
 
+	});
 
 	//联动变化次级区域
 	$(".area_data").change(function(){
@@ -187,7 +202,8 @@
 		var data = {
 			brand_id        :   $(".brand_data").val(),
 			area_id         :   $(".area_lower_data").val(),
-			area_higher_id  :   $(".area_data").val()
+			area_higher_id  :   $(".area_data").val(),
+			medical_group_id        :   $(".group_data").val()
 		};
 
 		if(data.area_id == 0){

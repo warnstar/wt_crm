@@ -80,6 +80,16 @@
 						</div>
 					</div>
 					<div class="form-group">
+						<label class="col-sm-2 control-label">品牌</label>
+
+						<select style="width: 90px;float: left;" class="form-control m-b" name="brand">
+							<option value="0">品牌</option>
+							<?php if(isset($brands) && $brands) foreach($brands as $v):?>
+								<option value="<?=$v['id']?>"><?=$v['name']?></option>
+							<?php endforeach;?>
+						</select>
+					</div>
+					<div class="form-group">
 						<label class="col-sm-2 control-label">所属区域</label>
 
 						<div class="col-sm-10"  >
@@ -94,7 +104,6 @@
 
 							</select>
 						</div>
-
 					</div>
 
 					<div class="hr-line-dashed"></div>
@@ -150,6 +159,9 @@
 				},
 				birth: {
 					mydate:true
+				},
+				brand: {
+					required:true
 				},
 				area:{
 					myarea:true,
@@ -209,19 +221,20 @@
 	function add_commit(){
 		var url = "<?=\yii\helpers\Url::toRoute("users/save")?>";
 		var data = {
-			name    :   $(".name_data").val(),
-			sex     :   $(".sex_data:checked").val(),
-			phone   :   $(".phone_data").val(),
-			passport :   $(".passport_data").val(),
-			birth   :      $(".birth_data").val(),
-			cases_code :   $(".cases_data").val(),
+			name        :   $(".name_data").val(),
+			sex         :   $(".sex_data:checked").val(),
+			phone       :   $(".phone_data").val(),
+			passport    :   $(".passport_data").val(),
+			birth       :      $(".birth_data").val(),
+			cases_code  :   $(".cases_data").val(),
+			brand_id    :   $(".brand_data").val(),
 			area_id     :   $(".area_lower_data").val()
 		};
 
 		$.post(url,data,function(msg){
 			if(msg.status){
-				//alert("操作成功！");
-				//location.href = "<?=\yii\helpers\Url::toRoute("worker/list")?>";
+				alert("操作成功！");
+				location.href = "<?=\yii\helpers\Url::toRoute("users/list")?>";
 			}else{
 				alert(msg.error);
 			}

@@ -3,6 +3,7 @@ namespace backend\controllers;
 
 use app\models\Area;
 use app\models\Brand;
+use app\models\Medical_group;
 use app\models\Users;
 use Yii;
 use app\controllers\CommonController;
@@ -55,19 +56,32 @@ class UsersController extends CommonController
     }
 
     public function  actionList(){
-
-        $res = (new Users())->search();
+        $option = [];
+        if($this->role_id != 1){
+            $option['brand_id'] = $this->brand_id;
+        }
+        $res = (new Users())->search($option);
         $data['users'] = $res['list'];
         $data['pages'] = $res['pages'];
 
+
         $data['brands'] = (new Brand())->search();
         $data['areas'] = (new Area())->get_lower(0);
+
+        $data['groups'] = [];
+        if($this->role_id != 1){
+            $data['groups'] = (new Medical_group())->find()->where(['brand_id'=>$this->brand_id])->asArray()->all();
+        }
+
 
         return $this->render('users_list',$data);
     }
     public function actionList_ajax(){
 
         $get = Yii::$app->request->get();
+        if($this->role_id != 1){
+            $get['brand_id'] = $this->brand_id;
+        }
 
         $res = (new Users())->search($get);
         $data['users'] = $res['list'];
@@ -81,6 +95,7 @@ class UsersController extends CommonController
 
     public function actionAdd(){
         $data['areas'] = (new Area())->get_lower(0);
+        $data['brands'] = (new Brand())->search();
 
         return $this->render('users_add',$data);
     }
@@ -100,14 +115,17 @@ class UsersController extends CommonController
         $user->area_id = isset($post['area_id']) ? $post['area_id'] : null;
         $user->cases_code = isset($post['cases_code']) ? $post['cases_code'] : null;
 
-
+        //创建的时候
         if(!$user->id){
+//            if($this->role_id != 1){
+//                $user->brand_id = $this->brand_id;
+//            }
             $user->create_time = time();
         }
         $msg['status'] = 0;
         $msg['error'] = "操作失败！";
         if($user->exist()){
-            $msg['error'] = "护照号和病历号5不能重复！";
+            $msg['error'] = "护照号和病历号不能重复！";
         }else{
             if($user->save()){
 

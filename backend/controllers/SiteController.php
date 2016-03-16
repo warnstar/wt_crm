@@ -88,7 +88,9 @@ class SiteController extends Controller
         $msg['status'] = 0;
         if ($worker = $worker->login()) {
             $session = Yii::$app->session;
-            $session->set('worker',$worker);
+
+            $worker_arr = (new Worker())->detail($worker->id);
+            $session->set('worker',$worker_arr);
 
             $msg['status'] = 1;
         } else {
