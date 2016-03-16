@@ -32,7 +32,7 @@ class Medical_group_user extends \yii\db\ActiveRecord
     {
         return [
             [['medical_group_id', 'user_id'], 'required'],
-            [['medical_group_id', 'user_id', 'start_time', 'end_time', 'create_time'], 'integer']
+            [['medical_group_id', 'user_id', 'start_time', 'end_time', 'create_time','next_visit','last_visit'], 'integer']
         ];
     }
 
@@ -47,6 +47,8 @@ class Medical_group_user extends \yii\db\ActiveRecord
             'user_id' => 'User ID',
             'start_time' => 'Start Time',
             'end_time' => 'End Time',
+            'next_visit'=>"Next_visit",
+            'last_visit'=>'Last_visit',
             'create_time' => 'Create Time',
         ];
     }
@@ -55,13 +57,29 @@ class Medical_group_user extends \yii\db\ActiveRecord
 
         $select = [
             'medical_group_user.*',
-            'users.*',
+            'user_name'=>'users.name',
+            'user_passport'=>'users.passport',
             'brand_name'            =>  'b.name'
         ];
         $query->select($select);
 
 
         if($option){
+            //待访问客户
+            if(isset($option['un_visit']) && $option['un_visit']){
+                //当前处于疗程
+                $this_time = strtotime(date("Y-m-d",time()));
+                $query->andWhere("medical_group_user.start_time <= $this_time && medical_group_user.end_time > $this_time");
+
+                //获取待访问的（当前时间小于要访问的时间）
+                $query->andWhere("medical_group_user.next_visit <= $this_time");
+
+                //下次访问的时间在7天之内,未访问过，
+                $flag_time = $this_time * 3600*24*7;
+                $query->andWhere("medical_group_user.last_visit >= $flag_time OR medical_group_user.last_visit = 0");
+                //
+            }
+
 
             //筛选品牌
             if(isset($option['brand_id']) && $option['brand_id']){
@@ -82,7 +100,7 @@ class Medical_group_user extends \yii\db\ActiveRecord
                 $query->andWhere(['medical_group_user.medical_group_id'=>(int)$option['medical_group_id']]);
             }
 
-            //搜索(护照号，手机号，病历号）
+            //搜索(护照号，姓名，手机号，病历号）
             if(isset($option['search']) && $option['search']){
                 $search = $option['search'];
                 //$search_num = (int)$search;
@@ -100,7 +118,6 @@ class Medical_group_user extends \yii\db\ActiveRecord
         $pages = new Pagination([
             'totalCount'    => $query->count(),
             'pageSize'      => 9,
-            'route'         => "users/list"
         ]);
         $query->offset($pages->offset)
             ->limit($pages->limit);
@@ -113,6 +130,38 @@ class Medical_group_user extends \yii\db\ActiveRecord
 
         return $data;
     }
+
+    //待访客户
+    public function un_visit_users($option = null){
+        //brand_id,
+        $option['un_visit'] = true;
+
+
+        $data = $this->search($option);
+
+        return $data;
+    }
+    public function detail($id){
+        $query = $this->find();
+
+        $select = [
+            'medical_group_user.*',
+            'users.*',
+            'brand_name'            =>  'b.name'
+        ];
+        $query->select($select);
+
+        $query->andWhere(['medical_group_user.id'=>$id]);
+
+        $query->leftJoin(['users'],'medical_group_user.user_id=users.id')
+            ->leftJoin(['mg'=>'medical_group'],'medical_group_user.medical_group_id=mg.id')
+            ->leftJoin(['b'=>'brand'],'mg.brand_id=b.id');
+
+        $data = $query->asArray()->one();
+
+        return $data;
+    }
+
     public function exist(){
         $data = $this->find()->where(['medical_group_id'=>$this->medical_group_id,'user_id'=>$this->user_id])->one();
 

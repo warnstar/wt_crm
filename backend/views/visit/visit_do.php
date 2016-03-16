@@ -34,66 +34,61 @@
 						<label class="col-sm-2 control-label">姓名</label>
 
 						<div class="col-sm-10">
-							<input type="text" class="form-control"  name="name" >
+							<input disabled type="text" class="form-control" value="<?=$mgu['name']?>"  name="name" >
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">性别</label>
 						<div class="col-sm-9">
-							<label class="radio-inline"><input type="radio" checked="" value="男"  name="sex">男</label>
-							<label class="radio-inline"><input type="radio" value="女"  name="sex">女</label>
+							<label class="radio-inline"><input disabled type="radio" class="sex_data" checked="<?=$mgu['sex'] == 1 ? true : false?>" value="1"  name="sex">男</label>
+							<label class="radio-inline"><input disabled type="radio" class="sex_data" checked="<?=$mgu['sex'] == 1 ? true : false?>" value="2"  name="sex">女</label>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">年龄</label>
 
 						<div class="col-sm-10">
-							<input type="text" class="form-control"  name="age" >
+							<input disabled type="text" class="form-control" value="<?=date("Y",time())-date("Y",$mgu['birth'])?>"  name="age" >
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">手机号</label>
 
 						<div class="col-sm-10">
-							<input type="text" class="form-control"  name="phone" >
+							<input disabled type="text" class="form-control"  value="<?=$mgu['phone']?>"  name="phone" >
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">护照号</label>
 
 						<div class="col-sm-10">
-							<input type="text" class="form-control"  name="passport" >
+							<input disabled  type="text" class="form-control"  value="<?=$mgu['passport']?>"  name="passport" >
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">出生日期</label>
 
 						<div class="col-sm-10">
-							<input type="text" class="form-control date"  name="birth" >
+							<input disabled type="text" class="form-control date"  value="<?=date("Y-m-d",$mgu['birth'])?>"  name="birth" >
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-2 control-label">病历号(HN)</label>
+						<label disabled class="col-sm-2 control-label">病历号(HN)</label>
 
 						<div class="col-sm-10">
-							<input type="text" class="form-control"  name="hn" >
+							<input disabled type="text" class="form-control"  value="<?=$mgu['cases_code']?>"  name="hn" >
 						</div>
 					</div>
+
 					<div class="form-group">
 						<label class="col-sm-2 control-label">所属区域</label>
 
 						<div class="col-sm-10"  >
-							<select style="width: 90px;float: left;" class="form-control m-b" name="">
-								<option>请选择</option>
-								<option>南区</option>
-								<option>北区</option>
+							<select disabled style="width: 90px;float: left;" class="form-control m-b" name="">
+								<option><?=$area ? $area['higher_name'] : ""?></option>
 							</select>
-							<select style="width: 90px;float: left;margin-left: 10px;" class="form-control m-b" name="area">
-								<option value="0">请选择</option>
-								<option>广东</option>
-								<option>广西</option>
-								<option>山东</option>
-								<option>山西</option>
+							<select disabled style="width: 90px;float: left;margin-left: 10px;" class="form-control m-b" name="area">
+								<option><?=$area ? $area['name'] : ""?></option>
 
 							</select>
 						</div>
@@ -103,21 +98,21 @@
 						<label class="col-sm-2 control-label" >疗程开始时间</label>
 
 						<div class="col-sm-10">
-							<input type="text" class="form-control date"  name="star_time" >
+							<input disabled type="text" class="form-control date"  value="<?=date("Y-m-d",$mgu['start_time'])?>" name="star_time" >
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-2 control-label">疗程结束时间</label>
+						<label disabled class="col-sm-2 control-label">疗程结束时间</label>
 
 						<div class="col-sm-10">
-							<input type="text" class="form-control date"  name="end_time" >
+							<input disabled type="text" class="form-control date"  value="<?=date("Y-m-d",$mgu['end_time'])?>" name="end_time" >
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">状态</label>
 
 						<div class="col-sm-10">
-							<input disabled type="text" class="form-control"  name="status" >
+							<input disabled type="text" class="form-control"  value="<?=$mgu['end_time'] > time() ? "疗程中" : "已结束"?>" name="status" >
 						</div>
 					</div>
 
@@ -129,7 +124,7 @@
 							<a class="btn btn-primary" >查看当前疗程</a>
 							<a class="btn btn-primary" >查看健康足迹</a>
 							<a href="<?=\yii\helpers\Url::toRoute("visit/visit_error")?>"  class="btn btn-primary" >处理与异常</a>
-							<button class="btn btn-primary" type="submit">回访完成</button>
+							<a class="btn btn-primary visit_complete" >回访完成</a>
 							<a href="<?=\yii\helpers\Url::toRoute("visit/visit_note_add")?>"  class="btn btn-primary" type="submit">添加备注</a>
 
 						</div>
@@ -139,3 +134,15 @@
 		</div>
 	</div>
 </div>
+<script>
+	//回访完成
+	$(".visit_complete").click(function(){
+		var url = "<?=\yii\helpers\Url::toRoute("visit/visit_do_save")?>";
+		var data = {
+			id      :   "<?=$mgu_id?>"
+		};
+		$.post(url,data,function(){
+
+		},'json');
+	});
+</script>

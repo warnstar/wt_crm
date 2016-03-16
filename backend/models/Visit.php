@@ -44,4 +44,18 @@ class Visit extends \yii\db\ActiveRecord
             'create_time' => 'Create Time',
         ];
     }
+    public function create(){
+        if($this->save()){
+            //汇总所有备注到此回访记录
+            $notes = (new Note())->find()->where(['mgu_id'=>$this->mgu_id])->all();
+            if($notes) foreach($notes as $v){
+                $v->visit_id = $this->id;
+                $v->save();
+            }
+
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

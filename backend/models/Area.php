@@ -85,7 +85,7 @@ class Area extends \yii\db\ActiveRecord
         $role_id = 0;
         $brand_id = 0;
         $parent_id = 0;
-        dump($option);
+
         if(isset($option['parent_id']) && $option['parent_id']){
             $parent_id = $option['parent_id'];
         }
@@ -120,6 +120,28 @@ class Area extends \yii\db\ActiveRecord
 
         return $data;
     }
+
+    //获取完全区域名
+    public function complete_area_name($id){
+        $query = $this->find();
+
+        $select = [
+            'area.id',
+            'area.name',
+            'higher_id'=> 'higher_area.id',
+            'higher_name'=> 'higher_area.name'
+        ];
+        $query->select($select);
+
+        $query->andWhere(['area.id'=>$id]);
+
+        $query->leftJoin(['higher_area'=>'area'],'area.parent_id=higher_area.id');
+
+        $data = $query->asArray()->one();
+
+        return $data;
+    }
+
     public function exist(){
         $data = $this->findOne(['name'=>$this->name]);
 

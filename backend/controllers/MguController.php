@@ -66,10 +66,15 @@ class MguController extends CommonController
     }
 
 
+    /**
+     * 创建疗程
+     * @return string
+     */
     public function actionSave(){
         $post = Yii::$app->request->post();
         $mgu = new Medical_group_user();
 
+        //更新数据的情况
         if(isset($post['id']) && $post['id']){
             $mgu = (new Medical_group_user())->findOne($post['id']);
         }
@@ -85,7 +90,12 @@ class MguController extends CommonController
         $msg['status'] = 0;
         if($group){
             $mgu->start_time = $group->end_time;
-            $mgu->end_time = $mgu->start_time + $mgu->end_time * 3600 * 24;//之前保存的结束时间是天，规则是开始后的第几天。
+
+            //之前保存的结束时间是天，规则是开始后的第几天。
+            $mgu->end_time = $mgu->start_time + $mgu->end_time * 3600 * 24;
+
+            //写入疗程开始后的下次回访时间
+            $mgu->next_visit = $mgu->start_time + 3600*24;
 
             if($mgu->exist()){
                 $msg['error'] = "已经加入该团！";

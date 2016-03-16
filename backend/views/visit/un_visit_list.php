@@ -75,25 +75,24 @@
 								<td>护照号</td>
 								<td>上次回访时间</td>
 								<td>本次应回访时间</td>
-								<td>状态</td>
 								<td>操作</td>
 							</tr>
 							</thead>
 							<tbody align="center">
-
+							<?php if($mgu) foreach($mgu as $v):?>
 							<tr>
-								<td class="project-status">张三四</td>
-								<td class="project-title">G1234567</td>
-								<td class="project-title">07/03/2016</td>
+								<td class="project-status"><?=$v['user_name']?></td>
+								<td class="project-title"><?=$v['user_passport']?></td>
+								<td class="project-title"><?=$v['last_visit'] ? date("Y-m-d",$v['last_visit']) : "无"?></td>
+								<td class="project-title"><?=date("Y-m-d",$v['next_visit'])?></td>
 
-								<td class="project-title">07/03/2016</td>
-								<td class="project-title">疗程中</td>
 
 								<td >
-									<a href="<?=\yii\helpers\Url::toRoute("visit/visit_do")?>" class=" btn btn-white btn-sm">回访</a>
+									<a href="<?=\yii\helpers\Url::toRoute("visit/visit_do") . "&id=" .  $v['id']?>" class=" btn btn-white btn-sm">回访</a>
 
 								</td>
 							</tr>
+							<?php endforeach;?>
 							</tbody>
 						</table>
 					</div>

@@ -19,6 +19,7 @@ class CommonController extends Controller {
     public $role_id     = 0;
     public $brand_id    = 0;
     public $area_id     = 0;
+    public $worker_id   = -1;
 
     public function beforeAction($event) {
 
@@ -33,6 +34,7 @@ class CommonController extends Controller {
             $this->role_id      = $worker['role_id'];
             $this->brand_id     = $worker['brand_id'];
             $this->area_id      = $worker['area_id'];
+            $this->worker_id    = $worker['id'];
 
             return true;
         }else{

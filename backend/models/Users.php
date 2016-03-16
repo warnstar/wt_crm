@@ -142,6 +142,7 @@ class Users extends \yii\db\ActiveRecord
         return $data;
     }
 
+
     public function exist(){
         $data = $this->findOne(['passport'=>$this->passport]);
 
