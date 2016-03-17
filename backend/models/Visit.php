@@ -29,7 +29,8 @@ class Visit extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['mgu_id', 'worker_id','type', 'create_time'], 'integer']
+            [['mgu_id', 'worker_id','type', 'create_time'], 'integer'],
+            [['notify_user'], 'string'],
         ];
     }
 
@@ -44,6 +45,7 @@ class Visit extends \yii\db\ActiveRecord
             'worker_id' => 'Worker ID',
             'type'      =>  'Type',
             'create_time' => 'Create Time',
+            'notify_user'=>'Notify_user'
         ];
     }
     public function search($option = null){

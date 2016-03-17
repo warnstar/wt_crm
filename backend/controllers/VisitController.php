@@ -111,11 +111,75 @@ class VisitController extends CommonController
     }
     //==>回访异常
     public function actionVisit_error(){
-        return $this->render("visit_error");
+        $mgu_id = Yii::$app->request->get("mgu_id");
+        $mgu = (new Medical_group_user())->find()->where(['id'=>$mgu_id])->one();
+        if($mgu){
+            $data['mgu_id'] = $mgu_id;
+
+            return $this->render("visit_error",$data);
+        }else{
+            return "访问异常";
+        }
     }
     //==>回访异常
     public function actionVisit_error_save(){
+        $post = Yii::$app->request->post();
 
+        $next_day = isset($post['next_day']) ? $post['next_day'] : null;
+        $notify_user = isset($post['notify_user']) ? $post['notify_user'] : null;
+
+        $note = new Note();
+
+        $note->mgu_id = isset($post['mgu_id']) ? $post['mgu_id'] : null;
+        $note->content =  isset($post['content']) ? $post['content'] : null;
+        $note->general_note_type = 0;
+        $note->content_type = 1;//异常备注只有文本
+        $note->type = 2;        //异常备注
+        $note->worker_id = $this->worker_id;
+        $note->notify_user = $notify_user;
+        $note->create_time = time();
+
+        $mgu = (new Medical_group_user())->find()->where(['id'=>$note->mgu_id])->one();
+
+        $msg['status'] = 0;
+
+        //创建备注成功
+        if($mgu && $note->save()){
+            $msg['status'] = 1;
+
+            //完成回访
+            $mgu->last_visit = time();
+            if($next_day == 1){
+                //第二天通知我
+                $mgu->next_visit = strtotime(date("Y-m-d",time())) + 3600*24*1;
+            }else{
+                $mgu->next_visit = strtotime(date("Y-m-d",time())) + 3600*24*7;
+            }
+
+            //回访时间设置完成
+            if($mgu->save()){
+                //创建回访记录
+                $visit = new Visit();
+                $visit->notify_user = $notify_user;//通知用户
+                $visit->mgu_id = $mgu->id;
+                $visit->worker_id = $this->worker_id;
+                $visit->type = 2;
+                $visit->create_time = $mgu->last_visit;
+                //创建回访记录
+                $visit_res = $visit->create();
+                if($visit_res){
+                    //发送短信通知
+
+                }
+
+            }else{
+                $msg['error'] = "创建回访记录失败！";
+            }
+        }else{
+            $msg['error'] = "创建备注失败";
+        }
+
+        return json_encode($msg);
     }
 
 
@@ -130,7 +194,6 @@ class VisitController extends CommonController
         }else{
             return "疗程错误！";
         }
-
     }
 
     /**

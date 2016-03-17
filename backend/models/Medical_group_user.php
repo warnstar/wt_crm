@@ -69,7 +69,7 @@ class Medical_group_user extends \yii\db\ActiveRecord
             if(isset($option['un_visit']) && $option['un_visit']){
                 //当前处于疗程
                 //当前时间（算今天结束后的时间）
-                $this_time = strtotime(date("Y-m-d",time() + 3600*24));
+                $this_time = time();
                 $query->andWhere("medical_group_user.start_time <= $this_time && medical_group_user.end_time > $this_time");
 
                 //获取待访问的（当前时间小于要访问的时间）
