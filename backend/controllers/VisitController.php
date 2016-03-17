@@ -4,7 +4,6 @@ namespace backend\controllers;
 use app\models\Area;
 use app\models\Medical_group_user;
 use app\models\Note;
-use app\models\Note_resource;
 use app\models\Note_type;
 use app\models\Visit;
 use Yii;
@@ -31,10 +30,33 @@ class VisitController extends CommonController
 
     //回访列表
     public function  actionVisit_list(){
-        $data = [];
+        $get = Yii::$app->request->get("mgu_id");
+        $option = [];
+        if($this->worker_id){
+            $option['worker_id'] = $this->worker_id;
+        }
+        if(isset($get['mgu_id']) && $get['mgu_id']){
+            $option['mgu_id'] = $get['mgu_id'];
+        }
+
+        $visits = (new Visit())->search($option);
+
+        $data['visits'] = $visits['list'];
+        $data['pages'] = $visits['pages'];
+
         return $this->render("visit_list",$data);
     }
 
+    public function actionVisit_detail(){
+        $id = Yii::$app->request->get("id");
+        $data['visit'] = (new Visit())->detail($id);
+
+        $option['visit_id'] = $id;
+        $data['visit_notes'] = (new Note())->search($option);
+
+
+        return $this->render("visit_detail",$data);
+    }
 
     //待回访列表
     public function actionUn_visit_list(){
@@ -43,7 +65,6 @@ class VisitController extends CommonController
         $mgu = (new Medical_group_user())->un_visit_users($option);
         $data['mgu'] = $mgu['list'];
         $data['pages'] = $mgu['pages'];
-
 
         return $this->render("un_visit_list",$data);
     }
@@ -75,7 +96,7 @@ class VisitController extends CommonController
                 $visit = new Visit();
                 $visit->mgu_id = $mgu->id;
                 $visit->worker_id = $this->worker_id;
-                $visit->create_time = time();
+                $visit->create_time = $mgu->last_visit;
                 //创建回访记录
                 $visit_res = $visit->create();
                 $msg['status'] = 1;
@@ -122,7 +143,7 @@ class VisitController extends CommonController
         $note = new Note();
 
         $note->mgu_id = isset($post['mgu_id']) ? $post['mgu_id'] : null;
-        $note->general_note_type = isset($post['general_note_type']) ? $post['general_note_type'] : null;
+        $note->general_note_type = isset($post['general_note_type']) ? $post['general_note_type'] : 0;
         $note->content_type = isset($post['content_type']) ? $post['content_type'] : null;
         $note->type = 1;//普通备注
         $note->worker_id = $this->worker_id;

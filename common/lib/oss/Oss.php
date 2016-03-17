@@ -10,6 +10,7 @@ include "oss_service/sdk.class.php";
 class Oss{
 	private $oss;
 	const BUCKET = 'wtcrm';
+	const IMG_OPTION_ADDR = "http://wtcrm.img-cn-shenzhen.aliyuncs.com/";
 
 	public function __construct(){
 		$this->oss = new \ALIOSS();
@@ -45,6 +46,7 @@ class Oss{
 		if($res){
 			$result['url'] = $res->header['_info']['url'];
 			$result['url_object'] = $name;
+			$result['name'] = $info['name'];
 		}else{
 			$result['error'] = '上传失败，请重试';
 		}

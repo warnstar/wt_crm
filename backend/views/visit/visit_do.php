@@ -121,9 +121,9 @@
 					<div class="form-group" style="width: 118%;">
 						<div class="col-sm-4 col-sm-offset-3">
 							<a href="javascript:history.go(-1)" class="btn btn-primary" type="submit">返回</a>
-							<a class="btn btn-primary" >查看当前疗程</a>
-							<a class="btn btn-primary" >查看健康足迹</a>
-							<a href="<?=\yii\helpers\Url::toRoute("visit/visit_error")?>"  class="btn btn-primary" >处理与异常</a>
+							<a href="<?=\yii\helpers\Url::toRoute("mgu/mgu_detail") . "&mgu_id=" . $mgu_id?>" class="btn btn-primary" >查看当前疗程</a>
+							<a href="<?=\yii\helpers\Url::toRoute("mgu/user_join_group") . "&user_id=" . $mgu['user_id'] . "&brand_id=" . $mgu['brand_id']?>" class="btn btn-primary" >查看健康足迹</a>
+							<a href="<?=\yii\helpers\Url::toRoute("visit/visit_error") . "&mgu_id=" . $mgu_id?>"  class="btn btn-primary" >处理与异常</a>
 							<a class="btn btn-primary visit_complete" >回访完成</a>
 							<a href="<?=\yii\helpers\Url::toRoute("visit/visit_note_add") . "&mgu_id=" . $mgu_id?>"  class="btn btn-primary" type="submit">添加备注</a>
 

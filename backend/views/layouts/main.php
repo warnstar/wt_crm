@@ -140,8 +140,11 @@
                 <li>
                     <a href="index.html#"><i class="fa fa-desktop"></i> <span class="nav-label">回访管理</span></a>
                     <ul class="nav nav-second-level">
+                        <?php if($worker['role_id'] == 2):?>
                         <li><a href="<?=Url::toRoute("visit/un_visit_list")?>">待访客户</a>
                         </li>
+                        <?php endif;?>
+
                         <li><a href="<?=Url::toRoute("visit/visit_list")?>">回访记录</a>
                         </li>
 

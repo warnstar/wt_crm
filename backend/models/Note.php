@@ -59,4 +59,40 @@ class Note extends \yii\db\ActiveRecord
             'create_time' => 'Create Time',
         ];
     }
+    public function search($option = null){
+        $query = $this->find();
+
+        $select = [
+            'note.*',
+            'worker_name'=>'w.name',
+            'worker_role'=>'r.name'
+        ];
+        $query->select($select);
+
+        $query->orderBy("note.create_time asc");
+        if($option){
+            //筛选创建者
+            if(isset($option['worker_id']) && $option['worker_id']){
+                $query->andWhere(['note.worker_id'=>(int)$option['worker_id']]);
+            }
+
+            //筛选回访记录
+            if(isset($option['visit_id']) && $option['visit_id']){
+                $query->andWhere(['note.visit_id'=>(int)$option['visit_id']]);
+            }
+
+            //筛选疗程
+            if(isset($option['mgu_id']) && $option['mgu_id']){
+                $query->andWhere(['note.mgu_id'=>(int)$option['mgu_id']]);
+            }
+        }
+
+        $query->leftJoin(['w'=>'worker'],'note.worker_id=w.id')
+            ->leftJoin(['r'=>'worker_role'],'w.role_id=r.id');
+
+
+        $data = $query->asArray()->all();
+
+        return $data;
+    }
 }

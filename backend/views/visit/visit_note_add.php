@@ -45,7 +45,7 @@
 						<label class="col-sm-2 control-label">备注项目</label>
 
 						<div class="col-sm-10"  >
-							<select style="width: auto;float: left;" class="form-control note_type " name="type">
+							<select style="width: auto;float: left;" class="form-control note_type " name="note_type">
 								<option value="0">请选择</option>
 								<?php if($types) foreach($types as $v):?>
 									<option value="<?=$v['id']?>"><?=$v['name']?></option>
@@ -147,7 +147,7 @@
 		// validate signup form on keyup and submit
 		$("#signupForm").validate({
 			rules: {
-				type: "required",
+				note_type: {notling:true,},
 				n_text: {beizhu:true,},
 				n_file: {beizhu:true,},
 				n_pic: {beizhu:true,}
@@ -155,7 +155,7 @@
 
 			},
 			messages: {
-				type  : "备注项目不能为空",
+				note_type  : "备注项目不能为空",
 				n_text: {beizhu:"备注内容不能空"},
 				n_file: {beizhu:"请选择要上传的文件"},
 				n_pic: {beizhu:"请选择要上传的图片"}

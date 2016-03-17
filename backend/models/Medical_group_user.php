@@ -68,23 +68,28 @@ class Medical_group_user extends \yii\db\ActiveRecord
             //待访问客户
             if(isset($option['un_visit']) && $option['un_visit']){
                 //当前处于疗程
-                $this_time = strtotime(date("Y-m-d",time()));
+                //当前时间（算今天结束后的时间）
+                $this_time = strtotime(date("Y-m-d",time() + 3600*24));
                 $query->andWhere("medical_group_user.start_time <= $this_time && medical_group_user.end_time > $this_time");
 
                 //获取待访问的（当前时间小于要访问的时间）
                 $query->andWhere("medical_group_user.next_visit <= $this_time");
 
-                //下次访问的时间在7天之内,未访问过，
-                $flag_time = $this_time * 3600*24*7;
-                $query->andWhere("medical_group_user.last_visit >= $flag_time OR medical_group_user.last_visit = 0");
-                //
+                //未访问过，
+                $query->orWhere("medical_group_user.last_visit = 0");
+
             }
 
+            //筛选用户参加的
+            if(isset($option['user_id']) && $option['user_id']){
+                $query->andWhere(['medical_group_user.user_id'=>(int)$option['user_id']]);
+            }
 
             //筛选品牌
             if(isset($option['brand_id']) && $option['brand_id']){
                 $query->andWhere(['b.id'=>(int)$option['brand_id']]);
             }
+
             //筛选区域
             if(isset($option['area_id']) && $option['area_id']){
                 $query->andWhere(['users.area_id'=>(int)$option['area_id']]);
@@ -141,13 +146,17 @@ class Medical_group_user extends \yii\db\ActiveRecord
 
         return $data;
     }
+
+    //疗程详情
     public function detail($id){
         $query = $this->find();
 
         $select = [
-            'medical_group_user.*',
             'users.*',
-            'brand_name'            =>  'b.name'
+            'medical_group_user.*',
+            'brand_id'              =>  'b.id',
+            'brand_name'            =>  'b.name',
+            'group_name'            =>  'mg.name'
         ];
         $query->select($select);
 
