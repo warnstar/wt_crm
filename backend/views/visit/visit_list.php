@@ -31,7 +31,7 @@
 						</div>
 					</div>
 
-					<div class="project-list">
+					<div class="project-list list_data">
 
 						<table class="table table-hover">
 							<thead>
@@ -61,6 +61,14 @@
 
 							</tbody>
 						</table>
+						<div class="pages" style="width:80%;margin:0 auto;text-align: center;">
+							<?=
+							\yii\widgets\LinkPager::widget([
+									'pagination' => $pages,
+									'options' => ['class' => 'pagination pull-center', 'style' => 'margin:0px']
+							]);
+							?>
+						</div>
 					</div>
 				</div>
 			</div>

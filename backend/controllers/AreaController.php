@@ -1,9 +1,7 @@
 <?php
 namespace backend\controllers;
 
-use app\controllers\CommonController;
 use app\models\Area;
-use app\models\City;
 use Yii;
 
 /**

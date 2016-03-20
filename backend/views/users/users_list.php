@@ -97,7 +97,7 @@ $privilege = Yii::$app->session->get("worker");
 								<td class="project-title"><?=$v['brand_name']?></td>
 								<td class="project-title"><?php if(!$v['last_mgu']) echo "无疗程";else echo  ($v['end_time_mgu'] - $v['start_time_mgu'] > 0) ? "疗程中" : "疗程结束";?></td>
 								<td >
-									<button class=" btn btn-white btn-sm">查看详情</button>
+									<a href="<?=\yii\helpers\Url::toRoute("users/detail") . "&id=" . $v['id']?>" class=" btn btn-white btn-sm">查看详情</a>
 									<button class="btn-delete btn btn-white btn-sm">删除</button>
 								</td>
 							</tr>
@@ -200,9 +200,9 @@ $privilege = Yii::$app->session->get("worker");
 		var url = "<?=\yii\helpers\Url::toRoute("users/list_ajax")?>";
 
 		var data = {
-			brand_id        :   $(".brand_data").val(),
-			area_id         :   $(".area_lower_data").val(),
-			area_higher_id  :   $(".area_data").val(),
+			brand_id                :   $(".brand_data").val(),
+			area_id                 :   $(".area_lower_data").val(),
+			area_higher_id          :   $(".area_data").val(),
 			medical_group_id        :   $(".group_data").val()
 		};
 
@@ -219,5 +219,19 @@ $privilege = Yii::$app->session->get("worker");
 
 			$(".list_data").html(msg);
 		})
+	})
+
+	//局部刷新
+	$(function(){
+		$('.list_data').on('click', '.pages a', function(){
+			var url = $(this).attr('href');
+
+			$.get(url, '', function(msg){
+				$(".list_data").empty();
+				$(".list_data").html(msg);
+
+			});
+			return false;
+		});
 	})
 </script>

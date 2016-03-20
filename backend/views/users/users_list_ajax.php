@@ -26,10 +26,9 @@
 			<td class="project-title"><?=date('Y',time())-date('Y',$v['birth'])?></td>
 			<td class="project-title"><?=$v['passport']?></td>
 			<td class="project-title"><?=$v['brand_name']?></td>
-			<td class="project-title">疗程中</td>
-
+			<td class="project-title"><?php if(!$v['last_mgu']) echo "无疗程";else echo  ($v['end_time_mgu'] - $v['start_time_mgu'] > 0) ? "疗程中" : "疗程结束";?></td>
 			<td >
-				<button class=" btn btn-white btn-sm">查看详情</button>
+				<a href="<?=\yii\helpers\Url::toRoute("users/detail") . "&id=" . $v['id']?>" class=" btn btn-white btn-sm">查看详情</a>
 				<button class="btn-delete btn btn-white btn-sm">删除</button>
 			</td>
 		</tr>
@@ -39,9 +38,8 @@
 <div class="pages" style="width:80%;margin:0 auto;text-align: center;">
 	<?=
 	\yii\widgets\LinkPager::widget([
-		'pagination' => $pages,
-		'options' => ['class' => 'pagination pull-center', 'style' => 'margin:0px']
+			'pagination' => $pages,
+			'options' => ['class' => 'pagination pull-center', 'style' => 'margin:0px']
 	]);
 	?>
-
 </div>

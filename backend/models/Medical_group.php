@@ -108,8 +108,7 @@ class Medical_group extends \yii\db\ActiveRecord
 
         $pages = new Pagination([
             'totalCount' => $query->count(),
-            'pageSize'  => 9,
-            'route' => "group/list"
+            'pageSize'  => 3,
         ]);
         $query->offset($pages->offset)
             ->limit($pages->limit);

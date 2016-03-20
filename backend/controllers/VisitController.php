@@ -2,12 +2,13 @@
 namespace backend\controllers;
 
 use app\models\Area;
+use app\models\Brand;
+use app\models\Medical_group;
 use app\models\Medical_group_user;
 use app\models\Note;
 use app\models\Note_type;
 use app\models\Visit;
 use Yii;
-use app\controllers\CommonController;
 
 /**
  * Site controller
@@ -60,14 +61,39 @@ class VisitController extends CommonController
 
     //待回访列表
     public function actionUn_visit_list(){
-        $option['brand_id'] = $this->brand_id;
+        $option = [];
+        if($this->role_id != 1){
+            $option['brand_id'] = $this->brand_id;
+        }
+        $res = (new Medical_group_user())->un_visit_users($option);
+        $data['mgu'] = $res['list'];
+        $data['pages'] = $res['pages'];
 
-        $mgu = (new Medical_group_user())->un_visit_users($option);
-        $data['mgu'] = $mgu['list'];
-        $data['pages'] = $mgu['pages'];
+
+        $data['brands'] = (new Brand())->search();
+        $data['areas'] = (new Area())->get_lower(0);
+
+        $data['groups'] = [];
+        if($this->role_id != 1){
+            $data['groups'] = (new Medical_group())->find()->where(['brand_id'=>$this->brand_id])->asArray()->all();
+        }
 
         return $this->render("un_visit_list",$data);
     }
+    public function actionUn_visit_list_ajax(){
+
+        $get = Yii::$app->request->get();
+        if($this->role_id != 1){
+            $get['brand_id'] = $this->brand_id;
+        }
+
+        $res = (new Medical_group_user())->un_visit_users($get);
+        $data['mgu'] = $res['list'];
+        $data['pages'] = $res['pages'];
+
+        return $this->renderPartial("un_visit_list_ajax",$data);
+    }
+
 
     //回访详情
     public function actionVisit_do(){

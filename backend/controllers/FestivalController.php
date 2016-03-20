@@ -3,10 +3,7 @@ namespace backend\controllers;
 
 use app\models\Brand;
 use app\models\Festival;
-use app\models\Worker;
-use yii\base\ErrorException;
 use Yii;
-use app\controllers\CommonController;
 
 /**
  * Site controller
@@ -26,6 +23,7 @@ class FestivalController extends CommonController
             ],
         ];
     }
+
 
     public function  actionList(){
         $data['festivals'] = (new Festival())->search();

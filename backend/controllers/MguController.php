@@ -10,7 +10,6 @@ use app\models\Note_type;
 use app\models\Users;
 use yii\base\ErrorException;
 use Yii;
-use app\controllers\CommonController;
 
 /**
  * Site controller

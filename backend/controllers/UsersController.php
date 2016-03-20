@@ -6,7 +6,6 @@ use app\models\Brand;
 use app\models\Medical_group;
 use app\models\Users;
 use Yii;
-use app\controllers\CommonController;
 use common\models\LoginForm;
 
 /**
@@ -90,7 +89,23 @@ class UsersController extends CommonController
         return $this->renderPartial("users_list_ajax",$data);
     }
     public function actionDetail(){
-        return $this->render('users_detail');
+        $id = Yii::$app->request->get("id");
+
+        $user = (new Users())->detail($id);
+        $data['user'] = $user;
+
+        if($user){
+            $data['brands'] = (new Brand())->search();
+
+            $area_higher = (new Area())->find()->where(['id'=>$user['area_id']])->asArray()->one();
+            $data['user']['area_higher_id'] = $area_higher['parent_id'];
+            $data['area_higher'] = (new Area())->get_lower(0);
+            $data['area_lower'] = (new Area())->get_lower($data['user']['area_higher_id']);
+
+            return $this->render('users_detail',$data);
+        }else{
+            return "未找到用户";
+        }
     }
 
     public function actionAdd(){

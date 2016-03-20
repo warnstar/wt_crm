@@ -7,7 +7,6 @@ use app\models\Medical_group;
 use app\models\Medical_group_user;
 use app\models\Users;
 use Yii;
-use app\controllers\CommonController;
 
 /**
  * Site controller

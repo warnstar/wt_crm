@@ -1,11 +1,10 @@
 <?php
-namespace app\controllers;
+namespace backend\controllers;
+
+use common\lib\Sms;
 use Yii;
 use yii\web\Controller;
 use yii\web\Response;
-use yii\helpers\Url;
-use yii\helpers\Json;
-use yii\filters\AccessControl;
 /**
  * @desc   公共控制器，需要权限验证的都继承此控制器
  * @author WCHUANG
@@ -51,5 +50,16 @@ class CommonController extends Controller {
         return $this->renderPartial('//site/error',['error' => $error]);
     }
 
+    /**
+     * 短信测试
+     */
+    public function actionSms_test(){
 
+        $a = (new Sms())->sendMessage('18665278127',"128937");
+        dump($a);
+    }
+
+    public function actionExcel_import(){
+
+    }
 }

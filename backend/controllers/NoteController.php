@@ -5,7 +5,6 @@ use app\models\Note;
 use app\models\Note_type;
 use yii\base\ErrorException;
 use Yii;
-use app\controllers\CommonController;
 
 /**
  * Site controller
