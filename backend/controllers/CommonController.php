@@ -1,6 +1,7 @@
 <?php
 namespace backend\controllers;
 
+use common\Excel;
 use common\lib\Sms;
 use Yii;
 use yii\web\Controller;
@@ -61,5 +62,41 @@ class CommonController extends Controller {
 
     public function actionExcel_import(){
 
+
+        return $this->render("excel");
+    }
+
+    public function actionExcel_save(){
+        if(isset($_FILES['excel_data'])){
+            $objPHPExcel = \PHPExcel_IOFactory::load($_FILES['excel_data']['tmp_name']);
+
+            $sheet = $objPHPExcel->getSheet(0); // 读取第一個工作表
+            $highestRow = $sheet->getHighestRow(); // 取得总行数
+            $highestColumm = $sheet->getHighestColumn(); // 取得总列数
+
+
+            /** 循环读取每个单元格的数据 */
+            $dataset = [];
+            for ($row = 1; $row <= $highestRow; $row++){//行数是以第1行开始
+
+                for ($column = 'A'; $column <= $highestColumm; $column++) {//列数是以A列开始
+                    if($row > 1 && isset($dataset[1]) && $dataset[1]){
+
+                        $dataset[$row][$dataset[1][$column]] = $sheet->getCell($column.$row)->getValue();
+                    }else{
+                        $dataset[$row][$column] = $sheet->getCell($column.$row)->getValue();
+                    }
+                }
+            }
+            array_shift($dataset);
+            dump($dataset);
+        }else{
+            echo "文件不对！";
+        }
+
+    }
+
+    public function actionExcel_export(){
+        $test =  (new Excel())->test();
     }
 }
