@@ -3,6 +3,7 @@ namespace backend\controllers;
 
 use app\models\Area;
 use app\models\Brand;
+use app\models\Users;
 use app\models\Worker;
 use Yii;
 
@@ -105,7 +106,35 @@ class WorkerController extends CommonController
 
         return json_encode($msg);
     }
-    public function password_reset(){
-        return $this->render('password_reset',$data);
+    public function actionPassword_reset(){
+        return $this->render('password_reset');
+    }
+
+    public function actionPassword_save(){
+        $old_password = Yii::$app->request->post("old_password");
+        $new_password = Yii::$app->request->post("new_password");
+
+        $worker = (new Worker())->find()->where(['id'=>$this->worker_id])->one();
+        $msg['status'] = 0;
+        if(!$worker){
+            $msg['error'] = "用户不存在！";
+        }
+        if(!$old_password || !$new_password){
+            $msg['error'] = "新旧密码都不能为空！";
+        }
+
+        if(!isset($msg['error'])){
+            if(md5($old_password) == $worker->password){
+                $worker->password = md5($new_password);
+                if($worker->save()){
+                    $msg['status'] = 1;
+                }else{
+                    $msg['error'] = "更新密码失败";
+                }
+            }else{
+                $msg['error'] = "旧密码不对！";
+            }
+        }
+        return json_encode($msg);
     }
 }

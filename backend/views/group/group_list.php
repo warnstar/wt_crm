@@ -30,7 +30,7 @@ $privilege = Yii::$app->session->get("worker");
 				<div class="ibox-content">
 					<div class="row m-b-sm m-t-sm">
 						<div class="col-md-1"style="width: 100%;">
-							<button style="float:left;" type="button" id="loading-example-btn" class=" btn btn-white btn-sm"><i class="fa fa-refresh"></i> 刷新</button>
+							<button   onclick="location.reload()" style="float:left;" type="button" id="loading-example-btn" class=" btn btn-white btn-sm"><i class="fa fa-refresh"></i> 刷新</button>
 							<div <?php if($privilege['role_id'] != 1) echo "hidden=hidden";?> style="overflow: hidden;float: left;">
 								<div  class="m-b-xs" style="float: left;width: 120px;margin-left: 10px;">
 									<select class="input-sm form-control input-s-sm inline worker_filter brand_data">
@@ -86,6 +86,7 @@ $privilege = Yii::$app->session->get("worker");
 							</tbody>
 						</table>
 						<div class="pages" style="width:80%;margin:0 auto;text-align: center;">
+							<?php $pages->route = "visit/error_un_do_ajax";?>
 							<?=
 							\yii\widgets\LinkPager::widget([
 									'pagination' => $pages,
@@ -126,5 +127,18 @@ $privilege = Yii::$app->session->get("worker");
 
 			$(".list_data").html(msg);
 		})
+	});
+
+	//局部刷新
+	$(function(){
+		$('.list_data').on('click', '.pages a', function(){
+			var url = $(this).attr('href');
+
+			$.get(url, '', function(msg){
+				$(".list_data").empty();
+				$(".list_data").html(msg);
+			});
+			return false;
+		});
 	})
 </script>

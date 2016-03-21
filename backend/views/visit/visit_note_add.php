@@ -25,7 +25,7 @@
 <!-- 标题 -->
 <div class="row wrapper border-bottom white-bg page-heading title">
 	<div class="col-lg-10">
-		<h2>用户管理-添加备注</h2>
+		<h2>回访管理-添加备注</h2>
 	</div>
 
 </div>
@@ -223,6 +223,8 @@
 		formdata.append('mgu_id',"<?=$mgu_id?>");
 		formdata.append('general_note_type', $(".note_type").val());
 		formdata.append('content_type', content_type);
+		formdata.append('type', "<?=$type?>");//异常备注类型
+		formdata.append('visit_id', "<?=$visit_id?>");//异常备注所属回访记录
 
 		//获取备注内容
 		if(content_type == 1){
@@ -238,6 +240,8 @@
 			var file_data = document.getElementsByClassName("file_data")[0];
 			formdata.append('content_file', file_data.files[0]);
 		}
+
+
 		$.ajax({
 			url:url,
 			type:'POST',

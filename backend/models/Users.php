@@ -129,7 +129,6 @@ class Users extends \yii\db\ActiveRecord
         $pages = new Pagination([
             'totalCount' => $query->count(),
             'pageSize'  => 9,
-            'route'     =>'users/list_ajax'
         ]);
         $query->offset($pages->offset)
             ->limit($pages->limit);

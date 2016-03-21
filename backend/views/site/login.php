@@ -55,7 +55,7 @@
 
             $.post(url,data,function(msg){
                 if(msg.status){
-                   location.href = "<?=\yii\helpers\Url::toRoute("users/list")?>";
+                   location.href = "<?=\yii\helpers\Url::toRoute("common/home")?>";
                 }else{
                     alert("账户名或密码错误！");
                 }

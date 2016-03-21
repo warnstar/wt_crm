@@ -57,8 +57,12 @@ class Medical_group_user extends \yii\db\ActiveRecord
 
         $select = [
             'medical_group_user.*',
+
             'user_name'=>'users.name',
+            'user_sex'=>'users.sex',
+            'user_birth'=>'users.birth',
             'user_passport'=>'users.passport',
+
             'brand_name'            =>  'b.name'
         ];
         $query->select($select);
@@ -79,6 +83,7 @@ class Medical_group_user extends \yii\db\ActiveRecord
                 $query->orWhere("medical_group_user.last_visit = 0");
 
             }
+
 
             //筛选用户参加的
             if(isset($option['user_id']) && $option['user_id']){
@@ -146,6 +151,8 @@ class Medical_group_user extends \yii\db\ActiveRecord
 
         return $data;
     }
+
+
 
     //疗程详情
     public function detail($id){

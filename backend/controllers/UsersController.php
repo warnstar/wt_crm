@@ -138,13 +138,14 @@ class UsersController extends CommonController
             $user->create_time = time();
         }
         $msg['status'] = 0;
-        $msg['error'] = "操作失败！";
+
         if($user->exist()){
             $msg['error'] = "护照号和病历号不能重复！";
         }else{
             if($user->save()){
-
                 $msg['status'] = 1;
+            }else{
+                $msg['error'] = "操作失败！";
             }
         }
 

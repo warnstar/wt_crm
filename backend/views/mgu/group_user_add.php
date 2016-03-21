@@ -5,6 +5,7 @@
  * Date: 2016/3/14
  * Time: 14:21
  */
+$privilege = Yii::$app->session->get("worker");
 ?>
 <!-- 标题 -->
 <div class="row wrapper border-bottom white-bg page-heading title">
@@ -50,9 +51,9 @@
 				<div class="ibox-content">
 					<div class="row m-b-sm m-t-sm">
 						<div class="col-md-1"style="width: 100%;">
-							<button style="float:left;" type="button" id="loading-example-btn" class=" btn btn-white btn-sm"><i class="fa fa-refresh"></i> 刷新</button>
+							<button  onclick="location.reload()" style="float:left;" type="button" id="loading-example-btn" class=" btn btn-white btn-sm"><i class="fa fa-refresh"></i> 刷新</button>
 							<div style="overflow: hidden;float: left;">
-								<div  class="m-b-xs" style="float: left;width: 120px;margin-left: 10px;">
+								<div <?php if($privilege['role_id'] != 1) echo "hidden=hidden";?>  class="m-b-xs" style="float: left;width: 120px;margin-left: 10px;">
 									<select class="input-sm form-control input-s-sm inline brand_data worker_filter">
 										<option value="0">品牌</option>
 										<?php foreach($brands as $b):?>
@@ -61,7 +62,7 @@
 									</select>
 								</div>
 								<div  class="m-b-xs" style="float: left;width: 120px;margin-left: 10px;">
-									<select class="input-sm form-control input-s-sm inline area_data worker_filter">
+									<select  class="input-sm form-control input-s-sm inline area_data worker_filter">
 										<option value="0">区域</option>
 										<?php foreach($areas as $a):?>
 											<option value="<?=$a['id']?>"><?=$a['name']?></option>
@@ -75,13 +76,7 @@
 
 									</select>
 								</div>
-								<div  class="m-b-xs" style="float: left;width: 120px;margin-left: 10px;">
-									<select class="input-sm form-control input-s-sm inline worker_filter">
-										<option value="0">医疗团</option>
-										<option value="1">第十期</option>
-										<option value="2">第十一期</option>
-									</select>
-								</div>
+
 							</div>
 							<div class="input-group">
 								<input style="width: 300px;margin-left: 30px;" type="text" placeholder="请输入手机号/病历号/护照号/姓名查询" class="input-sm form-control search_data"> <span style="float:left" class="input-group-btn">
@@ -92,7 +87,7 @@
 
 					</div>
 
-					<div class="project-list">
+					<div class="project-list list_data">
 
 						<table class="table table-hover">
 							<thead>
@@ -121,6 +116,7 @@
 							</tbody>
 						</table>
 						<div class="pages" style="width:80%;margin:0 auto;text-align: center;">
+							<?php $pages->route = "mgu/add_ajax";?>
 							<?=
 							\yii\widgets\LinkPager::widget([
 									'pagination' => $pages,
@@ -197,7 +193,7 @@
 			user_id     :   create_data.user_id,
 			end_time    :   $(".end_time").val()
 		};
-		console.log(data);
+
 		$.post(url,data,function(msg){
 			if(msg.status){
 				alert("添加成功！");
@@ -206,5 +202,91 @@
 				alert(msg.error);
 			}
 		},'json');
+	})
+</script>
+
+<script>
+	//品牌--》医疗团联动变化
+	$(".brand_data").change(function(){
+		var brand_id = $(this).val();
+		var url = "<?=\yii\helpers\Url::toRoute("group/group_select")?>";
+		var data = {
+			brand_id  :   brand_id
+		};
+		$(".group_data").val(0);
+		if(data.brand_id != 0){
+			$.get(url,data,function(msg){
+				$(".group_data").empty();
+				$(".group_data").html(msg);
+			})
+		}
+
+	});
+
+	//联动变化次级区域
+	$(".area_data").change(function(){
+		var area_id = $(this).val();
+		var url = "<?=\yii\helpers\Url::toRoute("area/area_select")?>";
+		var data = {
+			id  :   area_id
+		};
+		$(".area_lower_data").val(0);
+		if(data.id != 0){
+			$.get(url,data,function(msg){
+				$(".area_lower_data").empty();
+				$(".area_lower_data").html(msg);
+			})
+		}
+
+	});
+
+	$(".search_click").click(function(){
+		var url = "<?=\yii\helpers\Url::toRoute("mgu/add_ajax")?>";
+		var data = {
+			search  :   $(".search_data").val()
+		};
+		$.get(url,data,function(msg){
+			$(".list_data").empty();
+
+			$(".list_data").html(msg);
+		})
+	});
+	//筛选
+	$(".worker_filter").change(function(){
+		var url = "<?=\yii\helpers\Url::toRoute("mgu/add_ajax")?>";
+
+		var data = {
+			brand_id                :   $(".brand_data").val(),
+			area_id                 :   $(".area_lower_data").val(),
+			area_higher_id          :   $(".area_data").val(),
+			medical_group_id        :   "<?=$group_id?>"
+		};
+
+		if(data.area_id == 0){
+			delete data.area_id;
+		}
+		if(data.area_higher_id == 0){
+			delete data.area_higher_id;
+		}
+
+
+		$.get(url,data,function(msg){
+			$(".list_data").empty();
+
+			$(".list_data").html(msg);
+		})
+	});
+
+	//局部刷新
+	$(function(){
+		$('.list_data').on('click', '.pages a', function(){
+			var url = $(this).attr('href');
+
+			$.get(url, '', function(msg){
+				$(".list_data").empty();
+				$(".list_data").html(msg);
+			});
+			return false;
+		});
 	})
 </script>

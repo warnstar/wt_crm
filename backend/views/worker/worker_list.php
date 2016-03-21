@@ -203,5 +203,19 @@
 
 			$(".list_data").html(msg);
 		})
+	});
+
+	//局部刷新
+	$(function(){
+		$('.list_data').on('click', '.pages a', function(){
+			var url = $(this).attr('href');
+
+			$.get(url, '', function(msg){
+				$(".list_data").empty();
+				$(".list_data").html(msg);
+
+			});
+			return false;
+		});
 	})
 </script>

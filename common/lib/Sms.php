@@ -4,8 +4,8 @@ namespace common\lib;
 class Sms{
 
 	private $base = [
-			'account'   => "lyr",
-			'password'  => "a123456"
+			'account'   => "AC00117",
+			'password'  => "AC0011752"
 	];
 
     const  BASE_URL  = "http://dx.ipyy.net/smsJson.aspx";

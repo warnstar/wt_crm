@@ -4,6 +4,7 @@ namespace backend\controllers;
 use common\Excel;
 use common\lib\Sms;
 use Yii;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\Response;
 /**
@@ -96,6 +97,11 @@ class CommonController extends Controller {
 
     }
 
+
+    public function actionHome(){
+
+        return $this->render("home");
+    }
     public function actionExcel_export(){
         $test =  (new Excel())->test();
     }

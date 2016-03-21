@@ -33,6 +33,7 @@ class MguController extends CommonController
     public function  actionList(){
         $medical_group_id = Yii::$app->request->get("medical_group_id");
         $option['medical_group_id'] = $medical_group_id;
+        $data['group_id'] = $medical_group_id;
 
         $res = (new Medical_group_user())->search($option);
         $data['users'] = $res['list'];
@@ -45,10 +46,19 @@ class MguController extends CommonController
         return $this->render("group_user_list",$data);
     }
 
-    public function actionDetail(){
+    public function actionList_ajax(){
+        $get = Yii::$app->request->get();
 
+
+        $res = (new Medical_group_user())->search($get);
+        $data['users'] = $res['list'];
+        $data['pages'] = $res['pages'];
+
+
+        return $this->renderPartial("group_user_list_ajax",$data);
     }
 
+    //添加团员
     public function actionAdd(){
         $group_id = Yii::$app->request->get('medical_group_id');
         $data['group_id'] = $group_id;
@@ -63,7 +73,23 @@ class MguController extends CommonController
 
         return $this->render("group_user_add",$data);
     }
+    public function actionAdd_ajax(){
+        $get = Yii::$app->request->get();
+        $group_id = isset($get['medical_group_id']) ? $get['medical_group_id'] : null;
+        $data['group_id'] = $group_id;
 
+        if($group_id){
+            $get['un_join_group'] = $group_id;
+            unset($get['medical_group_id']);
+        }
+
+
+        $res = (new Users())->search($get);
+        $data['users'] = $res['list'];
+        $data['pages'] = $res['pages'];
+
+        return $this->renderPartial("group_user_add_ajax",$data);
+    }
 
     /**
      * 创建疗程
@@ -84,7 +110,7 @@ class MguController extends CommonController
         if(!$mgu->id){
             $mgu->create_time = time();
         }
-        $group = (new Medical_group())->findOne($mgu->medical_group_id);
+        $group = (new Medical_group())->find()->where(['id'=>$mgu->medical_group_id])->one();
 
         $msg['status'] = 0;
         if($group){
@@ -104,11 +130,14 @@ class MguController extends CommonController
 
                     //修改用户最后一次参团与品牌
                     $user = (new Users())->find()->where(['id'=>$mgu->user_id])->one();
-
-
                     $user->brand_id = $group->brand_id;
                     $user->last_mgu = $mgu->id;
-                    $user->save();
+                    $flag['user_mgu'] = $user->save();
+
+                    //修改医疗团用户数
+                    $user_count = (new Medical_group_user())->find()->where(['medical_group_id'=>$mgu->medical_group_id])->count("*");
+                    $group->user_count = $user_count;
+                    $flag['group_count'] = $group->save();
                 }
             }
         }else{

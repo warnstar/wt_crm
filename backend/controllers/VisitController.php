@@ -48,6 +48,7 @@ class VisitController extends CommonController
         return $this->render("visit_list",$data);
     }
 
+    //回访详情
     public function actionVisit_detail(){
         $id = Yii::$app->request->get("id");
         $data['visit'] = (new Visit())->detail($id);
@@ -189,7 +190,8 @@ class VisitController extends CommonController
                 $visit->notify_user = $notify_user;//通知用户
                 $visit->mgu_id = $mgu->id;
                 $visit->worker_id = $this->worker_id;
-                $visit->type = 2;
+                $visit->type = 2;//异常回访
+                $visit->error_content = $note->content;//异常备注
                 $visit->create_time = $mgu->last_visit;
                 //创建回访记录
                 $visit_res = $visit->create();
@@ -216,6 +218,10 @@ class VisitController extends CommonController
             $data['types'] = (new Note_type())->find()->asArray()->all();
             $data['mgu_id'] = $mgu_id;
 
+            //异常备注
+            $data['type'] = Yii::$app->request->get('type');
+            $data['visit_id'] = Yii::$app->request->get('visit_id');
+
             return $this->render("visit_note_add",$data);
         }else{
             return "疗程错误！";
@@ -229,12 +235,15 @@ class VisitController extends CommonController
      */
     public function actionVisit_note_save(){
         $post = Yii::$app->request->post();
+        $type = (isset($post['type']) && $post['type'])  ? $post['type'] : 1;//是否为异常备注
+
         $note = new Note();
 
+        $note->visit_id = (isset($post['visit_id']) && $post['visit_id']) ? $post['visit_id'] : 0;
         $note->mgu_id = isset($post['mgu_id']) ? $post['mgu_id'] : null;
         $note->general_note_type = isset($post['general_note_type']) ? $post['general_note_type'] : 0;
         $note->content_type = isset($post['content_type']) ? $post['content_type'] : null;
-        $note->type = 1;//普通备注
+        $note->type = $type;//普通/异常备注
         $note->worker_id = $this->worker_id;
         $note->create_time = time();
 
@@ -257,7 +266,6 @@ class VisitController extends CommonController
                     if($res_url){
                         $note->content = json_encode($res_url);
                     }
-
                 }
             }
 
@@ -278,5 +286,82 @@ class VisitController extends CommonController
         }
 
         return json_encode($msg);
+    }
+
+
+    //列出异常备注
+    public function actionError_un_do(){
+        $option = [];
+        if($this->role_id != 1){
+            $option['brand_id'] = $this->brand_id;
+        }
+        $res = (new Visit())->undo_error_users($option);
+        $data['list'] = $res['list'];
+        $data['pages'] = $res['pages'];
+
+        $data['brands'] = (new Brand())->search();
+        $data['areas'] = (new Area())->get_lower(0);
+
+        $data['groups'] = [];
+        if($this->role_id != 1){
+            $data['groups'] = (new Medical_group())->find()->where(['brand_id'=>$this->brand_id])->asArray()->all();
+        }
+
+
+        return $this->render("error_un_do",$data);
+    }
+    public function actionError_un_do_ajax(){
+        $get = Yii::$app->request->get();
+        if($this->role_id != 1){
+            $get['brand_id'] = $this->brand_id;
+        }
+
+        $res = (new Visit())->undo_error_users($get);
+        $data['list'] = $res['list'];
+        $data['pages'] = $res['pages'];
+
+        return $this->renderPartial("error_un_do_ajax",$data);
+    }
+
+    //处理问题
+    public function actionError_do(){
+        $visit_id = Yii::$app->request->get("visit_id");
+
+        $data['detail'] = (new Visit())->detail($visit_id);
+
+
+        return $this->render("error_do",$data);
+    }
+
+
+    //处理完成
+    public function actionError_do_save(){
+        $visit_id = Yii::$app->request->post('visit_id');
+        $visit = (new Visit())->find()->where(['id'=>$visit_id])->one();
+
+        $msg['error'] = 0;
+        if($visit){
+            $visit->type_status = 1;
+            $visit->error_end_time = time();
+            if($visit->save()){
+                $msg['status'] = 1;
+            }else{
+                $msg['error'] = "处理完成失败";
+            }
+        }else{
+            $msg['error'] = "该回访记录不存在！";
+        }
+
+        return json_encode($msg);
+    }
+
+
+    public function actionError_had_do(){
+        $res = (new Visit())->had_do_error_users();
+        $data['list'] = $res['list'];
+        $data['pages'] = $res['pages'];
+
+
+        return $this->render("error_had_do",$data);
     }
 }

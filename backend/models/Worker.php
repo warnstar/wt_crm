@@ -157,7 +157,7 @@ class Worker extends \yii\db\ActiveRecord
         $pages = new Pagination([
             'totalCount' => $query->count(),
             'pageSize'  => 9,
-            'route' => "worker/list"
+            'route' => "worker/list_ajax"
         ]);
         $query->offset($pages->offset)
             ->limit($pages->limit);

@@ -90,14 +90,14 @@
                 </li>
                 <?php endif;?>
 
-                <?php if($worker['role_id'] == 1 || $worker['role_id'] == 2):?>
+                <?php if($worker['role_id'] == 1 || $worker['role_id'] == 2 || $worker['role_id'] == 3):?>
                 <li>
                     <a href="index.html#"><i class="fa fa fa-globe"></i> <span class="nav-label">用户管理</span></a>
                     <ul class="nav nav-second-level">
 
                         <li><a href="<?=Url::toRoute('users/list')?>">客户列表</a>
                         </li>
-                        <?php if($worker['role_id'] == 2):?>
+                        <?php if($worker['role_id'] == 2 || $worker['role_id'] == 3):?>
 
                         <li><a href="<?=Url::toRoute('users/add')?>">添加客户</a>
                         </li>
@@ -110,6 +110,21 @@
                     </ul>
                 </li>
                 <?php endif;?>
+
+                <?php if($worker['role_id'] == 3):?>
+                    <li>
+                        <a href="index.html#"><i class="fa fa-desktop"></i> <span class="nav-label">客服问题</span></a>
+                        <ul class="nav nav-second-level">
+
+                            <li><a href="<?=Url::toRoute("visit/error_un_do")?>">待处理</a>
+                            </li>
+
+                            <li><a href="<?=Url::toRoute("visit/error_had_do")?>">已处理</a>
+                            </li>
+                        </ul>
+                    </li>
+                <?php endif;?>
+
 
                 <?php if($worker['role_id'] == 1):?>
                 <li>

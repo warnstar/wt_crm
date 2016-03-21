@@ -225,12 +225,13 @@
 			sex         :   $(".sex_data:checked").val(),
 			phone       :   $(".phone_data").val(),
 			passport    :   $(".passport_data").val(),
-			birth       :      $(".birth_data").val(),
+			birth       :   $(".birth_data").val(),
 			cases_code  :   $(".cases_data").val(),
 			brand_id    :   $(".brand_data").val(),
 			area_id     :   $(".area_lower_data").val()
 		};
 
+		console.log(data);
 		$.post(url,data,function(msg){
 			if(msg.status){
 				alert("操作成功！");

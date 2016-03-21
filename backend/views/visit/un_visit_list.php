@@ -31,7 +31,7 @@ $privilege = Yii::$app->session->get("worker");
 				<div class="ibox-content">
 					<div class="row m-b-sm m-t-sm">
 						<div class="col-md-1"style="width: 100%;">
-							<button style="float:left;" type="button" id="loading-example-btn" class=" btn btn-white btn-sm"><i class="fa fa-refresh"></i> 刷新</button>
+							<button onclick="location.reload()" style="float:left;" type="button" id="loading-example-btn" class=" btn btn-white btn-sm"><i class="fa fa-refresh"></i> 刷新</button>
 							<div style="overflow: hidden;float: left;">
 								<div <?php if($privilege['role_id'] != 1) echo "hidden=hidden";?>  class="m-b-xs" style="float: left;width: 120px;margin-left: 10px;">
 									<select class="input-sm form-control input-s-sm inline brand_data worker_filter">
