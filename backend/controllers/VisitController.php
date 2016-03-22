@@ -1,13 +1,16 @@
 <?php
 namespace backend\controllers;
 
-use app\models\Area;
-use app\models\Brand;
-use app\models\Medical_group;
-use app\models\Medical_group_user;
-use app\models\Note;
-use app\models\Note_type;
-use app\models\Visit;
+
+use common\models\Area;
+use common\models\Brand;
+use common\models\Medical_group;
+use common\models\Medical_group_user;
+use common\models\Note;
+use common\models\Note_type;
+use common\models\SysSms;
+use common\models\Visit;
+use common\models\Worker;
 use Yii;
 
 /**
@@ -31,10 +34,10 @@ class VisitController extends CommonController
 
     //回访列表
     public function  actionVisit_list(){
-        $get = Yii::$app->request->get("mgu_id");
+        $get = Yii::$app->request->get();
         $option = [];
         if($this->worker_id){
-            $option['worker_id'] = $this->worker_id;
+            //$option['worker_id'] = $this->worker_id;
         }
         if(isset($get['mgu_id']) && $get['mgu_id']){
             $option['mgu_id'] = $get['mgu_id'];
@@ -197,7 +200,11 @@ class VisitController extends CommonController
                 $visit_res = $visit->create();
                 if($visit_res){
                     //发送短信通知
+                    $workers  = (new Worker())->getRoleWorker($notify_user,$mgu->id);
+                    if($workers) foreach($workers as $v){
+                        $res = (new SysSms())->error_notice($v['phone'],$mgu->user_id);
 
+                    }
                 }
 
             }else{

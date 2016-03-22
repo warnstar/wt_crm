@@ -1,14 +1,13 @@
 <?php
 namespace backend\controllers;
 
-use app\models\Area;
-use app\models\Brand;
-use app\models\Medical_group;
-use app\models\Medical_group_user;
-use app\models\Note;
-use app\models\Note_type;
-use app\models\Users;
-use yii\base\ErrorException;
+
+use common\models\Area;
+use common\models\Brand;
+use common\models\Medical_group;
+use common\models\Medical_group_user;
+use common\models\Note;
+use common\models\Users;
 use Yii;
 
 /**

@@ -117,19 +117,20 @@
 				n_text:'备注内容不能为空'
 			},
 			submitHandler:function(){
-
 				add_commit()
 			}
 		});
 	});
 
 	function get_notify_user(){
-		var content = "";
+		var content = '';
+
 		$('.notify_user').each(function(){
 			if($(this).prop('checked')){
 				content += (content ? ',' : '') + $(this).val();
 			}
 		});
+
 		return content;
 	}
 
@@ -141,8 +142,9 @@
 			mgu_id          :   "<?=$mgu_id?>",
 			content         :   $(".content_data").val(),
 			next_day        :   $(".next_day:checked").val(),
-			notify_user     :   JSON.stringify(notify_user)
+			notify_user     :   notify_user
 		};
+
 		$.post(url,data,function(msg){
 			if(msg.status){
 				alert("创建异常备注成功");

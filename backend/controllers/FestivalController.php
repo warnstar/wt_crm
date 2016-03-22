@@ -1,8 +1,9 @@
 <?php
 namespace backend\controllers;
 
-use app\models\Brand;
-use app\models\Festival;
+
+use common\models\Brand;
+use common\models\Festival;
 use Yii;
 
 /**
@@ -26,7 +27,7 @@ class FestivalController extends CommonController
 
 
     public function  actionList(){
-        $data['festivals'] = (new Festival())->search();
+        $data['festivals'] = (new \common\models\Festival())->search();
 
         return $this->render('festival_list',$data);
     }

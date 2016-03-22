@@ -1,11 +1,6 @@
 <?php
 
-namespace app\models;
-
-use Yii;
-use yii\data\ActiveDataProvider;
-use yii\data\Pagination;
-use yii\helpers\Url;
+namespace common\models;
 
 /**
  * This is the model class for table "worker".
@@ -173,6 +168,72 @@ class Worker extends \yii\db\ActiveRecord
     public function find_by_phone($phone){
         $worker = $this->find()->where(['phone'=>$phone])->asArray()->one();
         return $worker;
+    }
+
+    public function getRoleWorker($roles = '',$mgu_id){
+        if(!$roles || !$mgu_id){
+            return null;
+        }
+
+        $mgu = (new Medical_group_user())->find()->where(['id'=>$mgu_id])->one();
+        $flag= [];
+        if(!$mgu){
+            $flag['mgu'] = $mgu;
+            return null;
+        }
+
+        $group = (new Medical_group())->find()->where(['id'=>$mgu->medical_group_id])->one();
+        if(!$group){
+            $flag['group'] = $group;
+            return null;
+        }
+
+        $user = (new Users)->find()->where(['id'=>$mgu->user_id])->one();
+        if(!$user){
+            $flag['user'] = $user;
+            return null;
+        }
+
+        $workers = [];
+
+        //限制品牌
+        $option['brand_id'] = $group->brand_id;
+        //获取对接人员
+        if(strlen(strpos($roles,'3'))){
+            $option['role_id'] = 3;
+            $workers[] = (new Worker())->find()->where($option)->asArray()->one();
+        }
+        //获取品牌经理
+        if(strlen(strpos($roles,'4'))){
+            $option['role_id'] = 4;
+            $workers[] = (new Worker())->find()->where($option)->asArray()->one();
+        }
+        //获取区域经理
+        if(strlen(strpos($roles,'5'))){
+            $option['role_id'] = 5;
+            $area_higher_id = (new Area())->find()->select('parent_id')->where(['id'=>$user->area_id])->asArray()->one();
+            $option['a.parent_id'] = $area_higher_id;
+
+            $workers[] = (new Worker())->find()->select('worker.*')->andWhere($option)->leftJoin(['a'=>'area'],'worker.area_id=a.id')->asArray()->one();
+
+            unset($option['a.parent_id']);
+        }
+        //获取大区经理
+        if(strlen(strpos($roles,'6'))){
+            $option['role_id'] = 6;
+            $option['area_id'] = $user->area_id;
+            $workers[] = (new Worker())->find()->where($option)->asArray()->one();
+        }
+
+        //处理，除去null的
+        $data = [];
+        if($workers) foreach($workers as $v){
+           if($v){
+               $data[] = $v;
+           }
+        }
+
+        return $data;
     }
 
     public function exist(){

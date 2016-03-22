@@ -10,7 +10,7 @@ class Sms{
 
     const  BASE_URL  = "http://dx.ipyy.net/smsJson.aspx";
 
-	const  SIGN_TEXT = "【创世华信】";
+	const  SIGN_TEXT = "【唯托国际】";
 
 	//发送短信
 	public function sendMessage($phone,$content){

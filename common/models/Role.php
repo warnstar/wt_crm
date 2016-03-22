@@ -1,24 +1,23 @@
 <?php
 
-namespace app\models;
+namespace common\models;
 
 use Yii;
 
 /**
- * This is the model class for table "note_type".
+ * This is the model class for table "worker_role".
  *
  * @property integer $id
  * @property string $name
- * @property integer $create_time
  */
-class Note_type extends \yii\db\ActiveRecord
+class Role extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'note_type';
+        return 'worker_role';
     }
 
     /**
@@ -28,7 +27,6 @@ class Note_type extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
-            [['create_time'], 'integer'],
             [['name'], 'string', 'max' => 255]
         ];
     }
@@ -41,7 +39,6 @@ class Note_type extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
-            'create_time' => 'Create Time',
         ];
     }
 }

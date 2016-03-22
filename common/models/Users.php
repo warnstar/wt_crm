@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace common\models;
 
 use Yii;
 use yii\data\Pagination;
@@ -141,6 +141,11 @@ class Users extends \yii\db\ActiveRecord
 
         return $data;
     }
+
+    public function getBirthDayUsers(){
+
+    }
+
 
     public function detail($id){
         $query = $this->find();

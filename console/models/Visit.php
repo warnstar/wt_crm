@@ -55,6 +55,7 @@ class Visit extends \yii\db\ActiveRecord
 
         $select = [
             'visit.*',
+            'brand_id'  =>'b.id',
             'brand_name'=>'b.name',
             'user_name'=>'users.name',
             'user_passport'=>'users.passport',
@@ -70,6 +71,10 @@ class Visit extends \yii\db\ActiveRecord
             if(isset($option['undo_error']) && $option['undo_error']){
                 $query->andWhere(['visit.type'=>2]);//异常记录
                 $query->andWhere(['visit.type_status'=>0]);//未处理
+            }
+            //获取有待处理客服问题的品牌。
+            if(isset($option['un_deal_brand']) && $option['un_deal_brand']){
+                $query->groupBy('brand_id');
             }
 
             //已处理用户筛选
@@ -139,7 +144,7 @@ class Visit extends \yii\db\ActiveRecord
         return $data;
     }
 
-    //待处理客户
+    //已处理客户
     public function had_do_error_users($option = null){
 
         $option['had_do_error'] = true;
@@ -161,6 +166,27 @@ class Visit extends \yii\db\ActiveRecord
         return $data;
     }
 
+    public function un_deal_brand($option = null){
+        $option['undo_error'] = true;
+        $option['un_deal_brand'] = true;
+
+        $res = $this->search($option);
+        $workers = [];
+        if(isset($res['list']) && $res['list']){
+            foreach($res['list'] as $v){
+                $workers[]  = (new Worker())->find()->where(['brand_id'=>$v['brand_id'],'role_id'=>3])->asArray()->one();
+            }
+        }
+
+        //处理，除去null的
+        $data = [];
+        if($workers) foreach($workers as $v){
+            if($v){
+                $data[] = $v;
+            }
+        }
+        return $data;
+    }
     public function detail($id){
         $query = $this->find();
 
@@ -201,6 +227,9 @@ class Visit extends \yii\db\ActiveRecord
 
         return $data;
     }
+
+
+
     public function create(){
         if($this->save()){
             //汇总所有备注到此回访记录
@@ -215,4 +244,6 @@ class Visit extends \yii\db\ActiveRecord
             return false;
         }
     }
+
+
 }

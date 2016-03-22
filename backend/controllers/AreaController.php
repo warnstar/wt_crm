@@ -1,7 +1,8 @@
 <?php
 namespace backend\controllers;
 
-use app\models\Area;
+
+use common\models\Area;
 use Yii;
 
 /**

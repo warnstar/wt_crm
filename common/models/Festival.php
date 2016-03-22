@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace common\models;
 
 use Yii;
 
@@ -65,6 +65,19 @@ class Festival extends \yii\db\ActiveRecord
         $query->orderBy($order);
 
         $data = $query->asArray()->all();
+
+        return $data;
+    }
+
+    //获取今天过节的节日
+    public function getTodayFestival(){
+        $this_day = strtotime(date("Y-m-d",time()));
+
+        $query = $this->find();
+
+        $query->andWhere(['festival.start_time'=>$this_day]);
+
+        $data = $query->asArray()->one();
 
         return $data;
     }

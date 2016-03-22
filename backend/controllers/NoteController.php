@@ -1,9 +1,8 @@
 <?php
 namespace backend\controllers;
 
-use app\models\Note;
-use app\models\Note_type;
-use yii\base\ErrorException;
+
+use common\models\Note_type;
 use Yii;
 
 /**

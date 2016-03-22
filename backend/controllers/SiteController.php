@@ -1,13 +1,15 @@
 <?php
 namespace backend\controllers;
 
-use app\models\Worker;
+
+use common\models\Worker;
 use Yii;
 use yii\filters\AccessControl;
+use yii\helpers\Url;
 use yii\web\Controller;
-use common\models\LoginForm;
+
 use backend\models\SignupForm;
-use yii\filters\VerbFilter;
+
 
 /**
  * Site controller
@@ -106,6 +108,6 @@ class SiteController extends Controller
         $session->open();
         $session->destroy();
 
-        return $this->goHome();
+        $this->redirect(Url::toRoute("site/login"));
     }
 }

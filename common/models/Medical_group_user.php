@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace common\models;
 
 use Yii;
 use yii\data\Pagination;
@@ -63,6 +63,7 @@ class Medical_group_user extends \yii\db\ActiveRecord
             'user_birth'=>'users.birth',
             'user_passport'=>'users.passport',
 
+            'brand_id'              =>  'b.id',
             'brand_name'            =>  'b.name'
         ];
         $query->select($select);
@@ -84,6 +85,10 @@ class Medical_group_user extends \yii\db\ActiveRecord
 
             }
 
+            //获取有待访客户的品牌。
+            if(isset($option['un_visit_brand']) && $option['un_visit_brand']){
+                $query->groupBy('brand_id');
+            }
 
             //筛选用户参加的
             if(isset($option['user_id']) && $option['user_id']){
@@ -124,7 +129,7 @@ class Medical_group_user extends \yii\db\ActiveRecord
             ->leftJoin(['mg'=>'medical_group'],'medical_group_user.medical_group_id=mg.id')
             ->leftJoin(['b'=>'brand'],'mg.brand_id=b.id');
 
-        $data = $query->asArray()->all();
+
         $pages = new Pagination([
             'totalCount'    => $query->count(),
             'pageSize'      => 9,
@@ -152,6 +157,34 @@ class Medical_group_user extends \yii\db\ActiveRecord
         return $data;
     }
 
+
+    //获取有待访客户的品牌
+    /**
+     * @param null $option
+     * @return array 返回客服列表
+     */
+    public function un_visit_brands($option = null){
+
+        $option['un_visit'] = true;
+        $option['un_visit_brand'] = true;
+
+        $res = $this->search($option);
+        $workers = [];
+        if(isset($res['list']) && $res['list']){
+            foreach($res['list'] as $v){
+                $workers[]  = (new Worker())->find()->where(['brand_id'=>$v['brand_id'],'role_id'=>2])->asArray()->one();
+            }
+        }
+
+        //处理，除去null的
+        $data = [];
+        if($workers) foreach($workers as $v){
+            if($v){
+                $data[] = $v;
+            }
+        }
+        return $data;
+    }
 
 
     //疗程详情

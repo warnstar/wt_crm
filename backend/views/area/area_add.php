@@ -57,7 +57,7 @@
 					<div class="form-group">
 						<div class="col-sm-4 col-sm-offset-3">
 							<a class="btn btn-primary submit" type="submit">确定</a>
-							<a href="javascript:history.go(-1)" class="btn btn-primary" >取消</a>
+							<a href="<?=\yii\helpers\Url::toRoute("common/home")?>" class="btn btn-primary" >取消</a>
 						</div>
 					</div>
 				</form>

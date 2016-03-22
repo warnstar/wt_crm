@@ -30,7 +30,7 @@
 			<td class="project-title"><?=$w['wchat']?></td>
 
 			<td >
-				<button class=" btn btn-white btn-sm">查看详情</button>
+				<a href="<?=\yii\helpers\Url::toRoute("worker/detail") . "&id=" . $w['id']?>" class=" btn btn-white btn-sm">查看详情</a>
 				<button class="btn-delete btn btn-white btn-sm">删除</button>
 			</td>
 		</tr>
@@ -44,5 +44,4 @@
 			'options' => ['class' => 'pagination pull-center', 'style' => 'margin:0px']
 	]);
 	?>
-
 </div>

@@ -1,26 +1,24 @@
 <?php
 
-namespace app\models;
+namespace common\models;
 
 use Yii;
 
 /**
- * This is the model class for table "sys_config".
+ * This is the model class for table "note_type".
  *
  * @property integer $id
  * @property string $name
- * @property string $key_name
- * @property string $key
  * @property integer $create_time
  */
-class Sys_config extends \yii\db\ActiveRecord
+class Note_type extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'sys_config';
+        return 'note_type';
     }
 
     /**
@@ -29,8 +27,9 @@ class Sys_config extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['name'], 'required'],
             [['create_time'], 'integer'],
-            [['name', 'key_name', 'key'], 'string', 'max' => 255]
+            [['name'], 'string', 'max' => 255]
         ];
     }
 
@@ -42,8 +41,6 @@ class Sys_config extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
-            'key_name' => 'Key Name',
-            'key' => 'Key',
             'create_time' => 'Create Time',
         ];
     }

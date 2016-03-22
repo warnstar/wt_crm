@@ -1,8 +1,9 @@
 <?php
 namespace backend\controllers;
 
-use app\models\Brand;
-use app\models\Worker;
+
+use common\models\Brand;
+use common\models\Worker;
 use Yii;
 
 /**

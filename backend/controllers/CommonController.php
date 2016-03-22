@@ -1,10 +1,12 @@
 <?php
 namespace backend\controllers;
 
+
 use common\Excel;
-use common\lib\Sms;
+use common\models\SysSms;
+use common\models\Visit;
+use common\models\Worker;
 use Yii;
-use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\Response;
 /**
@@ -56,9 +58,12 @@ class CommonController extends Controller {
      * 短信测试
      */
     public function actionSms_test(){
+        $phone = "15918604869";
+        //$res = (new SysSms())->undo_notice($phone);
+        $res = (new SysSms())->error_notice($phone,4);
 
-        $a = (new Sms())->sendMessage('18665278127',"128937");
-        dump($a);
+        dump($res);
+
     }
 
     public function actionExcel_import(){
@@ -96,13 +101,25 @@ class CommonController extends Controller {
         }
 
     }
+    public function actionExcel_export(){
+        $test =  (new Excel())->test();
+    }
 
-
+    //主页
     public function actionHome(){
 
         return $this->render("home");
     }
-    public function actionExcel_export(){
-        $test =  (new Excel())->test();
+
+    public function actionNotice(){
+        $notify_user = "3,5,6,4";
+        $workers  = (new Worker())->getRoleWorker($notify_user,20);
+        dump($workers);
+    }
+
+    public function actionUn_deal(){
+        $res = (new Visit())->un_deal_brand();
+
+        dump($res);
     }
 }

@@ -1,10 +1,12 @@
 <?php
 namespace backend\controllers;
 
-use app\models\Area;
-use app\models\Brand;
-use app\models\Users;
-use app\models\Worker;
+
+
+use common\models\Area;
+use common\models\Brand;
+use common\models\Role;
+use common\models\Worker;
 use Yii;
 
 /**
@@ -33,7 +35,7 @@ class WorkerController extends CommonController
         $data['pages'] = $res['pages'];
         $data['brands'] = (new Brand())->search();
         $data['areas'] = (new Area())->get_lower();
-        $data['roles'] = (new \app\models\Role())->find()->where("id > 1")->asArray()->all();
+        $data['roles'] = (new Role())->find()->where("id > 1")->asArray()->all();
 
         return $this->render('worker_list',$data);
     }
@@ -53,7 +55,7 @@ class WorkerController extends CommonController
         $id = Yii::$app->request->get("id");
         $data['worker'] = (new Worker())->find()->where(['id'=>$id])->asArray()->one();
         $data['brands'] = (new Brand())->search();
-        $data['roles'] = (new \app\models\Role())->find()->where('id > 1')->asArray()->all();
+        $data['roles'] = (new Role())->find()->where('id > 1')->asArray()->all();
 
         $area_higher = (new Area())->find()->where(['id'=>$data['worker']['area_id']])->asArray()->one();
         $data['worker']['area_higher_id'] = $area_higher['parent_id'];
@@ -65,7 +67,7 @@ class WorkerController extends CommonController
     }
 
     public function actionAdd(){
-        $data['roles'] = (new \app\models\Role())->find()->where("id > 1")->asArray()->all();
+        $data['roles'] = (new Role())->find()->where("id > 1")->asArray()->all();
         return $this->render('worker_add',$data);
     }
 
@@ -137,4 +139,6 @@ class WorkerController extends CommonController
         }
         return json_encode($msg);
     }
+
+
 }

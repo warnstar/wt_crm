@@ -29,8 +29,8 @@
 			<td class="project-title"><?=$v['user_count']?></td>
 
 			<td >
-				<a class=" btn btn-white btn-sm">查看详情</a>
-				<a class=" btn btn-white btn-sm">查看团员</a>
+				<a class=" btn btn-white btn-sm" href="<?=\yii\helpers\Url::toRoute("group/detail") . "&id=" . $v['id']?>">查看详情</a>
+				<a class=" btn btn-white btn-sm" href="<?=\yii\helpers\Url::toRoute("mgu/list") . "&medical_group_id=" . $v['id']?>">查看团员</a>
 				<button class="btn-delete btn btn-white btn-sm">删除</button>
 			</td>
 		</tr>
@@ -38,10 +38,11 @@
 	</tbody>
 </table>
 <div class="pages" style="width:80%;margin:0 auto;text-align: center;">
+	<?php $pages->route = "visit/error_un_do_ajax";?>
 	<?=
 	\yii\widgets\LinkPager::widget([
-		'pagination' => $pages,
-		'options' => ['class' => 'pagination pull-center', 'style' => 'margin:0px']
+			'pagination' => $pages,
+			'options' => ['class' => 'pagination pull-center', 'style' => 'margin:0px']
 	]);
 	?>
 

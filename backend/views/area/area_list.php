@@ -33,7 +33,7 @@
 								<div  class="m-b-xs" style="float: left;width: 120px;margin-left: 10px;">
 									<select class="input-sm form-control input-s-sm inline higher_data">
 										<option value="0">请选择</option>
-										<?php $area_h = (new \app\models\Area())->get_lower(0); if($area_h) foreach($area_h as $v):?>
+										<?php $area_h = (new \common\models\Area())->get_lower(0); if($area_h) foreach($area_h as $v):?>
 										<option value="<?=$v['id']?>"><?=$v['name']?></option>
 										<?php endforeach;?>
 
