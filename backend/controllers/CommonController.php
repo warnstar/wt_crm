@@ -3,6 +3,7 @@ namespace backend\controllers;
 
 
 use common\Excel;
+use common\models\Medical_group_user;
 use common\models\SysSms;
 use common\models\Visit;
 use common\models\Worker;
@@ -54,6 +55,19 @@ class CommonController extends Controller {
         return $this->renderPartial('//site/error',['error' => $error]);
     }
 
+    //主页
+    public function actionHome(){
+
+        return $this->render("home");
+    }
+
+
+    /**
+     * ==============================测试=====================================
+     */
+
+
+
     /**
      * 短信测试
      */
@@ -101,14 +115,12 @@ class CommonController extends Controller {
         }
 
     }
-    public function actionExcel_export(){
-        $test =  (new Excel())->test();
-    }
 
-    //主页
-    public function actionHome(){
 
-        return $this->render("home");
+    public function actionEnglish(){
+        $row_flag = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z";
+        $row_flag =  explode(',',$row_flag);
+        dump($row_flag);
     }
 
     public function actionNotice(){
@@ -117,6 +129,17 @@ class CommonController extends Controller {
         dump($workers);
     }
 
+    public function actionGroup_user_export_test(){
+        $res = (new Medical_group_user())->excel_data(9);
+
+        if($res){
+            if(isset($res['excel_title']) && isset($res['excel_data']) && isset($res['excel_name'])){
+                (new Excel())->export_data($res['excel_data'],$res['excel_title'],$res['excel_name']);
+            }
+
+        }
+
+    }
     public function actionUn_deal(){
         $res = (new Visit())->un_deal_brand();
 

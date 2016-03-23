@@ -31,7 +31,8 @@ class Festival extends \yii\db\ActiveRecord
         return [
             [['name', 'start_time', 'greeting'], 'required'],
             [['start_time', 'create_time'], 'integer'],
-            [['name', 'greeting'], 'string', 'max' => 255]
+            [['greeting'],'string'],
+            [['name'], 'string', 'max' => 255]
         ];
     }
 
@@ -71,7 +72,7 @@ class Festival extends \yii\db\ActiveRecord
 
     //获取今天过节的节日
     public function getTodayFestival(){
-        $this_day = strtotime(date("Y-m-d",time()));
+        $this_day = strtotime(date("md",time()));
 
         $query = $this->find();
 

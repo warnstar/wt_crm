@@ -60,7 +60,7 @@ class FestivalController extends CommonController
 
         $festival->name = isset($post['name']) ? $post['name'] : null;
 
-        $festival->start_time = isset($post['start_time']) ? strtotime(date("2016-m-d",strtotime($post['start_time']))) : null;
+        $festival->start_time = isset($post['start_time']) ? strtotime(date("md",strtotime($post['start_time']))) : null;
         $festival->greeting = isset($post['greeting']) ? $post['greeting'] : null;
         if(!$festival->id){
             $festival->create_time = time();

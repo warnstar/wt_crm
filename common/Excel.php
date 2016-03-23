@@ -83,5 +83,62 @@ class Excel
 
 		return null;
 	}
-	
+
+	public function export_data($source = [],$title = [],$file_name = ""){
+		if(!$file_name){
+			$file_name = date("Y-m-d",time());
+		}
+
+		//测试数据
+//		$title = ["青龙","白虎","朱雀","炫舞"];
+//		$source = [
+//			['A','B','C',"D",],
+//			['as','dd','ss','ww'],
+//			['qq','ww','ee','tt']
+//		];
+
+		$objPHPExcel = $this->objPHPExcel;
+
+		$objPHPExcel->getProperties()->setCreator("XX");//作者
+
+
+		$row_flag = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z";
+		$row_flag =  explode(',',$row_flag);
+
+
+		/**
+		 * 设置表头 第1行
+		 */
+		if($title) foreach($title as $k=>$v){
+			$objPHPExcel->setActiveSheetIndex(0)
+					->setCellValue($row_flag[$k] . 1, $v);
+		}
+
+
+		$num = 1;
+		foreach($source as $k => $v) {
+			$num = $num + 1;//第二行开始
+			if ($v) foreach ($title as $kk => $vv) {
+				$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue($row_flag[$kk] . $num, $v[$kk]);
+			}
+		}
+
+		$objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+
+		$outputFileName = $file_name . ".xlsx";
+
+		ob_end_clean();
+		header("Content-Type: application/force-download");
+		header("Content-Type: application/octet-stream");
+		header("Content-Type: application/download");
+		header('Content-Disposition:inline;filename="'.$outputFileName.'"');
+		header("Content-Transfer-Encoding: binary");
+		header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+		header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+		header("Pragma: no-cache");
+		$objWriter->save('php://output');
+
+		return null;
+	}
 }

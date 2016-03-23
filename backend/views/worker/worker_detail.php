@@ -41,9 +41,8 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label">性别</label>
 						<div class="col-sm-9">
-							<label class="radio-inline"><input type="radio" class="sex_data" checked="<?=$worker['sex'] == 1 ? true : false?>" value="1"  name="sex">男</label>
-							<label class="radio-inline"><input type="radio" class="sex_data" checked="<?=$worker['sex'] == 1 ? true : false?>" value="2"  name="sex">女</label>
-						</div>
+							<label class="radio-inline"><input type="radio" class="sex_data" <?=$worker['sex'] == 1 ? "checked" : ""?> value="1"  name="sex">男</label>
+							<label class="radio-inline"><input type="radio" class="sex_data" <?=$worker['sex'] != 1 ? "checked" : ""?> value="2"  name="sex">女</label></div>
 					</div>
 
 					<div class="form-group">

@@ -47,8 +47,8 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label">性别</label>
 						<div class="col-sm-9">
-							<label class="radio-inline"><input type="radio" class="sex_data" checked="<?=$user['sex'] == 1 ? "true" : ""?>" value="1"  name="sex">男</label>
-							<label class="radio-inline"><input type="radio" class="sex_data" checked="<?=$user['sex'] != 1 ? "true" : ""?>" value="2"  name="sex">女</label>
+							<label class="radio-inline"><input type="radio" class="sex_data" <?=$user['sex'] == 1 ? "checked" : ""?> value="1"  name="sex">男</label>
+							<label class="radio-inline"><input type="radio" class="sex_data" <?=$user['sex'] != 1 ? "checked" : ""?> value="2"  name="sex">女</label>
 						</div>
 					</div>
 
@@ -262,7 +262,7 @@
 			birth       :      $(".birth_data").val(),
 			cases_code  :   $(".cases_data").val(),
 			brand_id    :   $(".brand_data").val(),
-			area_id     :   $(".area_lower_data").val()
+			area_id     :   $(".area_lower_data").val(),
 		};
 
 		console.log(data);

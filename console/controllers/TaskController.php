@@ -8,6 +8,7 @@
 namespace console\controllers;
 
 
+use common\models\Festival;
 use common\models\Medical_group_user;
 use common\models\SysSms;
 use common\models\Users;
@@ -24,13 +25,28 @@ class TaskController extends \yii\console\Controller
 	//给今天生日的客户发送祝福短信
 	public function actionBirthday(){
 		$users = (new Users())->getBirthDayUsers();
+
+		if($users){
+			foreach($users as $v){
+				$sms_log[] = (new SysSms())->sendBirthDayGreeting($v['phone'],$v['name']);
+			}
+		}
+		return null;
 	}
 	//发送节日祝福短信
 	public function actionFestival(){
 
 
-		$users = (new Users())->find()->asArray()->all();
-
+		$festival = (new Festival())->getTodayFestival();
+		if($festival){
+			$users = (new Users())->find()->asArray()->all();
+			if($users){
+				foreach($users as $v){
+					$sms_log[] = (new SysSms())->sendFestivalGreeting($v['phone'],$festival['greeting']);
+				}
+			}
+		}
+		return null;
 	}
 
 

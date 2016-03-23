@@ -1,9 +1,11 @@
 <?php
 namespace backend\controllers;
 
+use common\Excel;
 use common\models\Area;
 use common\models\Brand;
 use common\models\Medical_group;
+use common\models\Medical_group_user;
 use common\models\Users;
 use Yii;
 
@@ -148,10 +150,28 @@ class GroupController extends CommonController
         return $this->renderPartial("group_select",$data);
     }
 
+    //创建随机字符串
     function createRandomStr($length){
         $str=array_merge(range(0,9),range('a','z'),range('A','Z'));
         shuffle($str);
         $str=implode('',array_slice($str,0,$length));
         return$str;
+    }
+
+    public function actionGroup_user_export()
+    {
+        $id = Yii::$app->request->get('id');
+        if($id){
+            $res = (new Medical_group_user())->excel_data($id);
+
+            if($res){
+                if(isset($res['excel_title']) && isset($res['excel_data']) && isset($res['excel_name'])){
+                    (new Excel())->export_data($res['excel_data'],$res['excel_title'],$res['excel_name']);
+                }
+            }
+        }else{
+            echo "group_id不对！";
+        }
+
     }
 }

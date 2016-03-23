@@ -25,7 +25,7 @@ $privilege = Yii::$app->session->get("worker");
 				<div class="ibox-title">
 					<h5>所有团员</h5>
 					<div class="ibox-tools">
-						<a href="projects.html" class="btn btn-primary btn-xs">导出excel表格</a>
+						<a href="<?=\yii\helpers\Url::toRoute("group/group_user_export") . "&id=" . $group_id?>" class="btn btn-primary btn-xs">导出excel表格</a>
 					</div>
 				</div>
 				<div class="ibox-content">

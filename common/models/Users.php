@@ -37,7 +37,7 @@ class Users extends \yii\db\ActiveRecord
         return [
             [['name', 'passport'], 'required'],
             [['birth', 'sex', 'status', 'area_id', 'create_time','brand_id'], 'integer'],
-            [['name', 'passport','cases_code', 'phone', 'wchat'], 'string', 'max' => 255]
+            [['name','birth_day', 'passport','cases_code', 'phone', 'wchat'], 'string', 'max' => 255]
         ];
     }
 
@@ -51,6 +51,7 @@ class Users extends \yii\db\ActiveRecord
             'name' => 'Name',
             'passport' => 'Passport',
             'birth' => 'Birth',
+            'birth_day'=>'Birth_day',
             'phone' => 'Phone',
             'sex' => 'Sex',
             'cases_code'=>'Cases_code',
@@ -142,8 +143,20 @@ class Users extends \yii\db\ActiveRecord
         return $data;
     }
 
+    /**
+     * 获取今天生日的用户
+     * @return array|\yii\db\ActiveRecord[]
+     */
     public function getBirthDayUsers(){
+        $query = $this->find();
+        $birth_day = date("md",time());
 
+        $query->andWhere("birth_day = $birth_day");
+
+
+        $data = $query->asArray()->all();
+
+        return $data;
     }
 
 

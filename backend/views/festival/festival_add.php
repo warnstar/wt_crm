@@ -55,7 +55,7 @@
 						<label class="col-sm-2 control-label">节日问候语</label>
 
 						<div class="col-sm-10">
-							<input type="text" class="form-control greeting_data"  name="greetings" >
+							<textarea class="form-control greeting_data"  name="greetings" ></textarea>
 						</div>
 
 					</div>

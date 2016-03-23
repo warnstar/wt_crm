@@ -1,6 +1,7 @@
 <?php
 
 namespace common\models;
+use yii\data\Pagination;
 
 /**
  * This is the model class for table "worker".

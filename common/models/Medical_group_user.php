@@ -226,4 +226,68 @@ class Medical_group_user extends \yii\db\ActiveRecord
         }
     }
 
+    public function excel_data($medical_group_id){
+        // “	姓名	 性别	手机号	护照号	出生年月（mm/dd/YY)	HN	品牌	 所属区域  ”
+        $title = [
+            '姓名',
+            '性别',
+            '手机号',
+            '护照号',
+            '出生年月',
+            'HN',
+            '品牌',
+            '所属区域'
+        ];
+
+        $query = $this->find();
+
+        $select = [
+            'user_name'             =>'users.name',
+            'user_sex'              =>'users.sex',
+            'user_phone'            =>'users.phone',
+            'user_passport'         =>'users.passport',
+            'user_birth'            =>'users.birth',
+            'user_cases_code'       =>'users.cases_code',
+            'brand_name'            =>  'b.name',
+            'area_name'             =>  'a.name'
+        ];
+        $query->select($select);
+
+        $query->where(['medical_group_user.medical_group_id'=>$medical_group_id]);
+
+        $query->leftJoin(['users'],'medical_group_user.user_id=users.id')
+            ->leftJoin(['mg'=>'medical_group'],'medical_group_user.medical_group_id=mg.id')
+            ->leftJoin(['b'=>'brand'],'mg.brand_id=b.id')
+            ->leftJoin(['a'=>'area'],'users.area_id=a.id');
+
+        $res = $query->asArray()->all();
+
+        $res_deal = [];
+        //数据处理
+        if($res){
+            //转换数据视图
+            foreach($res as $k=>$v){
+                $res[$k]['user_sex'] = ( $v['user_sex'] == 1 ? "男" : "女" );
+                $res[$k]['user_birth'] = date("m/d/Y",$v['user_birth']);
+
+            }
+
+            //去除数组键名
+            foreach($res as $k=>$v){
+                foreach($v as $kk=>$vv){
+                    $res_deal[$k][] = $vv;
+                }
+            }
+        }
+
+
+        $data['excel_data'] = $res_deal;
+        $data['excel_title'] = $title;
+
+        $group = (new Medical_group())->find()->select('name')->where(['id'=>$medical_group_id])->asArray()->one();
+        if($group){
+            $data['excel_name'] = $group['name'];
+        }
+        return $data;
+    }
 }

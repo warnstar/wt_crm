@@ -41,10 +41,23 @@ class SysSms
 		}
 	}
 
-	public function sendBirthDayGreeting($phone){
+	public function sendBirthDayGreeting($phone,$name){
+
+
+		$content ="日月轮转永不断，情若真挚长相伴，不论你身在天涯海角，公司都送上对你最真挚的祝福。尊敬的" . $name . "女士/男士，祝您生日快乐！";
+		$res = (new Sms())->sendMessage($phone,$content);
+		return $res;
 
 	}
+
+	/**
+	 * 发送节日祝福短信
+	 * @param $phone
+	 * @param $content
+	 */
 	public function sendFestivalGreeting($phone,$content){
-
+		$res = (new Sms())->sendMessage($phone,$content);
+		return $res;
 	}
+
 }

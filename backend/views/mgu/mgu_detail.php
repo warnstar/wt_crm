@@ -57,8 +57,8 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label">性别</label>
 						<div class="col-sm-9">
-							<label class="radio-inline"><input disabled type="radio" class="sex_data" checked="<?=$mgu_detail['sex'] == 1 ? true : false?>" value="1"  name="sex">男</label>
-							<label class="radio-inline"><input disabled type="radio" class="sex_data" checked="<?=$mgu_detail['sex'] == 1 ? true : false?>" value="2"  name="sex">女</label>
+							<label class="radio-inline"><input disabled type="radio" class="sex_data" <?=$mgu_detail['sex'] == 1 ? "checked" : ""?> value="1"  name="sex">男</label>
+							<label class="radio-inline"><input disabled type="radio" class="sex_data" <?=$mgu_detail['sex'] != 1 ? "checked" : ""?> value="2"  name="sex">女</label>
 						</div>
 					</div>
 					<div class="form-group">
@@ -168,6 +168,9 @@
 							<a href="javascript:history.go(-1)" class="btn btn-primary" >返回</a>
 							<button class="btn btn-primary" >保存</button>
 							<a href="<?=\yii\helpers\Url::toRoute("visit/visit_list") . "&mgu_id=" . $mgu_detail['id']?>" class="btn btn-primary" >查看回访记录</a>
+							<?php if($mgu_detail['end_time'] > time()):?>
+							<a href="<?=\yii\helpers\Url::toRoute("visit/visit_note_add") . "&mgu_id=" . $mgu_detail['id']?>"  class="btn btn-primary" type="submit">添加备注</a>
+							<?php endif;?>
 						</div>
 					</div>
 				</form>

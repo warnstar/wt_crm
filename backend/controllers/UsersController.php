@@ -103,6 +103,7 @@ class UsersController extends CommonController
             $data['area_higher'] = (new Area())->get_lower(0);
             $data['area_lower'] = (new Area())->get_lower($data['user']['area_higher_id']);
 
+            //dump($data);
             return $this->render('users_detail',$data);
         }else{
             return "未找到用户";
@@ -126,9 +127,11 @@ class UsersController extends CommonController
         $user->name = isset($post['name']) ? $post['name'] : null;
         $user->sex = isset($post['sex']) ? $post['sex'] : null;
         $user->birth = isset($post['birth']) ? strtotime($post['birth']) : null;
+        $user->birth_day = date("md",$user->birth);
         $user->phone = isset($post['phone']) ? $post['phone'] : null;
         $user->passport = isset($post['passport']) ? $post['passport'] : null;
         $user->area_id = isset($post['area_id']) ? $post['area_id'] : null;
+        $user->brand_id = isset($post['brand_id']) ? $post['brand_id'] : null;
         $user->cases_code = isset($post['cases_code']) ? $post['cases_code'] : null;
 
         //创建的时候
