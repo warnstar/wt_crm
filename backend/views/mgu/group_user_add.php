@@ -37,11 +37,11 @@ $privilege = Yii::$app->session->get("worker");
 										<small class="font-bold">请选择一个excel文件</small>
 									</div>
 									<div class="modal-body">
-										<input type="file" name="file" id="file">
+										<input type="file" class="excel_data" name="file" id="file">
 									</div>
 									<div class="modal-footer">
 										<button type="button" class="btn btn-white" data-dismiss="modal">取消</button>
-										<button type="button" id="upfile" class="btn btn-primary">确定</button>
+										<button type="button" id="upfile" class="btn btn-primary commit_click">确定</button>
 									</div>
 								</div>
 							</div>
@@ -108,6 +108,7 @@ $privilege = Yii::$app->session->get("worker");
 									<td class="project-title"><?=$v['passport']?></td>
 
 									<td >
+
 										<button class=" btn btn-white btn-sm add handle add_click" group_id="<?=$group_id?>" user_id="<?=$v['id']?>"  data-id='3' >添加</button>
 									</td>
 								</tr>
@@ -162,8 +163,8 @@ $privilege = Yii::$app->session->get("worker");
 
 	$('#upfile').click(function(event) {
 
-		$('#myModal2').modal('hide');
-		var i = layer.load('上传中');
+		//$('#myModal2').modal('hide');
+		//var i = layer.load('上传中');
 		//layer.close(i);  关闭上传中
 	});
 
@@ -289,4 +290,56 @@ $privilege = Yii::$app->session->get("worker");
 			return false;
 		});
 	})
+</script>
+
+
+
+<script>
+
+	$(".excel_data").on("change",function(){
+		var files = !!this.files ? this.files : [];
+		if (!files.length || !window.FileReader) return;
+		var excel = files[0];
+
+
+		var re= new RegExp('(.xlsx)');
+		if(!re.test(excel.name)){
+			alert("请传入.xlsx文件");
+			$(".excel_data").val("");
+		}
+
+	});
+
+	$(".commit_click").click(function(){
+		add_commit();
+	});
+
+	function add_commit(){
+		var formdata = new FormData();
+		var url = "<?=\yii\helpers\Url::toRoute("group/group_user_import")?>";
+
+
+		var file_data = document.getElementsByClassName("excel_data")[0];
+		formdata.append('excel_data', file_data.files[0]);
+		formdata.append('group_id',"<?=$group_id?>");
+
+		$.ajax({
+			url:url,
+			type:'POST',
+			data:formdata,
+			dataType:'json',
+			processData: false,  // 告诉jQuery不要去处理发送的数据
+			contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
+			success:function(msg){
+				if(msg.status){
+					alert("创建成功！");
+				}else{
+					alert(msg.error);
+				}
+			},
+			error:function(XmlHttpRequest,textStatus,errorThrown){
+
+			}
+		})
+	}
 </script>

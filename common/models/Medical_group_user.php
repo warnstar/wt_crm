@@ -290,4 +290,45 @@ class Medical_group_user extends \yii\db\ActiveRecord
         }
         return $data;
     }
+
+    public function create($post){
+
+        $this->medical_group_id = isset($post['group_id']) ? $post['group_id'] : null;
+        $this->user_id = isset($post['user_id']) ? $post['user_id'] : null;
+        $this->end_time = isset($post['end_time']) ? (int)$post['end_time']: null;
+        $this->create_time = time();
+
+        $group = (new Medical_group())->find()->where(['id'=>$this->medical_group_id])->one();
+
+        if($group) {
+            $this->start_time = $group->end_time;
+
+            //之前保存的结束时间是天，规则是开始后的第几天。
+            $this->end_time = $this->start_time + $this->end_time * 3600 * 24;
+
+            //写入疗程开始后的下次回访时间
+            $this->next_visit = $this->start_time + 3600 * 24;
+
+            if ($this->exist()) {
+                return null;
+            } else {
+                if ($this->save()) {
+
+                    //修改用户最后一次参团与品牌
+                    $user = (new Users())->find()->where(['id' => $this->user_id])->one();
+                    $user->brand_id = $group->brand_id;
+                    $user->last_mgu = $this->id;
+                    $flag['user_mgu'] = $user->save();
+
+                    //修改医疗团用户数
+                    $user_count = (new Medical_group_user())->find()->where(['medical_group_id' => $this->medical_group_id])->count("*");
+                    $group->user_count = $user_count;
+                    $flag['group_count'] = $group->save();
+
+                    return (new Users())->find()->where(['id'=>$user->id])->asArray()->one();
+                }
+            }
+        }
+        return null;
+    }
 }

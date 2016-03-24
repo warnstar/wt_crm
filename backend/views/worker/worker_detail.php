@@ -54,6 +54,14 @@
 					</div>
 
 					<div class="form-group">
+						<label class="col-sm-2 control-label">密码</label>
+
+						<div class="col-sm-10">
+							<input type="password" class="form-control password_data" name="password" >
+						</div>
+					</div>
+
+					<div class="form-group">
 						<label class="col-sm-2 control-label">角色</label>
 
 						<div class="col-sm-10"  >
@@ -234,7 +242,8 @@
 			phone   :   $(".phone_data").val(),
 			role_id :   $(".role_data").val(),
 			brand_id:   $(".brand_data").val(),
-			area_id :   $(".area_lower_data").val()
+			area_id :   $(".area_lower_data").val(),
+			password   :   $(".password_data").val()
 		};
 
 		$.post(url,data,function(msg){

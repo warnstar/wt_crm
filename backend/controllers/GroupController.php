@@ -158,6 +158,9 @@ class GroupController extends CommonController
         return$str;
     }
 
+    /**
+     * 导出excel
+     */
     public function actionGroup_user_export()
     {
         $id = Yii::$app->request->get('id');
@@ -172,6 +175,175 @@ class GroupController extends CommonController
         }else{
             echo "group_id不对！";
         }
+    }
 
+    /**
+     * 导入数据
+     */
+    public function actionGroup_user_import(){
+        $group_id = Yii::$app->request->post("group_id");
+
+        $user_data = (new Excel())->import_data();
+
+        //初步过滤
+        $user_data = $this->excel_user_filter($user_data,$group_id);
+
+
+        $new_users = [];
+        $join_users = [];
+        if($user_data){
+            $user_data = $this->get_exist_users($user_data,$group_id);
+
+            foreach($user_data as $k=>$v){
+                if($v['flag'] == 1){
+                    //已存在但未参与的用户
+                    $mgu['group_id'] = $group_id;
+                    $mgu['user_id'] = $v['user_id'];
+                    $mgu['end_time'] = 10;
+
+                    $mgu_new = (new Medical_group_user())->create($mgu);
+                    if($mgu_new){
+                        $join_users[] = $mgu_new;
+                    }
+
+
+                }else if($v['flag'] == 3){
+                    //不存在且正常的用户
+                    $res_new = (new Users())->create_data($v);
+                    if($res_new){
+                        $new_users[] = $res_new;
+                        $mgu['group_id'] = $group_id;
+                        $mgu['user_id'] = $v['user_id'];
+                        $mgu['end_time'] = 10;
+
+                        $mgu_new = (new Medical_group_user())->create($mgu);
+                        if($mgu_new){
+                            $join_users[] = $mgu_new;
+                        }
+                    }
+                }
+            }
+
+        }else{
+            $msg['error'] = "数据格式不对！";
+        }
+
+        dump($new_users);
+        dump($join_users);
+    }
+
+
+
+    //初步过滤
+    function excel_user_filter($users = [],$group_id = 0){
+        // “	姓名	 性别	手机号	护照号	出生年月（mm/dd/YY)	HN	品牌	 所属区域  ”
+        //不能为空：姓名，性别，手机号，护照号，HN,所属区域
+        //不能重复：护照号，HN
+        //品牌为无效字段，由所参加的团的品牌决定
+        //以护照号为用户标准，
+        //$users['flag'] = (0=非法；1=已存在用户；2=已参加,3=正常）
+
+
+        $keys = ['name','sex','phone','passport','birth','cases_code','brand','area_id'];
+        $error_data = [];
+        if($users){
+            $data = [];
+
+            array_shift($users);//去掉首行的表头
+
+            //设置键值
+            foreach($users as $k=>$v){
+                $i = 0;
+                foreach($v as $kk=>$vv){
+                    $data[$k][$keys[$i]] = $vv;
+                    $i = $i + 1;
+                }
+
+            }
+            $users = $data;
+
+            //转换部分数据格式
+            foreach($users as $k=>$v){
+                //去掉名字为空的
+                if(!$v['name']){
+                    $users[$k]['flag'] = 0 ;
+                }
+
+                //性别转换
+                if($v['sex'] == "男"){
+                    $users[$k]['sex'] = 1;
+                }else{
+                    $users[$k]['sex'] = 2;
+                }
+
+                //去掉电话为空的
+                if(!$v['phone']){
+                    $users[$k]['flag'] = 0 ;
+                }
+
+                //去掉护照为空的
+                if(!$v['passport']){
+                    $users[$k]['flag'] = 0 ;
+                }
+
+                //去掉病历号为空的
+                if(!$v['cases_code']){
+                    $users[$k]['flag'] = 0 ;
+                }
+
+                //生日转换
+                if($v['birth']){
+                    $users[$k]['birth'] = strtotime($v['birth']);
+                }else{
+                    $users[$k]['flag'] = 0 ;
+                }
+
+                //获取品牌id
+                $brand = (new Medical_group())->find()->where(['id'=>$group_id])->asArray()->one();
+                $users[$k]['brand_id'] = $brand['id'];
+
+                //区域转换
+                $area_name = $v['area_id'];
+                $area = (new Area())->find()->where(['like', 'name', $area_name])->andWhere("parent_id != 0")->asArray()->one();
+                if($area && $area['name']){
+                    $users[$k]['area_id'] = $area['id'];
+                }else{
+                    $error_data[] = $v;
+                    $users[$k]['flag'] = 0 ;
+                }
+            }
+        }else{
+            return null;
+        }
+        return $users;
+    }
+
+    //筛选出已存在的用户(护照号)
+    public function get_exist_users($users = [],$group_id){
+
+        if($users){
+            foreach($users as $k=>$v){
+                $u = (new Users())->find()->where(['passport'=>$v['passport']])->asArray()->one();
+                if($u){
+
+                    $mgu = (new Medical_group_user())->find()->where(['user_id'=>$u['id'],'medical_group_id'=>$group_id])->asArray()->one();
+                    if($mgu){
+                        //已加入该团
+                        $users[$k]['flag'] = 2;
+                    }else{
+                        //用户存在但未加团
+                        $users[$k]['flag'] = 1;
+                    }
+
+                    $users[$k]['user_id'] = $u['id'];
+                }else{
+                    $users[$k]['user_id'] = 0;
+                    $users[$k]['flag'] = 3;
+                }
+            }
+            return $users;
+        }else{
+            return null;
+        }
     }
 }

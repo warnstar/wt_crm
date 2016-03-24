@@ -186,8 +186,37 @@ class Users extends \yii\db\ActiveRecord
         return $data;
     }
 
+    public function create_data($post = []){
+        $user = new Users();
+
+        $user->name = isset($post['name']) ? $post['name'] : null;
+        $user->sex = isset($post['sex']) ? $post['sex'] : null;
+        $user->phone = isset($post['phone']) ? $post['phone'] : null;
+        $user->passport = isset($post['passport']) ? $post['passport'] : null;
+
+        $user->birth = isset($post['birth']) ? $post['birth'] : null;
+        $user->birth_day = date("md",$user->birth);
+        $user->cases_code = isset($post['cases_code']) ? $post['cases_code'] : null;
+        $user->brand_id = isset($post['brand_id']) ? (int)$post['brand_id'] : null;
+        $user->area_id = isset($post['area_id']) ? (int)$post['area_id'] : null;
+        $user->create_time = time();
+
+
+        if($user->exist()){
+            return null;
+        }else{
+
+            if($user->save(false)){
+                return $this->find()->where(['id'=>$user->id])->asArray()->one();
+            }else{
+                return null;
+            }
+        }
+    }
+
     public function exist(){
-        $data = $this->findOne(['passport'=>$this->passport]);
+        //护照号和病历号不能重名
+        $data = $this->find()->where(['passport'=>$this->passport])->orWhere(['cases_code'=>$this->cases_code])->one();
 
         if($data){
             if($this->id){

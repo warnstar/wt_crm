@@ -79,6 +79,11 @@ class WorkerController extends CommonController
 
         if(isset($post['id']) && $post['id']){
             $worker = (new Worker())->findOne($post['id']);
+            if(isset($post['password']) && $post['password']){
+                $worker->password = md5($post['password']);
+            }
+        }else{
+            $worker->password = isset($post['password']) ? md5($post['password']) : null;
         }
         $worker->name = isset($post['name']) ? $post['name'] : null;
         $worker->sex = isset($post['sex']) ? $post['sex'] : null;
@@ -86,7 +91,7 @@ class WorkerController extends CommonController
         $worker->role_id = isset($post['role_id']) ? $post['role_id'] : null;
         $worker->area_id = isset($post['area_id']) ? $post['area_id'] : null;
         $worker->brand_id = isset($post['brand_id']) ? $post['brand_id'] : null;
-        $worker->password = isset($post['password']) ? md5($post['password']) : null;
+
 
         if(!$worker->id){
             $worker->create_time = time();

@@ -100,16 +100,11 @@ class CommonController extends Controller {
             for ($row = 1; $row <= $highestRow; $row++){//行数是以第1行开始
 
                 for ($column = 'A'; $column <= $highestColumm; $column++) {//列数是以A列开始
-                    if($row > 1 && isset($dataset[1]) && $dataset[1]){
+                    $dataset[$row][$column] = $sheet->getCell($column.$row)->getValue();
 
-                        $dataset[$row][$dataset[1][$column]] = $sheet->getCell($column.$row)->getValue();
-                    }else{
-                        $dataset[$row][$column] = $sheet->getCell($column.$row)->getValue();
-                    }
                 }
             }
-            array_shift($dataset);
-            dump($dataset);
+
         }else{
             echo "文件不对！";
         }

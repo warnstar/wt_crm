@@ -26,6 +26,44 @@ class Excel
 		dump($objPHPExcel);
 	}
 
+	public function import_data(){
+		$data = [];
+		if($_FILES){
+			$i = 0;
+			foreach($_FILES as $k=>$v){
+				$objPHPExcel = \PHPExcel_IOFactory::load($_FILES[$k]['tmp_name']);
+
+				$sheet = $objPHPExcel->getSheet(0); // 读取第一個工作表
+				$highestRow = $sheet->getHighestRow(); // 取得总行数
+				$highestColumm = $sheet->getHighestColumn(); // 取得总列数
+
+
+				/** 循环读取每个单元格的数据 */
+				$dataset = [];
+				for ($row = 1; $row <= $highestRow; $row++){//行数是以第1行开始
+					for ($column = 'A'; $column <= $highestColumm; $column++) {//列数是以A列开始
+						$dataset[$row][$column] = $sheet->getCell($column.$row)->getValue();
+
+					}
+				}
+				if($dataset){
+					$data[] = $dataset;
+				}
+			}
+		}
+
+		/**
+		 * 当只有一个excel传入时候，返回单个数组（一个表的数据）
+		 */
+		if($data){
+			if(count($data) == 1){
+				$data = array_shift($data);
+			}
+		}
+
+		return $data;
+	}
+
 	public function test(){
 		
 		$objPHPExcel = $this->objPHPExcel;
