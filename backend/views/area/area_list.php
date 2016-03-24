@@ -114,6 +114,7 @@
 		})
 	});
 
+	//删除操作
 	$("body").on("click",".delete_click",function(){
 		var url = "<?=\yii\helpers\Url::toRoute("area/delete")?>";
 		var data = {

@@ -75,4 +75,19 @@ class NoteController extends CommonController
 
         return json_encode($msg);
     }
+
+    public function actionNote_type_delete(){
+        $id = Yii::$app->request->post("id");
+
+        $msg['status'] = 0;
+
+        $res = (new Note_type())->delete_this($id);
+        if(isset($res['code']) && $res['code'] == 0){
+            $msg['status'] = 1;
+        }else{
+            $msg['error'] = $res['error'];
+        }
+
+        return json_encode($msg);
+    }
 }
