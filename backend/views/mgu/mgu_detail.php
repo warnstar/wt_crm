@@ -116,7 +116,7 @@
 					<?php if($visit_notes) foreach($visit_notes as $v):?>
 						<?php if($v['content_type'] == 1):?>
 							<div class="form-group">
-								<label class="col-sm-2 control-label">备注内容为文字</label>
+								<label class="col-sm-2 control-label"><?=$v['type_name'] ? $v['type_name'] : "异常备注"?></label>
 
 								<div class="col-sm-10">
 									<p class="beizhu_p"><?=$v['content']?></p>
@@ -127,7 +127,7 @@
 
 						<?php if($v['content_type'] == 3):?>
 							<div class="form-group">
-								<label class="col-sm-2 control-label">备注内容为文件</label>
+								<label class="col-sm-2 control-label"><?=$v['type_name'] ? $v['type_name'] : "异常备注"?></label>
 								<div class="col-sm-10">
 									<?php $content = json_decode($v['content']);?>
 
@@ -142,7 +142,7 @@
 
 						<?php if($v['content_type'] == 2):?>
 							<div class="form-group">
-								<label class="col-sm-2 control-label">备注图片</label>
+								<label class="col-sm-2 control-label"><?=$v['type_name'] ? $v['type_name'] : "异常备注"?></label>
 
 								<div class="col-sm-10">
 									<div>
