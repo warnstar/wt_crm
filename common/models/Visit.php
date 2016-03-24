@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\lib\oss\Oss;
 use Yii;
 use yii\data\Pagination;
 
@@ -246,5 +247,32 @@ class Visit extends \yii\db\ActiveRecord
         }
     }
 
+    public function delete_this($id = 0){
 
+        $data = (new Visit())->find()->where(['id'=>$id])->one();
+        if(!$data){
+            $msg['code'] = 3;
+            $msg['error'] = "要删除用户对象不存在!";
+            return $msg;
+        }
+
+        if(!isset($msg)){
+            if($data->delete()){
+                $msg['code'] = 0;
+
+                //删除备注
+                $notes = (new Note())->find()->where(['visit_id'=>$id])->asArray()->all();
+                if($notes){
+                    foreach($notes as $v){
+                        $flag['notes'] = (new Note())->delete_this($v['id']);
+                    }
+                }
+            }else{
+                $msg['code'] = 6;
+                $msg['error'] = "数据库操作失败！";
+            }
+        }
+
+        return $msg;
+    }
 }

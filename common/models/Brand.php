@@ -110,8 +110,8 @@ class Brand extends \yii\db\ActiveRecord
 
     public function delete_this($id = 0){
 
-        $area = (new Brand())->find()->where(['id'=>$id])->one();
-        if(!$area){
+        $data = (new Brand())->find()->where(['id'=>$id])->one();
+        if(!$data){
             $msg['code'] = 3;
             $msg['error'] = "要删除用户对象不存在!";
             return $msg;
@@ -135,7 +135,7 @@ class Brand extends \yii\db\ActiveRecord
         }
 
         if(!isset($msg)){
-            if($area->delete()){
+            if($data->delete()){
                 $msg['code'] = 0;
             }else{
                 $msg['code'] = 6;

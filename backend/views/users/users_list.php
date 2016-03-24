@@ -98,7 +98,7 @@ $privilege = Yii::$app->session->get("worker");
 								<td class="project-title"><?php if(!$v['last_mgu']) echo "无疗程";else if($v['start_time_mgu'] > time())  echo "未开始";else if($v['end_time_mgu'] < time()) echo "已结束";else echo "进行中";?></td>
 								<td >
 									<a href="<?=\yii\helpers\Url::toRoute("users/detail") . "&id=" . $v['id']?>" class=" btn btn-white btn-sm">查看详情</a>
-									<button class="btn-delete btn btn-white btn-sm">删除</button>
+									<button value="<?=$v['id']?>" class="btn-delete btn btn-white btn-sm delete_click">删除</button>
 								</td>
 							</tr>
 							<?php endforeach;?>
@@ -121,35 +121,7 @@ $privilege = Yii::$app->session->get("worker");
 </div>
 
 <script type="text/javascript">
-	$('.btn-delete').on('click', function(){
-		var obj = $(this).parent().parent();//记录一下当前元素
-		$.layer({
-			shade: [0],
-			title: '提示',
-			area: ['auto','auto'],
-			dialog: {
-				msg: '您确定要删除这条数据吗？',
-				btns: 2,
-				type: 0,
-				btn: ['确定','取消'],
-				yes: function(){
 
-					obj.remove();//删除当前行
-					layer.msg('删除成功！',3 , {
-						type:1,
-						rate: 'bottom',
-						shade: [0]
-					});
-				}, no: function(){
-					layer.msg('删除失败！',3 , {
-						type:8,
-						rate: 'bottom',
-						shade: [0]
-					});
-				}
-			}
-		});
-	});
 
 	//品牌--》医疗团联动变化
 	$(".brand_data").change(function(){
@@ -234,5 +206,21 @@ $privilege = Yii::$app->session->get("worker");
 			});
 			return false;
 		});
-	})
+	});
+
+	//删除操作
+	$("body").on("click",".delete_click",function(){
+		var url = "<?=\yii\helpers\Url::toRoute("users/delete")?>";
+		var data = {
+			id  :   $(this).val()
+		};
+		$.post(url,data,function(msg){
+			if(msg.status){
+				alert("删除成功");
+				location.reload();
+			}else{
+				alert(msg.error);
+			}
+		},'json');
+	});
 </script>

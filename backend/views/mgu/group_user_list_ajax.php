@@ -31,7 +31,7 @@
 
 			<td >
 				<a href="<?=\yii\helpers\Url::toRoute("users/detail") . "&id=" . $v['user_id']?>" class=" btn btn-white btn-sm">查看详情</a>
-				<button class="btn-delete btn btn-white btn-sm">删除</button>
+				<button value="<?=$v['id']?>" class="btn-delete btn btn-white btn-sm delete_click">删除</button>
 			</td>
 		</tr>
 	<?php endforeach;?>

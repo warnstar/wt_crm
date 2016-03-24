@@ -93,7 +93,7 @@ $privilege = Yii::$app->session->get("worker");
 
 									<td >
 										<a href="<?=\yii\helpers\Url::toRoute("users/detail") . "&id=" . $v['user_id']?>" class=" btn btn-white btn-sm">查看详情</a>
-										<button class="btn-delete btn btn-white btn-sm">删除</button>
+										<button value="<?=$v['id']?>" class="btn-delete btn btn-white btn-sm delete_click">删除</button>
 									</td>
 								</tr>
 							<?php endforeach;?>
@@ -199,5 +199,22 @@ $privilege = Yii::$app->session->get("worker");
 			});
 			return false;
 		});
-	})
+	});
+
+
+	//删除操作
+	$("body").on("click",".delete_click",function(){
+		var url = "<?=\yii\helpers\Url::toRoute("mgu/delete")?>";
+		var data = {
+			id  :   $(this).val()
+		};
+		$.post(url,data,function(msg){
+			if(msg.status){
+				alert("删除成功");
+				location.reload();
+			}else{
+				alert(msg.error);
+			}
+		},'json');
+	});
 </script>

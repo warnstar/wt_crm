@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\lib\oss\Oss;
 use Yii;
 
 /**
@@ -97,5 +98,35 @@ class Note extends \yii\db\ActiveRecord
         $data = $query->asArray()->all();
 
         return $data;
+    }
+
+    public function delete_this($id = 0){
+
+        $data = (new Note())->find()->where(['id'=>$id])->one();
+        if(!$data){
+            $msg['code'] = 3;
+            $msg['error'] = "要删除用户对象不存在!";
+            return $msg;
+        }
+
+        if(!isset($msg)){
+            //删除资源
+            if($data->content_type == 2 || $data->content_type ==3){
+                $content = json_decode($data->content);
+                if($content){
+                    foreach($content as $v){
+                        $flag['content_res'][] = (new Oss())->file_del($v['url_object']);
+                    }
+                }
+            }
+            if($data->delete()){
+                $msg['code'] = 0;
+            }else{
+                $msg['code'] = 6;
+                $msg['error'] = "数据库操作失败！";
+            }
+        }
+
+        return $msg;
     }
 }

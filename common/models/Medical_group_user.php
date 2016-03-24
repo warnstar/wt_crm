@@ -331,4 +331,53 @@ class Medical_group_user extends \yii\db\ActiveRecord
         }
         return null;
     }
+
+    public function delete_this($id = 0){
+
+        $data = (new Medical_group_user())->find()->where(['id'=>$id])->one();
+
+        if(!$data){
+            $msg['code'] = 3;
+            $msg['error'] = "要删除用户对象不存在!";
+            return $msg;
+        }
+
+        $group = (new Medical_group())->find()->where(['id'=>$data->medical_group_id])->one();
+
+        if(!isset($msg)){
+            if($data->delete()){
+                $msg['code'] = 0;
+
+                //删除回访记录
+                $visits = (new Visit())->find()->where(['mgu_id'=>$id])->asArray()->all();
+                if($visits){
+                    foreach($visits as $v){
+
+                        $flag['visits'] = (new Visit())->delete_this($v['id']);
+                    }
+                }
+
+                //删除未匹配的备注
+                $notes = (new Note())->find()->where(['mgu_id'=>$id])->asArray()->all();
+                if($notes){
+                    foreach($notes as $v){
+                        $flag['notes'] = (new Note())->delete_this($v['id']);
+                    }
+                }
+
+                //修改医疗团用户数
+                if($group){
+                    $user_count = (new Medical_group_user())->find()->where(['medical_group_id'=>$group->id])->count("*");
+                    $group->user_count = $user_count;
+                    $flag['group_count'] = $group->save();
+                }
+
+            }else{
+                $msg['code'] = 6;
+                $msg['error'] = "数据库操作失败！";
+            }
+        }
+
+        return $msg;
+    }
 }

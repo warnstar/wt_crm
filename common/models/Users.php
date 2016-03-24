@@ -228,4 +228,37 @@ class Users extends \yii\db\ActiveRecord
             return false;
         }
     }
+
+    public function delete_this($id = 0){
+
+        $data = (new Users())->find()->where(['id'=>$id])->one();
+
+        if(!$data){
+            $msg['code'] = 3;
+            $msg['error'] = "要删除用户对象不存在!";
+            return $msg;
+        }
+
+
+
+        if(!isset($msg)){
+            if($data->delete()){
+                $msg['code'] = 0;
+
+                //删除参团
+                $mgus = (new Medical_group_user())->find()->where(['user_id'=>$id])->asArray()->all();
+                if($mgus){
+                    foreach($mgus as $v){
+
+                        $flag['mgus'] = (new Medical_group_user())->delete_this($v['id']);
+                    }
+                }
+            }else{
+                $msg['code'] = 6;
+                $msg['error'] = "数据库操作失败！";
+            }
+        }
+
+        return $msg;
+    }
 }
