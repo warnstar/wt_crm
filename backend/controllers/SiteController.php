@@ -95,6 +95,16 @@ class SiteController extends Controller
             $session->set('worker',$worker_arr);
 
             $msg['status'] = 1;
+            if($worker['role_id'] == 1){
+                $msg['url'] = Url::toRoute("users/list");
+            }else if($worker['role_id'] == 2){
+                $msg['url'] = Url::toRoute("visit/un_visit_list");
+            }else if($worker['role_id'] == 3){
+                $msg['url'] = Url::toRoute("visit/error_un_do");
+            }else{
+                $msg['status'] = 0;
+            }
+
         } else {
             $msg['status'] = 0;
         }
