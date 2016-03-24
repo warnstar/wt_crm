@@ -142,7 +142,9 @@
 						<div class="col-sm-4 col-sm-offset-3">
 							<a href="<?=\yii\helpers\Url::toRoute("users/list")?>" class="btn btn-primary" type="submit">返回</a>
 							<button class="btn btn-primary form_commit">修改</button>
+							<?php if($user['last_mgu']):?>
 							<a href="<?=\yii\helpers\Url::toRoute("mgu/mgu_detail") . "&mgu_id=" . $user['last_mgu']?>" class="btn btn-primary" >查看当前疗程</a>
+							<?php endif;?>
 							<a <a href="<?=\yii\helpers\Url::toRoute("mgu/user_join_group") . "&user_id=" . $user['id']?>" class="btn btn-primary" >查看健康足迹</a>
 						</div>
 					</div>

@@ -9,6 +9,7 @@ use common\models\Medical_group_user;
 use common\models\Note;
 use common\models\Users;
 use Yii;
+use yii\helpers\Url;
 
 /**
  * Site controller
@@ -151,14 +152,18 @@ class MguController extends CommonController
     public function actionMgu_detail(){
         $mgu_id = Yii::$app->request->get("mgu_id");
         $data = [];
+        if(!$mgu_id){
+            $this->redirect(Url::toRoute("common/home"));
+        }else{
+            $data['mgu_detail'] = (new Medical_group_user())->detail($mgu_id);
 
-        $data['mgu_detail'] = (new Medical_group_user())->detail($mgu_id);
-
-        $option['mgu_id'] = $mgu_id;
-        $data['visit_notes'] = (new Note())->search($option);
+            $option['mgu_id'] = $mgu_id;
+            $data['visit_notes'] = (new Note())->search($option);
 
 
-        return $this->render("mgu_detail",$data);
+            return $this->render("mgu_detail",$data);
+        }
+
     }
     //更新疗程信息
     public function actionMgu_update_save(){

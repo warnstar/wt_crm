@@ -98,4 +98,19 @@ class BrandController extends CommonController
 
         return $this->renderPartial('brand_select',$data);
     }
+
+    public function actionDelete(){
+        $id = Yii::$app->request->post("id");
+
+        $msg['status'] = 0;
+
+        $res = (new Brand())->delete_this($id);
+        if(isset($res['code']) && $res['code'] == 0){
+            $msg['status'] = 1;
+        }else{
+            $msg['error'] = $res['error'];
+        }
+
+        return json_encode($msg);
+    }
 }

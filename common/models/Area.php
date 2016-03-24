@@ -157,4 +157,46 @@ class Area extends \yii\db\ActiveRecord
             return false;
         }
     }
+
+    public function delete_this($id = 0){
+        if($id == 0){
+            $msg['code'] = 10;
+            $msg['error'] = "根区域不允许删除";
+            return $msg;
+        }
+
+        $area = (new Area())->find()->where(['id'=>$id])->one();
+        if(!$area){
+            $msg['code'] = 3;
+            $msg['error'] = "要删除用户对象不存在!";
+            return $msg;
+        }
+        $area_lower = $this->find()->where(['parent_id'=>$id])->one();
+        $users = (new Users())->find()->where(['area_id'=>$id])->one();
+        $workers = (new Worker())->find()->where(['area_id'=>$id])->one();
+
+        if($area_lower){
+            $msg['code'] = 10;
+            $msg['error'] = "有子区域的区域不允许删除";
+        }
+        if($users){
+            $msg['code'] = 10;
+            $msg['error'] = "有用户的区域不允许删除";
+        }
+        if($workers){
+            $msg['code'] = 10;
+            $msg['error'] = "有职员的区域不允许删除";
+        }
+
+        if(!isset($msg)){
+            if($area->delete()){
+                $msg['code'] = 0;
+            }else{
+                $msg['code'] = 6;
+                $msg['error'] = "数据库操作失败！";
+            }
+        }
+
+        return $msg;
+    }
 }

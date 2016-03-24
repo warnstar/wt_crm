@@ -108,12 +108,42 @@ class Brand extends \yii\db\ActiveRecord
         return $res;
     }
 
-    public function delete_this($id = null)
-    {
-        if(!$id){
-            $id = $this->id;
+    public function delete_this($id = 0){
+
+        $area = (new Brand())->find()->where(['id'=>$id])->one();
+        if(!$area){
+            $msg['code'] = 3;
+            $msg['error'] = "要删除用户对象不存在!";
+            return $msg;
         }
 
+        $users = (new Users())->find()->where(['brand_id'=>$id])->one();
+        $workers = (new Worker())->find()->where(['brand_id'=>$id])->one();
+        $groups = (new Medical_group())->find()->where(['brand_id'=>$id])->one();
+
+        if($groups){
+            $msg['code'] = 10;
+            $msg['error'] = "有出团的品牌不允许删除";
+        }
+        if($users){
+            $msg['code'] = 10;
+            $msg['error'] = "有用户的品牌不允许删除";
+        }
+        if($workers){
+            $msg['code'] = 10;
+            $msg['error'] = "有职员的品牌不允许删除";
+        }
+
+        if(!isset($msg)){
+            if($area->delete()){
+                $msg['code'] = 0;
+            }else{
+                $msg['code'] = 6;
+                $msg['error'] = "数据库操作失败！";
+            }
+        }
+
+        return $msg;
     }
 
 }
