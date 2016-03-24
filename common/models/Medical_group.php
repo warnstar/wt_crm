@@ -136,4 +136,32 @@ class Medical_group extends \yii\db\ActiveRecord
 
         return $data;
     }
+
+    public function delete_this($id = 0){
+
+        $data = (new Medical_group())->find()->where(['id'=>$id])->one();
+        if(!$data){
+            $msg['code'] = 3;
+            $msg['error'] = "要删除用户对象不存在!";
+            return $msg;
+        }
+
+        $mgu = (new Medical_group_user())->find()->where(['medical_group_id'=>$id])->one();
+
+        if($mgu){
+            $msg['code'] = 10;
+            $msg['error'] = "有团员的出团不允许删除";
+        }
+
+        if(!isset($msg)){
+            if($data->delete()){
+                $msg['code'] = 0;
+            }else{
+                $msg['code'] = 6;
+                $msg['error'] = "数据库操作失败！";
+            }
+        }
+
+        return $msg;
+    }
 }

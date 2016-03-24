@@ -378,4 +378,19 @@ class GroupController extends CommonController
             return null;
         }
     }
+
+    public function actionDelete(){
+        $id = Yii::$app->request->post("id");
+
+        $msg['status'] = 0;
+
+        $res = (new Medical_group())->delete_this($id);
+        if(isset($res['code']) && $res['code'] == 0){
+            $msg['status'] = 1;
+        }else{
+            $msg['error'] = $res['error'];
+        }
+
+        return json_encode($msg);
+    }
 }

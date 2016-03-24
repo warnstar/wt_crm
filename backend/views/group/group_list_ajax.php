@@ -31,7 +31,7 @@
 			<td >
 				<a class=" btn btn-white btn-sm" href="<?=\yii\helpers\Url::toRoute("group/detail") . "&id=" . $v['id']?>">查看详情</a>
 				<a class=" btn btn-white btn-sm" href="<?=\yii\helpers\Url::toRoute("mgu/list") . "&medical_group_id=" . $v['id']?>">查看团员</a>
-				<button class="btn-delete btn btn-white btn-sm">删除</button>
+				<button  value="<?=$v['id']?>" class="btn-delete btn btn-white btn-sm delete_click">删除</button>
 			</td>
 		</tr>
 	<?php endforeach;?>

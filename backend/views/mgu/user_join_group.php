@@ -56,7 +56,7 @@
 								<td class="project-status"><?=date("Y-m-d H:m:s",$v['create_time'])?></td>
 								<td class="project-title"><?=$v['brand_name']?></td>
 								<td class="project-title"><?=$v['user_passport']?></td>
-								<td class="project-title"><?php if($v['start_time'] > time()) echo "未开始";else if($v['end_time'] > time()) echo "已结束";else echo "进行中"; ?></td>
+								<td class="project-title"><?php if($v['start_time'] > time()) echo "未开始";else if($v['end_time'] < time()) echo "已结束";else echo "进行中"; ?></td>
 								<td >
 									<a href="<?=\yii\helpers\Url::toRoute("mgu/mgu_detail") . "&mgu_id=" . $v['id']?>" class=" btn btn-white btn-sm">查看详情</a>
 								</td>

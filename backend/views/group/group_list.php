@@ -79,7 +79,7 @@ $privilege = Yii::$app->session->get("worker");
 								<td >
 									<a class=" btn btn-white btn-sm" href="<?=\yii\helpers\Url::toRoute("group/detail") . "&id=" . $v['id']?>">查看详情</a>
 									<a class=" btn btn-white btn-sm" href="<?=\yii\helpers\Url::toRoute("mgu/list") . "&medical_group_id=" . $v['id']?>">查看团员</a>
-									<button class="btn-delete btn btn-white btn-sm">删除</button>
+									<button  value="<?=$v['id']?>" class="btn-delete btn btn-white btn-sm delete_click">删除</button>
 								</td>
 							</tr>
 							<?php endforeach;?>
@@ -140,5 +140,21 @@ $privilege = Yii::$app->session->get("worker");
 			});
 			return false;
 		});
-	})
+	});
+
+	//删除事件
+	$("body").on("click",".delete_click",function(){
+		var url = "<?=\yii\helpers\Url::toRoute("group/delete")?>";
+		var data = {
+			id  :   $(this).val()
+		};
+		$.post(url,data,function(msg){
+			if(msg.status){
+				alert("删除成功");
+				location.reload();
+			}else{
+				alert(msg.error);
+			}
+		},'json');
+	});
 </script>
