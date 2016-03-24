@@ -14,7 +14,7 @@
 <!-- 标题 -->
 <div class="row wrapper border-bottom white-bg page-heading title">
 	<div class="col-lg-10">
-		<h2>出团管理-添加出团</h2>
+		<h2>出团管理-医疗团详情</h2>
 	</div>
 
 </div>
@@ -25,7 +25,7 @@
 		<div class="ibox float-e-margins">
 
 			<div class="ibox-title">
-				<h5>添加出团</h5>
+				<h5>医疗团详情</h5>
 			</div>
 
 			<div class="ibox-content">

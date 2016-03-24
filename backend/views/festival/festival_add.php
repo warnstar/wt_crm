@@ -143,7 +143,7 @@
 		$.post(url,data,function(msg){
 			if(msg.status){
 				alert("操作成功！");
-				location.href = "<?=\yii\helpers\Url::toRoute("festival/list)")?>";
+				location.href = "<?=\yii\helpers\Url::toRoute("festival/list")?>";
 			}else{
 				alert(msg.error);
 			}

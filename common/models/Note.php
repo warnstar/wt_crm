@@ -65,7 +65,9 @@ class Note extends \yii\db\ActiveRecord
         $select = [
             'note.*',
             'worker_name'=>'w.name',
-            'worker_role'=>'r.name'
+            'worker_role'=>'r.name',
+
+            'type_name'=>'gt.name'
         ];
         $query->select($select);
 
@@ -88,6 +90,7 @@ class Note extends \yii\db\ActiveRecord
         }
 
         $query->leftJoin(['w'=>'worker'],'note.worker_id=w.id')
+            ->leftJoin(['gt'=>'note_type'],'note.general_note_type=gt.id')
             ->leftJoin(['r'=>'worker_role'],'w.role_id=r.id');
 
 

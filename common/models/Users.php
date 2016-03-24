@@ -79,7 +79,6 @@ class Users extends \yii\db\ActiveRecord
             'end_time_mgu'          => 'mgu.end_time',
             'start_time_mgu'        =>  'mgu.start_time',
             'group_name'            =>  'mg.name',
-            'brand_id'              =>  'b.id',
             'brand_name'            =>  'b.name'
         ];
         $query->select($select);
@@ -125,7 +124,7 @@ class Users extends \yii\db\ActiveRecord
             ->leftJoin(['mgu_all'=>'medical_group_user'],'users.id=mgu_all.user_id')
             ->leftJoin(['b'=>'brand'],'users.brand_id=b.id');
 
-
+        $query->groupBy("id");
 
         $pages = new Pagination([
             'totalCount' => $query->count(),

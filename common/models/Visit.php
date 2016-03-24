@@ -128,6 +128,7 @@ class Visit extends \yii\db\ActiveRecord
             ->leftJoin(['mg'=>'medical_group'],'mgu.medical_group_id=mg.id')
             ->leftJoin(['b'=>'brand'],'mg.brand_id=b.id');
 
+        $query->orderBy("visit.create_time DESC");
 
         $pages = new Pagination([
             'totalCount' => $query->count(),

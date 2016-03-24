@@ -332,9 +332,10 @@ $privilege = Yii::$app->session->get("worker");
 			contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
 			success:function(msg){
 				if(msg.status){
-					alert("创建成功！");
+					location.href = "<?=\yii\helpers\Url::toRoute("group/excel_import_result")?>";
 				}else{
-					alert(msg.error);
+					alert("导入数据失败！");
+					location.reload();
 				}
 			},
 			error:function(XmlHttpRequest,textStatus,errorThrown){

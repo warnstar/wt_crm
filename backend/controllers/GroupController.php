@@ -224,15 +224,47 @@ class GroupController extends CommonController
                 }
             }
 
-        }else{
-            $msg['error'] = "数据格式不对！";
         }
 
-        dump($new_users);
-        dump($join_users);
+
+        //处理返回结果
+        $msg['status'] = 0;
+        if($join_users){
+
+            foreach($join_users as $k=>$v){
+                $area = (new Area())->find()->where(['id'=>$v['area_id']])->asArray()->one();
+                if($area){
+                    $join_users[$k]['area_name'] = $area['name'];
+                }else{
+                    $join_users[$k]['area_name'] = "";
+                }
+
+                $brand = (new Brand())->find()->where(['id'=>$v['brand_id']])->asArray()->one();
+                if($brand){
+                    $join_users[$k]['brand_name'] = $brand['name'];
+                }else{
+                    $join_users[$k]['brand_name'] = "";
+                }
+
+            }
+
+            $msg['status'] = 1;
+
+            $session = Yii::$app->session;
+            $session->set("users",$join_users);
+
+        }
+        return json_encode($msg);
     }
 
+    public function actionExcel_import_result()
+    {
+        $session = Yii::$app->session;
 
+        $data['users'] = $session->get("users");
+
+        return $this->render("excel_import_result",$data);
+    }
 
     //初步过滤
     function excel_user_filter($users = [],$group_id = 0){
