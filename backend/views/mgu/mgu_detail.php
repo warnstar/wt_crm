@@ -104,13 +104,7 @@
 							<input type="text" class="form-control date end_time"  value="<?=date("m/d/Y",$mgu_detail['end_time'])?>"  name="end_time" >
 						</div>
 					</div>
-					<div class="form-group">
-						<label class="col-sm-2 control-label">见诊专家</label>
 
-						<div class="col-sm-10">
-							<input disabled type="text" class="form-control"  name="status" >
-						</div>
-					</div>
 
 
 					<?php if($visit_notes) foreach($visit_notes as $v):?>

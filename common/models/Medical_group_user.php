@@ -316,9 +316,11 @@ class Medical_group_user extends \yii\db\ActiveRecord
 
                     //修改用户最后一次参团与品牌
                     $user = (new Users())->find()->where(['id' => $this->user_id])->one();
-                    $user->brand_id = $group->brand_id;
-                    $user->last_mgu = $this->id;
-                    $flag['user_mgu'] = $user->save();
+                    if($user){
+                        $user->brand_id = $group->brand_id;
+                        $user->last_mgu = $this->id;
+                        $flag['user_mgu'] = $user->save();
+                    }
 
                     //修改医疗团用户数
                     $user_count = (new Medical_group_user())->find()->where(['medical_group_id' => $this->medical_group_id])->count("*");

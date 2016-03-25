@@ -257,6 +257,10 @@ class GroupController extends CommonController
         return json_encode($msg);
     }
 
+    /**
+     * 展示excel导入团员结果
+     * @return string
+     */
     public function actionExcel_import_result()
     {
         $session = Yii::$app->session;
