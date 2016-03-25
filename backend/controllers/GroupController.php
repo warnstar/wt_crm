@@ -213,7 +213,7 @@ class GroupController extends CommonController
                     if($res_new){
                         $new_users[] = $res_new;
                         $mgu['group_id'] = $group_id;
-                        $mgu['user_id'] = $v['user_id'];
+                        $mgu['user_id'] = $res_new['id'];
                         $mgu['end_time'] = 10;
 
                         $mgu_new = (new Medical_group_user())->create($mgu);
