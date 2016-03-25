@@ -335,7 +335,7 @@ $privilege = Yii::$app->session->get("worker");
 				if(msg.status){
 					location.href = "<?=\yii\helpers\Url::toRoute("group/excel_import_result")?>";
 				}else{
-					alert("导入数据失败！");
+					alert("没有一行数据符合要求，导入数据失败！");
 					location.reload();
 				}
 				layer.close(mask);

@@ -236,7 +236,8 @@ class Medical_group_user extends \yii\db\ActiveRecord
             '出生年月',
             'HN',
             '品牌',
-            '所属区域'
+            '所属区域',
+            '疗程时间(天)'
         ];
 
         $query = $this->find();
@@ -249,7 +250,9 @@ class Medical_group_user extends \yii\db\ActiveRecord
             'user_birth'            =>'users.birth',
             'user_cases_code'       =>'users.cases_code',
             'brand_name'            =>  'b.name',
-            'area_name'             =>  'a.name'
+            'area_name'             =>  'a.name',
+            'medical_group_user.end_time',
+            'medical_group_user.start_time'
         ];
         $query->select($select);
 
@@ -270,6 +273,9 @@ class Medical_group_user extends \yii\db\ActiveRecord
                 $res[$k]['user_sex'] = ( $v['user_sex'] == 1 ? "男" : "女" );
                 $res[$k]['user_birth'] = date("m/d/Y",$v['user_birth']);
 
+                $end_time = (int)(($v['end_time']-$v['start_time']) / (3600*24));
+                unset($res[$k]['start_time']);
+                $res[$k]['end_time'] = $end_time;
             }
 
             //去除数组键名

@@ -199,7 +199,7 @@ class GroupController extends CommonController
                     //已存在但未参与的用户
                     $mgu['group_id'] = $group_id;
                     $mgu['user_id'] = $v['user_id'];
-                    $mgu['end_time'] = 10;
+                    $mgu['end_time'] = $v['end_time'];
 
                     $mgu_new = (new Medical_group_user())->create($mgu);
                     if($mgu_new){
@@ -214,7 +214,7 @@ class GroupController extends CommonController
                         $new_users[] = $res_new;
                         $mgu['group_id'] = $group_id;
                         $mgu['user_id'] = $res_new['id'];
-                        $mgu['end_time'] = 10;
+                        $mgu['end_time'] = $v['end_time'];
 
                         $mgu_new = (new Medical_group_user())->create($mgu);
                         if($mgu_new){
@@ -272,7 +272,7 @@ class GroupController extends CommonController
 
     //初步过滤
     function excel_user_filter($users = [],$group_id = 0){
-        // “	姓名	 性别	手机号	护照号	出生年月（mm/dd/YY)	HN	品牌	 所属区域  ”
+        // “	姓名	 性别	手机号	护照号	出生年月（mm/dd/YY)	HN	品牌	 所属区域  疗程时间”
         //不能为空：姓名，性别，手机号，护照号，HN,所属区域
         //不能重复：护照号，HN
         //品牌为无效字段，由所参加的团的品牌决定
@@ -280,7 +280,7 @@ class GroupController extends CommonController
         //$users['flag'] = (0=非法；1=已存在用户；2=已参加,3=正常）
 
 
-        $keys = ['name','sex','phone','passport','birth','cases_code','brand','area_id'];
+        $keys = ['name','sex','phone','passport','birth','cases_code','brand','area_id','end_time'];
         $error_data = [];
         if($users){
             $data = [];
@@ -291,8 +291,10 @@ class GroupController extends CommonController
             foreach($users as $k=>$v){
                 $i = 0;
                 foreach($v as $kk=>$vv){
-                    $data[$k][$keys[$i]] = $vv;
-                    $i = $i + 1;
+                    if($i < count($keys)){
+                        $data[$k][$keys[$i]] = $vv;
+                        $i = $i + 1;
+                    }
                 }
 
             }
@@ -301,51 +303,85 @@ class GroupController extends CommonController
             //转换部分数据格式
             foreach($users as $k=>$v){
                 //去掉名字为空的
-                if(!$v['name']){
+                if(!isset($v['name']) || !$v['name']){
                     $users[$k]['flag'] = 0 ;
+                    $filter_error[] = "name";
                 }
 
                 //性别转换
-                if($v['sex'] == "男"){
+                if(isset($v['sex']) &&$v['sex'] == "男"){
                     $users[$k]['sex'] = 1;
                 }else{
                     $users[$k]['sex'] = 2;
                 }
 
                 //去掉电话为空的
-                if(!$v['phone']){
+                if(!isset($v['phone']) || !$v['phone']){
                     $users[$k]['flag'] = 0 ;
+                    $filter_error[] = "phone";
                 }
 
                 //去掉护照为空的
-                if(!$v['passport']){
+                if(!isset($v['passport']) || !$v['passport']){
                     $users[$k]['flag'] = 0 ;
+                    $filter_error[] = "passport";
                 }
 
                 //去掉病历号为空的
-                if(!$v['cases_code']){
+                if(!isset($v['cases_code']) || !$v['cases_code']){
                     $users[$k]['flag'] = 0 ;
+                    $filter_error[] = "cases_code";
                 }
 
                 //生日转换
-                if($v['birth']){
+                if(isset($v['birth']) && $v['birth']){
                     $users[$k]['birth'] = strtotime($v['birth']);
                 }else{
                     $users[$k]['flag'] = 0 ;
+                    $filter_error[] = "birth";
                 }
 
                 //获取品牌id
                 $brand = (new Medical_group())->find()->where(['id'=>$group_id])->asArray()->one();
-                $users[$k]['brand_id'] = $brand['id'];
+                if($brand){
+                    $users[$k]['brand_id'] = $brand['id'];
+                }else{
+                    $users[$k]['flag'] = 0 ;
+                    $filter_error[] = "brand_id";
+                }
+
 
                 //区域转换
-                $area_name = $v['area_id'];
-                $area = (new Area())->find()->where(['like', 'name', $area_name])->andWhere("parent_id != 0")->asArray()->one();
-                if($area && $area['name']){
-                    $users[$k]['area_id'] = $area['id'];
-                }else{
+                if(isset($v['area_id']) && $v['area_id']) {
+                    $area_name = $v['area_id'];
+                    if ($area_name) {
+                        $area = (new Area())->find()->where(['like', 'name', $area_name])->andWhere("parent_id != 0")->asArray()->one();
+                        if ($area && $area['id']) {
+                            $users[$k]['area_id'] = $area['id'];
+                            $area_ok = true;
+                        }
+                    }
+                }
+                if(!isset($area_ok)){
                     $error_data[] = $v;
+
                     $users[$k]['flag'] = 0 ;
+                    $filter_error[] = "area_id";
+                }
+
+
+                //疗程时间
+                if(isset($v['end_time']) && $v['end_time']){
+                    $end_time = (int)$v['end_time'];
+                    if($end_time > 0){
+                        $users[$k]['end_time'] =$end_time;
+                    }else{
+                        $users[$k]['flag'] = 0 ;
+                        $filter_error[] = "end_time";
+                    }
+                }else{
+                    $users[$k]['flag'] = 0 ;
+                    $filter_error[] = "end_time";
                 }
             }
         }else{
@@ -359,22 +395,24 @@ class GroupController extends CommonController
 
         if($users){
             foreach($users as $k=>$v){
-                $u = (new Users())->find()->where(['passport'=>$v['passport']])->asArray()->one();
-                if($u){
+                if(!isset($v['flag'])|| $v['flag'] != 0){
+                    $u = (new Users())->find()->where(['passport'=>$v['passport']])->asArray()->one();
+                    if($u){
 
-                    $mgu = (new Medical_group_user())->find()->where(['user_id'=>$u['id'],'medical_group_id'=>$group_id])->asArray()->one();
-                    if($mgu){
-                        //已加入该团
-                        $users[$k]['flag'] = 2;
+                        $mgu = (new Medical_group_user())->find()->where(['user_id'=>$u['id'],'medical_group_id'=>$group_id])->asArray()->one();
+                        if($mgu){
+                            //已加入该团
+                            $users[$k]['flag'] = 2;
+                        }else{
+                            //用户存在但未加团
+                            $users[$k]['flag'] = 1;
+                        }
+
+                        $users[$k]['user_id'] = $u['id'];
                     }else{
-                        //用户存在但未加团
-                        $users[$k]['flag'] = 1;
+                        $users[$k]['user_id'] = 0;
+                        $users[$k]['flag'] = 3;
                     }
-
-                    $users[$k]['user_id'] = $u['id'];
-                }else{
-                    $users[$k]['user_id'] = 0;
-                    $users[$k]['flag'] = 3;
                 }
             }
             return $users;
