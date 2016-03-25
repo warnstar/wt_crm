@@ -54,6 +54,14 @@
 
 						</div>
 					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label">选项</label>
+						<div class="col-sm-9">
+							<label class="radio-inline"><input class="user_view" checked type="checkbox">能否让用户查看</label>
+						</div>
+					</div>
+
 					<input type="hidden" id="leixing" value="1">
 					<div class="form-group" >
 						<label class="col-sm-2 control-label ">类型</label>
@@ -92,6 +100,7 @@
 							</div>
 						</div>
 					</div>
+
 					<div id="bei_pic" style="display:none">
 						<div class="form-group" >
 							<label class="col-sm-2 control-label">选择图片</label>
@@ -225,6 +234,10 @@
 		formdata.append('content_type', content_type);
 		formdata.append('type', "<?=$type?>");//异常备注类型
 		formdata.append('visit_id', "<?=$visit_id?>");//异常备注所属回访记录
+
+		if($(".user_view").prop('checked')){
+			formdata.append('user_view',1);
+		}
 
 		//获取备注内容
 		if(content_type == 1){

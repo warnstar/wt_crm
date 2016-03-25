@@ -250,11 +250,13 @@ class VisitController extends CommonController
         $note->mgu_id = isset($post['mgu_id']) ? $post['mgu_id'] : null;
         $note->general_note_type = isset($post['general_note_type']) ? $post['general_note_type'] : 0;
         $note->content_type = isset($post['content_type']) ? $post['content_type'] : null;
+        $note->user_view = (isset($post['user_view']) && $post['user_view']) ? $post['user_view'] : 0;
         $note->type = $type;//普通/异常备注
         $note->worker_id = $this->worker_id;
         $note->create_time = time();
 
         $msg['status'] = 0;
+
 
         if($note->save()){
 

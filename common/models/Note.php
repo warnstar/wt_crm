@@ -35,7 +35,7 @@ class Note extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['visit_id', 'mgu_id', 'type', 'content_type', 'general_note_type', 'worker_id', 'create_time'], 'integer'],
+            [['visit_id', 'mgu_id', 'type', 'content_type', 'general_note_type', 'worker_id', 'create_time','user_view'], 'integer'],
             [['mgu_id', 'type', 'content_type'], 'required'],
             [['content'], 'string'],
             [['notify_user'], 'string', 'max' => 255]
@@ -57,6 +57,7 @@ class Note extends \yii\db\ActiveRecord
             'notify_user' => 'Notify User',
             'general_note_type' => 'General Note Type',
             'worker_id' => 'Worker ID',
+            'user_view'=>'User_view',
             'create_time' => 'Create Time',
         ];
     }
