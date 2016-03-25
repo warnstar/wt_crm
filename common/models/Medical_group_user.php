@@ -300,7 +300,7 @@ class Medical_group_user extends \yii\db\ActiveRecord
 
         $group = (new Medical_group())->find()->where(['id'=>$this->medical_group_id])->one();
 
-        if($group) {
+        if($group && $this->user_id) {
             $this->start_time = $group->end_time;
 
             //之前保存的结束时间是天，规则是开始后的第几天。

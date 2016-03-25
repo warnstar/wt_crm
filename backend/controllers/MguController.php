@@ -114,7 +114,7 @@ class MguController extends CommonController
         $group = (new Medical_group())->find()->where(['id'=>$mgu->medical_group_id])->one();
 
         $msg['status'] = 0;
-        if($group){
+        if($group && $mgu->user_id){
             $mgu->start_time = $group->end_time;
 
             //之前保存的结束时间是天，规则是开始后的第几天。
@@ -142,7 +142,7 @@ class MguController extends CommonController
                 }
             }
         }else{
-            $msg['error'] = "要参加的团不存在！";
+            $msg['error'] = "要参加的团或用户不存在！";
         }
 
 
