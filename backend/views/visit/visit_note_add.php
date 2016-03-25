@@ -242,6 +242,8 @@
 		}
 
 
+		var mask = layer.load('上传中');
+
 		$.ajax({
 			url:url,
 			type:'POST',
@@ -256,9 +258,10 @@
 				}else{
 					alert(msg.error);
 				}
+				layer.close(mask);
 			},
 			error:function(XmlHttpRequest,textStatus,errorThrown){
-
+				layer.close(mask);
 //				alert('添加失败!');
 //				console.log(XmlHttpRequest);
 //				console.log(textStatus);

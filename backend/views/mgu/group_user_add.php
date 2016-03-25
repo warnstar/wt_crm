@@ -323,6 +323,7 @@ $privilege = Yii::$app->session->get("worker");
 		formdata.append('excel_data', file_data.files[0]);
 		formdata.append('group_id',"<?=$group_id?>");
 
+		var mask = layer.load('上传中');
 		$.ajax({
 			url:url,
 			type:'POST',
@@ -337,9 +338,10 @@ $privilege = Yii::$app->session->get("worker");
 					alert("导入数据失败！");
 					location.reload();
 				}
+				layer.close(mask);
 			},
 			error:function(XmlHttpRequest,textStatus,errorThrown){
-
+				layer.close(mask);
 			}
 		})
 	}

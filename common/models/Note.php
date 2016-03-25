@@ -113,9 +113,11 @@ class Note extends \yii\db\ActiveRecord
             //删除资源
             if($data->content_type == 2 || $data->content_type ==3){
                 $content = json_decode($data->content);
+
                 if($content){
                     foreach($content as $v){
-                        $flag['content_res'][] = (new Oss())->file_del($v['url_object']);
+
+                        $flag['content_res'][] = (new Oss())->file_del($v->url_object);
                     }
                 }
             }
