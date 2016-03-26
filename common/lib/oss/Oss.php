@@ -9,8 +9,8 @@ include "oss_service/sdk.class.php";
 
 class Oss{
 	private $oss;
-	const BUCKET = 'wtcrm';
-	const IMG_OPTION_ADDR = "http://wtcrm.img-cn-shenzhen.aliyuncs.com/";
+	const BUCKET = 'wt-crm';
+	const IMG_OPTION_ADDR = "http://wt-crm.img-cn-shenzhen.aliyuncs.com/";
 
 	public function __construct(){
 		$this->oss = new \ALIOSS();

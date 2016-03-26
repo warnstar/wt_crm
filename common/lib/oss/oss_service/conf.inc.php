@@ -1,10 +1,10 @@
 <?php
 //个人测试
 //ACCESS_ID
-define('OSS_ACCESS_ID', 'vOEa4GFB1j3PMCin');
+define('OSS_ACCESS_ID', 'Am5pKSScsVRUWrK2');
 
 //ACCESS_KEY
-define('OSS_ACCESS_KEY', 'nl3uMUUUrA1XR7ch1b6TD3YkY0LJbQ');
+define('OSS_ACCESS_KEY', '53MSvJwZr04qtDqjtFCZE0PCFDHWK0');
 define('OSS_ENDPOINT', 'http://oss-cn-shenzhen.aliyuncs.com');
 
 
