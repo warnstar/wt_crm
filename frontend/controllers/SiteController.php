@@ -28,10 +28,12 @@ class SiteController extends Controller
         ];
     }
 
-    
+
     public function actionLogin(){
         $get = Yii::$app->request->get();
 
-        (new WeChatAuth())->UserAuthory();
+        $url = (new WeChatAuth())->UserAuthory();
+        $data = $this->redirect($url);
+        dump($data);
     }
 }
