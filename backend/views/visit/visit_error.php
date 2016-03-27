@@ -146,6 +146,7 @@
 		};
 
 		$.post(url,data,function(msg){
+
 			if(msg.status){
 				alert("创建异常备注成功");
 				location.href = "<?=\yii\helpers\Url::toRoute("visit/un_visit_list")?>";

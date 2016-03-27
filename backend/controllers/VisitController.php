@@ -166,16 +166,31 @@ class VisitController extends CommonController
         $note->content_type = 1;//异常备注只有文本
         $note->type = 2;        //异常备注
         $note->worker_id = $this->worker_id;
-        $note->notify_user = $notify_user;
         $note->create_time = time();
 
+
+        //获取要通知的职员
+        $workers  = (new Worker())->getRoleWorker($notify_user,$note->mgu_id);
+        $target_notify_user = "";
+        if($workers){
+            foreach($workers as $v){
+                $target_notify_user = ($target_notify_user == "" ? $target_notify_user :  $target_notify_user . ',') . $v['name'];
+            }
+        }
+        //要通知的职员
+        $note->notify_user = $target_notify_user;
+
+
+
+        //获取当前疗程
         $mgu = (new Medical_group_user())->find()->where(['id'=>$note->mgu_id])->one();
+
+
 
         $msg['status'] = 0;
 
         //创建备注成功
         if($mgu && $note->save()){
-            $msg['status'] = 1;
 
             //完成回访
             $mgu->last_visit = time();
@@ -190,7 +205,7 @@ class VisitController extends CommonController
             if($mgu->save()){
                 //创建回访记录
                 $visit = new Visit();
-                $visit->notify_user = $notify_user;//通知用户
+                $visit->notify_user = $note->notify_user;//通知用户
                 $visit->mgu_id = $mgu->id;
                 $visit->worker_id = $this->worker_id;
                 $visit->type = 2;//异常回访
@@ -200,14 +215,15 @@ class VisitController extends CommonController
                 $visit_res = $visit->create();
                 if($visit_res){
                     //发送短信通知
-                    $workers  = (new Worker())->getRoleWorker($notify_user,$mgu->id);
                     if($workers) foreach($workers as $v){
-                        $res = (new SysSms())->error_notice($v['phone'],$mgu->user_id);
+                        $msg['sms'][] = (new SysSms())->error_notice($v['phone'],$mgu->user_id);
 
                     }
                 }
+                $msg['status'] = 1;
 
             }else{
+                $note->delete();
                 $msg['error'] = "创建回访记录失败！";
             }
         }else{
@@ -332,7 +348,7 @@ class VisitController extends CommonController
         return $this->renderPartial("error_un_do_ajax",$data);
     }
 
-    //处理问题
+    //处理问题（对接人员处理问题）
     public function actionError_do(){
         $visit_id = Yii::$app->request->get("visit_id");
 
@@ -343,7 +359,7 @@ class VisitController extends CommonController
     }
 
 
-    //处理完成
+    //处理完成（对接人员处理问题）
     public function actionError_do_save(){
         $visit_id = Yii::$app->request->post('visit_id');
         $visit = (new Visit())->find()->where(['id'=>$visit_id])->one();

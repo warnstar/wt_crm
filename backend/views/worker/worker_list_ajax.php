@@ -20,18 +20,18 @@
 	</thead>
 
 	<tbody align="center">
-	<?php foreach($workers as $w):?>
+	<?php foreach($workers as $v):?>
 		<tr>
-			<td class="project-status"><?=$w['name']?></td>
-			<td class="project-title"><?=$w['sex'] == 1 ? "男":"女"?></td>
-			<td class="project-title"><?=$w['role_name']?></td>
-			<td class="project-title"><?=$w['brand_name']?></td>
-			<td class="project-title"><?=$w['area_name']?></td>
-			<td class="project-title"><?=$w['wchat']?></td>
+			<td class="project-status"><?=$v['name']?></td>
+			<td class="project-title"><?=$v['sex'] == 1 ? "男":"女"?></td>
+			<td class="project-title"><?=$v['role_name']?></td>
+			<td class="project-title"><?=$v['brand_name']?></td>
+			<td class="project-title"><?=$v['area_name']?></td>
+			<td class="project-title"><?=$v['wchat']?></td>
 
 			<td >
-				<a href="<?=\yii\helpers\Url::toRoute("worker/detail") . "&id=" . $w['id']?>" class=" btn btn-white btn-sm">查看详情</a>
-				<button class="btn-delete btn btn-white btn-sm">删除</button>
+				<a href="<?=\yii\helpers\Url::toRoute("worker/detail") . "&id=" . $v['id']?>" class=" btn btn-white btn-sm">查看详情</a>
+				<button value="<?=$v['id']?>" class="btn-delete btn btn-white btn-sm delete_click">删除</button>
 			</td>
 		</tr>
 	<?php endforeach;?>

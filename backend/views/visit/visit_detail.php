@@ -81,7 +81,7 @@
 						<label class="col-sm-2 control-label">已通知</label>
 
 						<div class="col-sm-10">
-							<input type="text"  disabled class="form-control"  name="hn" >
+							<input type="text"  disabled class="form-control" value="<?=$visit['notify_user']?>"  name="hn" >
 						</div>
 					</div>
 

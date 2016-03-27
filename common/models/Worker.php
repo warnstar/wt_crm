@@ -33,7 +33,7 @@ class Worker extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['sex', 'role_id', 'brand_id', 'area_id', 'create_time'], 'integer'],
+            [['sex', 'role_id', 'brand_id', 'area_id','status', 'create_time'], 'integer'],
             [['role_id'], 'required'],
             [['name', 'password', 'phone', 'wchat'], 'string', 'max' => 255]
         ];
@@ -54,6 +54,7 @@ class Worker extends \yii\db\ActiveRecord
             'wchat' => 'Wchat',
             'brand_id' => 'Brand ID',
             'area_id' => 'Area ID',
+            'status'    =>'Status',
             'create_time' => 'Create Time',
         ];
     }
@@ -69,6 +70,7 @@ class Worker extends \yii\db\ActiveRecord
         ];
         $query->select($select);
 
+        $query->andWhere(['status'=>1]);
         $query->andWhere("worker.id = :id",[':id'=>$id]);
 
 
@@ -83,7 +85,10 @@ class Worker extends \yii\db\ActiveRecord
     }
 
     public function login(){
-        $worker = (new Worker())->findOne(['phone'=>$this->phone]);
+        $option['status'] = 1;
+
+        $option['phone'] = $this->phone;
+        $worker = (new Worker())->find()->andWhere($option)->one();
 
         if($worker && $worker->password == $this->password){
 
@@ -112,6 +117,7 @@ class Worker extends \yii\db\ActiveRecord
         ];
         $query->select($select);
 
+        $query->andWhere(['status'=>1]);
         $query->andWhere("worker.role_id > :role_id",[':role_id'=>1]);
 
         if($option){
@@ -167,7 +173,11 @@ class Worker extends \yii\db\ActiveRecord
     }
 
     public function find_by_phone($phone){
-        $worker = $this->find()->where(['phone'=>$phone])->asArray()->one();
+        //过滤禁用的
+        $option['status']= 1;
+
+        $option['phone'] = $phone;
+        $worker = $this->find()->where($option)->asArray()->one();
         return $worker;
     }
 
@@ -196,6 +206,9 @@ class Worker extends \yii\db\ActiveRecord
         }
 
         $workers = [];
+
+        //过滤禁用的
+        $option['status']= 1;
 
         //限制品牌
         $option['brand_id'] = $group->brand_id;
@@ -235,6 +248,32 @@ class Worker extends \yii\db\ActiveRecord
         }
 
         return $data;
+    }
+
+    public function delete_this($id){
+
+        $data = (new Worker())->findOne($id);
+        if(!$data){
+            $msg['code'] = 3;
+            $msg['error'] = "要删除用户对象不存在!";
+            return $msg;
+        }
+
+        if(!isset($msg)){
+            $brand = (new Brand())->findOne($data->brand_id);
+            if($data->delete()){
+                if($brand){
+                    $brand->manager_id = null;
+                    $brand->save();
+                }
+                $msg['code'] = 0;
+            }else{
+                $msg['code'] = 6;
+                $msg['error'] = "数据库操作失败！";
+            }
+        }
+
+        return $msg;
     }
 
     public function exist(){
