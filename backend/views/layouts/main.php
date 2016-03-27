@@ -53,6 +53,9 @@
 
     <link rel="stylesheet" type="text/css" media="all" href="css/daterangepicker-bs3.css"/>
 
+    <!--Session -->
+    <script src="js/jquery-session.js"></script>
+
 </head>
 
 <body>
@@ -79,7 +82,7 @@
 
                  <?php if($worker['role_id'] == 1):?>
                 <li >
-                    <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">品牌管理</span> </a>
+                    <a href="index.html"  class="menu_index menu_brand" menu_index="menu_brand"><i class="fa fa-th-large"></i> <span class="nav-label">品牌管理</span> </a>
                     <ul class="nav nav-second-level">
                         <li><a href="<?=Url::toRoute("brand/add")?>">添加品牌</a>
                         </li>
@@ -92,7 +95,7 @@
 
                 <?php if($worker['role_id'] == 1 || $worker['role_id'] == 2 || $worker['role_id'] == 3):?>
                 <li>
-                    <a href="index.html#"><i class="fa fa fa-globe"></i> <span class="nav-label">用户管理</span></a>
+                    <a href="index.html#"  class="menu_index menu_worker" menu_index="menu_worker"><i class="fa fa fa-globe"></i> <span class="nav-label">用户管理</span></a>
                     <ul class="nav nav-second-level">
 
                         <li><a href="<?=Url::toRoute('users/list')?>">客户列表</a>
@@ -113,7 +116,7 @@
 
                 <?php if($worker['role_id'] == 3):?>
                     <li>
-                        <a href="index.html#"><i class="fa fa-desktop"></i> <span class="nav-label">客服问题</span></a>
+                        <a href="index.html#"  class="menu_index menu_undo" menu_index="menu_undo"><i class="fa fa-desktop"></i> <span class="nav-label">客服问题</span></a>
                         <ul class="nav nav-second-level">
 
                             <li><a href="<?=Url::toRoute("visit/error_un_do")?>">待处理</a>
@@ -128,7 +131,7 @@
 
                 <?php if($worker['role_id'] == 1):?>
                 <li>
-                    <a href="index.html#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">节日管理</span></a>
+                    <a href="index.html#"  class="menu_index menu_festival" menu_index="menu_festival"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">节日管理</span></a>
                     <ul class="nav nav-second-level">
                         <li><a href="<?=Url::toRoute("festival/list")?>">节日列表</a>
                         </li>
@@ -141,7 +144,7 @@
 
 
                 <li>
-                    <a href="index.html#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">出团管理</span></a>
+                    <a href="index.html#"  class="menu_index menu_group" menu_index="menu_group"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">出团管理</span></a>
                     <ul class="nav nav-second-level">
                         <li><a href="<?=Url::toRoute("group/list")?>">出团列表</a>
                         </li>
@@ -153,7 +156,7 @@
 
                 <?php if($worker['role_id'] == 1 || $worker['role_id'] == 2):?>
                 <li>
-                    <a href="index.html#"><i class="fa fa-desktop"></i> <span class="nav-label">回访管理</span></a>
+                    <a href="index.html#"  class="menu_index menu_visit" menu_index="menu_visit"><i class="fa fa-desktop"></i> <span class="nav-label">回访管理</span></a>
                     <ul class="nav nav-second-level">
                         <?php if($worker['role_id'] == 2):?>
                         <li><a href="<?=Url::toRoute("visit/un_visit_list")?>">待访客户</a>
@@ -173,7 +176,7 @@
 
                 <?php if($worker['role_id'] == 1):?>
                 <li>
-                    <a href="index.html#"><i class="fa fa-edit"></i> <span class="nav-label">区域管理</span></a>
+                    <a href="index.html#"  class="menu_index menu_area" menu_index="menu_area"><i class="fa fa-edit"></i> <span class="nav-label">区域管理</span></a>
                     <ul class="nav nav-second-level">
                         <li><a href="<?=Url::toRoute("area/list")?>">区域列表</a>
                         </li>
@@ -185,7 +188,7 @@
                 <?php endif;?>
 
                 <li>
-                    <a href="index.html#"><i class="fa fa-flask"></i> <span class="nav-label">系统设置</span></a>
+                    <a href="index.html#"  class="menu_index menu_sys" menu_index="menu_sys"><i class="fa fa-flask"></i> <span class="nav-label">系统设置</span></a>
                     <ul class="nav nav-second-level">
                         <li><a href="<?=Url::toRoute("worker/password_reset")?>">修改密码</a>
                         </li>
@@ -206,5 +209,22 @@
 </div>
 
 </body>
+<script>
+    //记住菜单
+    $(function(){
+        var index_path = $.session.get('menu_index');
+        if(index_path){
+            var target = "."+index_path+" ul";
+            $("ul").removeClass('in');
+            $("."+index_path).next().addClass("in");
+            $("."+index_path).parent().addClass("active");
+        }
 
+    });
+
+    $('.menu_index').on('click',function(){
+        var index_path = $(this).attr('menu_index');
+        $.session.set('menu_index',index_path);
+    });
+</script>
 </html>

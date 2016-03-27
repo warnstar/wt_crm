@@ -28,7 +28,7 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login','login_validate', 'error','logout'],
+                        'actions' => ['login','login_validate','captcha', 'error','logout'],
                         'allow' => true,
                     ]
                 ],
@@ -45,8 +45,16 @@ class SiteController extends Controller
             'error' => [
                 'class' => 'yii\web\ErrorAction',
             ],
+            'captcha' =>  [
+                'class' => 'yii\captcha\CaptchaAction',
+                'height' => 50,
+                'width' => 80,
+                'minLength' => 4,
+                'maxLength' => 4
+            ],
         ];
     }
+
 
     /**
      * Signs user up.
