@@ -13,11 +13,10 @@ class WeChatAuth
 {
 	private $AppID = "wx1e713d7916bd3d33";
 	private $AppSecret = "3c80a1eb8eeebebaa121ef9b241154c5";
-
+	private $server_api = "http://";
 	public function UserAuthory(){
-		$url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=". $this->AppID . "&redirect_uri=http://m.etripbon.com/index.php/privilege/getWeixinUser&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";
-		$data = header($url);
-		dump($data);
+		$auth_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=". $this->AppID . "&redirect_uri=" . $this->server_api . "&response_type=code&scope=snsapi_login&state=1#wechat_redirect";
+		return $auth_url;
 	}
 
 	//获取微信用户信息/显示个人中心
