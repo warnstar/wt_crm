@@ -47,6 +47,10 @@ class SiteController extends Controller
     }
 
     public function actionGetUserInfo(){
-        
+        $get = Yii::$app->request->get();
+        $post = Yii::$app->request->post();
+        dump($get);
+        dump($post);
+        dump($_SERVER);
     }
 }
