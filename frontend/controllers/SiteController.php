@@ -11,23 +11,7 @@ use yii\filters\AccessControl;
  */
 class SiteController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'actions' => ['login','login_validate','weChat', 'error','logout'],
-                        'allow' => true,
-                    ]
-                ],
-            ],
-        ];
-    }
+
 
 
     public function actionLogin(){
