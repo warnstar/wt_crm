@@ -80,13 +80,13 @@ class SiteController extends Controller
         if($user_info && $user_info['openid']){
             //授权通过，获得用户信息
             $uid = $user_info['openid'];
-            dump($uid);
+
             if($accessUser == "user"){
                 /**
                  * 客户通道
                  **/
                 $user = (new UsersExtra())->getUser($uid);
-                dump($user);
+
                 if($user){
                     //用户已绑定，登陆成功
                     $session->set("user_id",$user->id);
@@ -124,6 +124,6 @@ class SiteController extends Controller
 
 
     public function actionTest(){
-        return $this->renderPartial("/users/bind");
+
     }
 }

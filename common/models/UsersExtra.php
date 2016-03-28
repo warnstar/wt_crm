@@ -58,8 +58,10 @@ class UsersExtra extends \yii\db\ActiveRecord
         $query = $this->find();
 
         $extra = $query->where(['uid'=>$uid])->one();
+
         if($extra){
-            $user = (new Users())->find()->where(['id'=>$extra->uid])->one();
+            $user = (new Users())->find()->where(['id'=>$extra->user_id])->one();
+            
             return $user;
         }else{
             return null;
