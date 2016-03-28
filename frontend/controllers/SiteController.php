@@ -1,7 +1,7 @@
 <?php
 namespace frontend\controllers;
 
-use common\lib\WeChatAuth;
+use common\lib\Wechat;
 use common\models\Users;
 use yii;
 use yii\web\Controller;
@@ -34,8 +34,8 @@ class SiteController extends Controller
 
         $get = Yii::$app->request->get();
         $users = (new Users())->find()->all();
-        //dump($users);
-        (new WeChatAuth())->UserAuthory();
+
+        (new Wechat())->UserAuthory();
 
     }
 
