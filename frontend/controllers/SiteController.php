@@ -4,6 +4,8 @@ namespace frontend\controllers;
 use common\lib\WeChatAuth;
 use common\models\Users;
 use common\models\UsersExtra;
+use common\models\Worker;
+use common\models\WorkerExtra;
 use yii;
 use yii\web\Controller;
 use yii\filters\AccessControl;
@@ -79,10 +81,13 @@ class SiteController extends Controller
             //授权通过，获得用户信息
             $uid = $user_info['openid'];
             if($accessUser == "user"){
-                //客户通道
+                /**
+                 * 客户通道
+                 **/
                 $user = (new UsersExtra())->getUser($uid);
                 if($user){
                     //用户已绑定，登陆成功
+                    $session->set("user_id",$user->id);
                     return $this->renderPartial("/users/user_detail");
                 }else{
                     //跳转到用户绑定页面
@@ -91,8 +96,18 @@ class SiteController extends Controller
                 }
 
             }else{
-                //职员通道
-
+                /**
+                 * 职员通道
+                 **/
+                $user = (new WorkerExtra())->getUser($uid);
+                if($user){
+                    //职员已绑定，登陆成功
+                    $session->set("worker_id",$user->id);
+                }else{
+                    //跳转到职员绑定页面
+                    $session->set("bind_extra_uid",$uid);
+                    return $this->renderPartial("/worker/bind");
+                }
             }
         }else{
             //授权失败，跳转到正常手机号登陆页面

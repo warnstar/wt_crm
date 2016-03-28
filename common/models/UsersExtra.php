@@ -47,6 +47,13 @@ class UsersExtra extends \yii\db\ActiveRecord
             'create_time' => 'Create Time',
         ];
     }
+
+    /**
+     * 通过UID获取绑定的用户
+     *
+     * @param $uid
+     * @return array|null|\yii\db\ActiveRecord
+     */
     public function getUser($uid){
         $query = $this->find();
 
