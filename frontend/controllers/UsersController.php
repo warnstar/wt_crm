@@ -31,7 +31,7 @@ class UsersController extends CommonController
 			$user = (new Users())->detail($user_id);
 			if($user){
 				$data['user'] = $user;
-				dump($user);
+				
 				return $this->renderPartial("users_detail",$data);
 			}else{
 				echo "用户不存在";
