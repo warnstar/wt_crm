@@ -9,7 +9,7 @@
 namespace common\lib;
 
 
-class Wechat
+class WeChatAuth
 {
 	private $AppID = "wx1e713d7916bd3d33";
 	private $AppSecret = "3c80a1eb8eeebebaa121ef9b241154c5";
