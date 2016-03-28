@@ -215,26 +215,38 @@
 	<ul class="mui-table-view">
 
 		<li class="mui-table-view-cell">
-			<a>姓名<span class="mui-pull-right">张三</span></a>
+			<a>姓名<span class="mui-pull-right"><?=$user['name']?></span></a>
 		</li>
 		<li class="mui-table-view-cell">
-			<a>年龄<span class="mui-pull-right">19</span></a>
+			<a>年龄<span class="mui-pull-right"><?=date("Y",time())-date("Y",$user['birth'])?></span></a>
 		</li>
 		<li class="mui-table-view-cell">
-			<a>性別<span class="mui-pull-right">男</span></a>
+			<a>性別<span class="mui-pull-right"><?=$user['sex'] == 1 ? "男" : "女"?></span></a>
 		</li>
 		<li class="mui-table-view-cell">
-			<a>HN<span class="mui-pull-right">G135847</span></a>
+			<a>HN<span class="mui-pull-right"><?=$user['cases_code']?></span></a>
 		</li>
 		<li class="mui-table-view-cell">
-			<a>疗程名称<span class="mui-pull-right">泰浪漫</span></a>
+			<a>疗程名称<span class="mui-pull-right"><?=$user['group_name']?></span></a>
 		</li>
 		<li class="mui-table-view-cell">
-			<a>状态<span class="mui-pull-right">疗程中</span></a>
+			<a>状态<span class="mui-pull-right">
+					<?php
+						if(!$user['last_mgu'])
+							echo "无疗程";
+						else if($user['start_time_mgu'] < time())
+							echo "未开始";
+						else if($user['end_time_mgu'] < time()){
+							echo "已结束";
+						}else{
+							echo "进行中";
+						}
+					?>
+			</span></a>
 		</li>
 		<li class="mui-table-view-cell">
 			<p class="beizhu-p">注意事项</p>
-			<span class="mui-pull-left beizhu">平时多喝水</span>
+			<span class="mui-pull-left beizhu"><?=$user['brand_attention']?></span>
 		</li>
 	</ul>
 	<ul class="mui-table-view">
@@ -261,7 +273,7 @@
 	</ul>
 </div>
 <div class="mui-content-padded beizhu-b">
-	<a type="button" href="<?=\yii\helpers\Url::toRoute("user/mgu_list")?>" class="mui-btn mui-btn-primary mui-btn-outlined">
+	<a type="button" href="<?=\yii\helpers\Url::toRoute("users/mgu_list")?>" class="mui-btn mui-btn-primary mui-btn-outlined">
 		查看健康足迹
 	</a>
 </div>

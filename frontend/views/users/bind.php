@@ -126,7 +126,7 @@
 	$("body").on("click",".commit_click",function(){
 		var url = "<?=\yii\helpers\Url::toRoute("users/bind_save")?>";
 		var data = {
-			pasport :   $(".passport_data").val(),
+			passport :   $(".passport_data").val(),
 			name    :   $(".name_data").val()
 		};
 		$.post(url,data,function(msg){

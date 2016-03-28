@@ -168,7 +168,8 @@ class Users extends \yii\db\ActiveRecord
             'start_time_mgu'        =>  'mgu.start_time',
             'group_name'            =>  'mg.name',
             'brand_id'              =>  'b.id',
-            'brand_name'            =>  'b.name'
+            'brand_name'            =>  'b.name',
+            'brand_attention'       =>  'b.attention'
         ];
         $query->select($select);
 

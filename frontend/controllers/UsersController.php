@@ -15,7 +15,7 @@ use yii\web\Controller;
 use yii;
 
 
-class UsersController extends Controller
+class UsersController extends CommonController
 {
 
 
@@ -28,11 +28,24 @@ class UsersController extends Controller
 
 		$user_id = $session->get("user_id");
 		if($user_id){
-			return $this->renderPartial("users_detail");
+			$user = (new Users())->detail($user_id);
+			if($user){
+				$data['user'] = $user;
+				dump($user);
+				return $this->renderPartial("users_detail",$data);
+			}else{
+				echo "用户不存在";
+			}
+
 		}else{
 			echo "无权限";
 		}
 
+	}
+
+
+	public function actionBind(){
+		return $this->renderPartial("bind");
 	}
 
 	public function actionBind_save(){

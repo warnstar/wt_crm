@@ -2,9 +2,9 @@
 namespace frontend\controllers;
 
 use common\lib\WeChatAuth;
-use common\models\Users;
+
 use common\models\UsersExtra;
-use common\models\Worker;
+
 use common\models\WorkerExtra;
 use yii;
 use yii\web\Controller;
