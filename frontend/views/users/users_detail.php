@@ -249,28 +249,47 @@
 			<span class="mui-pull-left beizhu"><?=$user['brand_attention']?></span>
 		</li>
 	</ul>
+
+
+	<?php if($visit_notes) foreach($visit_notes as $v):?>
 	<ul class="mui-table-view">
+		<?php if($v['content_type'] == 2):?>
+		<li class="mui-table-view-cell">
+			<p  class="beizhu-p"><?=$v['type_name'] ? $v['type_name'] : "异常备注"?></p>
+				<span class=" head mui-pull-left beizhu">
+					<?php $content = json_decode($v['content']);?>
 
-		<li class="mui-table-view-cell">
-			<p  class="beizhu-p">备注内容为图片</p>
-								<span class=" head mui-pull-left beizhu">
-									<img class="head-img mui-action-preview" id="head-img1" src="images/2624登录码.jpeg"/>
-									<img class="head-img mui-action-preview" id="head-img1" src="images/二维码.png"/>
-									<img class="head-img mui-action-preview" id="head-img1" src="images/logo.png"/>
-								</span>
+					<?php if($content) foreach($content as $img):?>
+
+					<img class="head-img mui-action-preview" id="head-img1" src="<?=isset($img->url_object) ? (\common\lib\oss\Oss::IMG_OPTION_ADDR . urlencode($img->url_object) . "@100w") : ""?>"/>
+					<?php endforeach;?>
+				</span>
 		</li>
+		<?php endif;?>
+
+		<?php if($v['content_type'] == 1):?>
 		<li class="mui-table-view-cell">
-			<p class="beizhu-p">备注内容为文字</p>
-			<span class="mui-pull-left beizhu">很多啊收到货就看上就卡死的暗示的空间和空间按时打卡上</span>
+			<p class="beizhu-p"><?=$v['type_name'] ? $v['type_name'] : "异常备注"?></p>
+			<span class="mui-pull-left beizhu"><?=$v['content']?></span>
 
 		</li>
+		<?php endif;?>
+
+		<?php if($v['content_type'] == 3):?>
 		<li class="mui-table-view-cell">
-			<p class="beizhu-p">备注内容为文件</p>
-					<span class="mui-pull-left beizhu">
-						<a href="a.txt">hah.txt</a>
-					</span>
+			<p class="beizhu-p"><?=$v['type_name'] ? $v['type_name'] : "异常备注"?></p>
+				<span class="mui-pull-left beizhu">
+					<?php $content = json_decode($v['content']);?>
+
+					<?php if($content) foreach($content as $file):?>
+						<a href="<?=isset($file->url) ? $file->url : ""?>"><?=isset($file->name) ? $file->name : "文件"?></a>
+					<?php endforeach;?>
+				</span>
 		</li>
+		<?php endif;?>
 	</ul>
+	<?php endforeach;?>
+
 </div>
 <div class="mui-content-padded beizhu-b">
 	<a type="button" href="<?=\yii\helpers\Url::toRoute("users/mgu_list")?>" class="mui-btn mui-btn-primary mui-btn-outlined">

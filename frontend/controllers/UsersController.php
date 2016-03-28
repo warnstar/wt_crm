@@ -33,7 +33,8 @@ class UsersController extends CommonController
 			if($user){
 				$data['user'] = $user;
 				if($user['last_mgu']){
-					$data['note'] = (new Note())->find()->where(['mgu_id'=>$user['last_mgu'],'user_view'=>1])->asArray()->all();
+					$option['mgu_id'] = $user['last_mgu'];
+					$data['visit_notes'] = (new Note())->search($option);
 				}
 				
 				return $this->renderPartial("users_detail",$data);
@@ -88,4 +89,5 @@ class UsersController extends CommonController
 		}
 		return json_encode($msg);
 	}
+	
 }
