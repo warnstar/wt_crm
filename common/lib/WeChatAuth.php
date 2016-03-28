@@ -17,8 +17,7 @@ class WeChatAuth
 
 
 	public function UserAuthory(){
-
-		$auth_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=". $this->AppID . "&redirect_uri=" . $this->server_api . "&response_type=code&scope=snsapi_login&state=1#wechat_redirect";
+		$auth_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=". $this->AppID . "&redirect_uri=" . $this->server_api . "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";
 		header('Location: '.$auth_url);
 	}
 

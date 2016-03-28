@@ -31,15 +31,22 @@ class SiteController extends Controller
 
 
     public function actionLogin(){
-
         $get = Yii::$app->request->get();
-        $users = (new Users())->find()->all();
+        $session = Yii::$app->session;
+        $session->open();
+        if(isset($get['accessUser']) && $get['accessUser'] == "worker"){
+            $session->set("accessUser","worker");
+        }else{
+            $session->set("accessUser","user");
+        }
 
         (new WeChatAuth())->UserAuthory();
+        
+        
 
     }
 
     public function actionGetUserInfo(){
-        echo "user";
+        
     }
 }
