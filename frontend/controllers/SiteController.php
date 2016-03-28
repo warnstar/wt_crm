@@ -2,6 +2,7 @@
 namespace frontend\controllers;
 
 use common\lib\WeChatAuth;
+use common\models\Users;
 use yii;
 use yii\web\Controller;
 use yii\filters\AccessControl;
@@ -20,7 +21,7 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login','login_validate', 'error','logout'],
+                        'actions' => ['login','login_validate','weChat', 'error','logout'],
                         'allow' => true,
                     ]
                 ],
@@ -30,8 +31,10 @@ class SiteController extends Controller
 
 
     public function actionLogin(){
-        $get = Yii::$app->request->get();
 
+        $get = Yii::$app->request->get();
+        $users = (new Users())->find()->all();
+        //dump($users);
         (new WeChatAuth())->UserAuthory();
 
     }
