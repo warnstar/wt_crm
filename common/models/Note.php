@@ -89,6 +89,11 @@ class Note extends \yii\db\ActiveRecord
             if(isset($option['mgu_id']) && $option['mgu_id']){
                 $query->andWhere(['note.mgu_id'=>(int)$option['mgu_id']]);
             }
+
+            //筛选用户可见
+            if(isset($option['user_view'])){
+                $query->andWhere(['note.user_view'=>(int)$option['user_view']]);
+            }
         }
 
         $query->leftJoin(['w'=>'worker'],'note.worker_id=w.id')

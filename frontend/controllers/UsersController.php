@@ -34,6 +34,7 @@ class UsersController extends CommonController
 				$data['user'] = $user;
 				if($user['last_mgu']){
 					$option['mgu_id'] = $user['last_mgu'];
+					$option['user_view'] = 1;
 					$data['visit_notes'] = (new Note())->search($option);
 				}
 				
