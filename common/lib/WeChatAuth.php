@@ -18,7 +18,7 @@ class WeChatAuth
 
 	public function UserAuthory(){
 		$auth_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=". $this->AppID . "&redirect_uri=" . $this->server_api . "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
-		header('Location: '.$auth_url);
+		header("location:".$auth_url);
 	}
 
 	//获取微信用户信息/显示个人中心
@@ -40,9 +40,9 @@ class WeChatAuth
 	}
 
 
-	private function curl($get_token_url){
+	private function curl($url){
 		$ch = curl_init();
-		curl_setopt($ch,CURLOPT_URL,$get_token_url);
+		curl_setopt($ch,CURLOPT_URL,$url);
 		curl_setopt($ch,CURLOPT_HEADER,0);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1 );
 		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);

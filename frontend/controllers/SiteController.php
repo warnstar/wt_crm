@@ -42,10 +42,9 @@ class SiteController extends Controller
             $session->set("accessUser","user");
         }
 
-        (new WeChatAuth())->UserAuthory();
+        $code_url  =  (new WeChatAuth())->UserAuthory();
         
-        
-
+        $this->redirect($code_url);
     }
 
 
@@ -57,6 +56,8 @@ class SiteController extends Controller
         dump($_SERVER);
     }
     public function actionTest(){
-        echo "test";exit;
+        $auth_url = "http://www.baidu.com";
+        header("location:".$auth_url);
+        //$this->redirect($auth_url);
     }
 }
