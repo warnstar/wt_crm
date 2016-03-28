@@ -25,14 +25,6 @@ return [
                 ],
             ],
         ],
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'enableStrictParsing' => true,
-            'suffix' => ".html",
-            'rules' => [ '' => 'site/login', // 如果没有这里，则访问域名不能直接打开默认Action
-            ]
-        ],
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],

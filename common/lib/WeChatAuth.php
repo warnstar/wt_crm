@@ -13,11 +13,11 @@ class WeChatAuth
 {
 	private $AppID = "wx1e713d7916bd3d33";
 	private $AppSecret = "3c80a1eb8eeebebaa121ef9b241154c5";
-	private $server_api = "http://wtfront.xlooit.com/index.php?r=site/getUserInfo";
+	private $server_api = "http://wtfront.xlooit.com/index.php?r=site/get_user_info";
 
 
 	public function UserAuthory(){
-		$auth_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=". $this->AppID . "&redirect_uri=" . $this->server_api . "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";
+		$auth_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=". $this->AppID . "&redirect_uri=" . $this->server_api . "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
 		header('Location: '.$auth_url);
 	}
 
