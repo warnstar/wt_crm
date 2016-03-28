@@ -101,16 +101,16 @@
 	<form id='login-form' class="mui-input-group">
 		<div class="mui-input-row">
 			<label>护照号</label>
-			<input id='account' type="text" class="mui-input-clear mui-input" placeholder="请输入账号">
+			<input id='passport' type="text" class="mui-input-clear mui-input passport_data" placeholder="请输入账号">
 		</div>
 		<div class="mui-input-row">
 			<label>姓名</label>
-			<input id='account' type="text" class="mui-input-clear mui-input" placeholder="请输入账号">
+			<input id='name' type="text" class="mui-input-clear mui-input name_data" placeholder="请输入账号">
 		</div>
 	</form>
 
 	<div class="mui-content-padded">
-		<button id='login' class="mui-btn mui-btn-block mui-btn-primary">登录</button>
+		<button id='login' class="mui-btn mui-btn-block mui-btn-primary commit_click">登录</button>
 
 	</div>
 	<div class="mui-content-padded oauth-area">
@@ -118,5 +118,23 @@
 	</div>
 </div>
 <script src="js/mui.min.js"></script>
+<script src="js/jquery-2.2.2.min.js"></script>
 </body>
 </html>
+
+<script>
+	$("body").on("click",".commit_click",function(){
+		var url = "<?=\yii\helpers\Url::toRoute("users/bind_save")?>";
+		var data = {
+			pasport :   $(".passport_data").val(),
+			name    :   $(".name_data").val()
+		};
+		$.post(url,data,function(msg){
+			if(msg.status){
+				location.href = msg.url;
+			}else{
+				alert(msg.error);
+			}
+		},'json');
+	});
+</script>

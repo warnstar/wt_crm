@@ -86,6 +86,7 @@ class SiteController extends Controller
                     return $this->renderPartial("/users/user_detail");
                 }else{
                     //跳转到用户绑定页面
+                    $session->set("bind_extra_uid",$uid);
                     return $this->renderPartial("/users/bind");
                 }
 
@@ -97,8 +98,7 @@ class SiteController extends Controller
             //授权失败，跳转到正常手机号登陆页面
             //客户通道
             if($accessUser == "user"){
-                $data['unbind'] = true;
-                return $this->renderPartial("/users/bind",$data);
+                return $this->renderPartial("/users/bind");
             }else{
                 //职员通道
             }

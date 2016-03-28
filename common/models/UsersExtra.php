@@ -58,4 +58,29 @@ class UsersExtra extends \yii\db\ActiveRecord
             return null;
         }
     }
+
+    public function createBind($uid,$user_id){
+        if(!$uid || !$user_id){
+            return false;
+        }
+        //清除旧绑定
+        $ole_extras = $this->find()->where(['user_id'=>$user_id])->orWhere(['uid'=>$uid])->all();
+        if($ole_extras){
+            foreach ($ole_extras as $v){
+                $v->delete();
+            }
+        }
+
+        $new_extra = new UsersExtra();
+        $new_extra->type = 1;//微信
+        $new_extra->uid = $uid;
+        $new_extra->user_id = $user_id;
+        $new_extra->create_time = time();
+
+        if($new_extra->save()){
+            return $new_extra;
+        }else{
+            return null;
+        }
+    }
 }
