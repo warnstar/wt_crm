@@ -201,9 +201,10 @@
 	.beizhu-p{
 		color: #000000;
 	}
-	.beizhu-b button{
+	.beizhu-b a{
 		margin: 0 auto;
 		display: block;
+		width:40%;
 	}
 	#foot{
 		margin-bottom: 30px;

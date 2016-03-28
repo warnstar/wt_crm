@@ -92,7 +92,11 @@ class Note extends \yii\db\ActiveRecord
 
             //筛选用户可见
             if(isset($option['user_view'])){
-                $query->andWhere(['note.user_view'=>(int)$option['user_view']]);
+                $condition = [
+                    "note.user_view"    =>  (int)$option['user_view'],
+                    'type'              =>  1
+                ];
+                $query->andWhere($condition);
             }
         }
 
