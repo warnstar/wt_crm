@@ -74,7 +74,7 @@ class SiteController extends Controller
         if($user_info){
             //授权通过，获得用户信息
             dump($user_info);
-
+            
 
 
         }else{
