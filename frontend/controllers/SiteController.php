@@ -24,7 +24,7 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login','test','get_user_info', 'error','logout'],
+                        'actions' => ['login','extra_login','test','get_user_info', 'error','logout'],
                         'allow' => true,
                     ]
                 ],
@@ -32,17 +32,6 @@ class SiteController extends Controller
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function actions()
-    {
-        return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
-        ];
-    }
 
     public function actionExtra_login(){
 
