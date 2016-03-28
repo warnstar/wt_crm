@@ -254,6 +254,14 @@ class Users extends \yii\db\ActiveRecord
                         $flag['mgus'] = (new Medical_group_user())->delete_this($v['id']);
                     }
                 }
+
+                //删除第三方绑定
+                $extras = (new UsersExtra())->find()->where(['user_id'=>$id])->all();
+                if($extras){
+                    foreach($extras as $v){
+                        $flag['extras'][] = $v->delete();
+                    }
+                }
             }else{
                 $msg['code'] = 6;
                 $msg['error'] = "数据库操作失败！";
