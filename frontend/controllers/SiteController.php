@@ -42,18 +42,21 @@ class SiteController extends Controller
             $session->set("accessUser","user");
         }
 
-        $code_url  =  (new WeChatAuth())->UserAuthory();
-        
-        $this->redirect($code_url);
+        (new WeChatAuth())->UserAuthory();
+
     }
 
 
     public function actionGet_user_info(){
         $get = Yii::$app->request->get();
-        $post = Yii::$app->request->post();
-        dump($get);
-        dump($post);
-        dump($_SERVER);
+
+        $user_info = [];
+        if(isset($get['code'])){
+            $code = $get['code'];
+            $user_info = (new WeChatAuth())->getUserInfo($code);
+        }
+        dump($user_info);
+
     }
     public function actionTest(){
         $auth_url = "http://www.baidu.com";

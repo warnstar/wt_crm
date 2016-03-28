@@ -22,8 +22,8 @@ class WeChatAuth
 	}
 
 	//获取微信用户信息/显示个人中心
-	public function getUserInfo(){
-		$code = $_GET["code"];
+	public function getUserInfo($code){
+		
 		$get_token_url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid='.$this->AppID.'&secret='.$this->AppSecret.'&code='.$code.'&grant_type=authorization_code';
 
 		$token_res = $this->curl($get_token_url);
