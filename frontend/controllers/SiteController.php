@@ -31,7 +31,7 @@ class SiteController extends Controller
             ],
         ];
     }
-    public function actionLogin(){
+    public function actionExtra_login(){
 
         $get = Yii::$app->request->get();
         $session = Yii::$app->session;
@@ -43,19 +43,31 @@ class SiteController extends Controller
         }
 
         (new WeChatAuth())->UserAuthory();
-
     }
 
 
     public function actionGet_user_info(){
         $get = Yii::$app->request->get();
 
+        $session = Yii::$app->session;
+        $session->open();
+
         $user_info = [];
         if(isset($get['code'])){
             $code = $get['code'];
             $user_info = (new WeChatAuth())->getUserInfo($code);
         }
-        dump($user_info);
+
+        if($user_info){
+            //授权通过，获得用户信息
+            dump($user_info);
+            
+
+
+        }else{
+            //授权失败，跳转到正常手机号登陆页面
+
+        }
 
     }
     public function actionTest(){
