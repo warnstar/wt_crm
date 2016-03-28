@@ -41,32 +41,21 @@
 
 <div class="mui-content">
 	<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed">
+		<?php if($groups) foreach($groups as $v):?>
 		<li class="mui-table-view-cell">
-			<a href="dd">
+			<a href="<?=\yii\helpers\Url::toRoute("users/detail") . "&mgu_id=" . $v['id']?>">
 				<div class="mui-table">
 					<div class="mui-table-cell mui-col-xs-10">
-						<h4 class="mui-ellipsis">泰神奇第十一期泰神奇第十一期泰神奇第十一期</h4>
-						<h5>疗程时间：40天</h5>
+						<h4 class="mui-ellipsis"><?=$v['group_name']?></h4>
+						<h5>疗程时间：<?=(int)(($v['end_time']-$v['start_time'])/(3600*24))?>天</h5>
 					</div>
 					<div class="mui-table-cell mui-col-xs-4 mui-text-right">
-						<span class="mui-h5">2015-12-12</span>
+						<span class="mui-h5"><?=date("Y-m-d",$v['group_join_time'])?></span>
 					</div>
 				</div>
 			</a>
 		</li>
-		<li class="mui-table-view-cell">
-			<a href="dd">
-				<div class="mui-table">
-					<div class="mui-table-cell mui-col-xs-10">
-						<h4 class="mui-ellipsis">泰神奇第十一期泰神奇第十一期泰神奇第十一期</h4>
-						<h5>疗程时间：40天</h5>
-					</div>
-					<div class="mui-table-cell mui-col-xs-4 mui-text-right">
-						<span class="mui-h5">2015-12-12</span>
-					</div>
-				</div>
-			</a>
-		</li>
+		<?php endforeach;?>
 
 	</ul>
 </div>

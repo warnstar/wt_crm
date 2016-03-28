@@ -52,7 +52,7 @@ class Medical_group_user extends \yii\db\ActiveRecord
             'create_time' => 'Create Time',
         ];
     }
-    public function search($option = null){
+    public function search($option = null,$page = true){
         $query = $this->find();
 
         $select = [
@@ -64,7 +64,10 @@ class Medical_group_user extends \yii\db\ActiveRecord
             'user_passport'=>'users.passport',
 
             'brand_id'              =>  'b.id',
-            'brand_name'            =>  'b.name'
+            'brand_name'            =>  'b.name',
+
+            'group_name'            =>  'mg.name',
+            'group_join_time'       =>  'medical_group_user.create_time'
         ];
         $query->select($select);
 
@@ -129,19 +132,26 @@ class Medical_group_user extends \yii\db\ActiveRecord
             ->leftJoin(['mg'=>'medical_group'],'medical_group_user.medical_group_id=mg.id')
             ->leftJoin(['b'=>'brand'],'mg.brand_id=b.id');
 
+        /**
+         * 是否进行分页
+         */
+        if($page){
+            $pages = new Pagination([
+                'totalCount'    => $query->count(),
+                'pageSize'      => 9,
+            ]);
+            $query->offset($pages->offset)
+                ->limit($pages->limit);
 
-        $pages = new Pagination([
-            'totalCount'    => $query->count(),
-            'pageSize'      => 9,
-        ]);
-        $query->offset($pages->offset)
-            ->limit($pages->limit);
 
+            $list = $query->asArray()->all();
 
-        $list = $query->asArray()->all();
+            $data['list'] = $list;
+            $data['pages'] = $pages;
+        }else{
+            $data['list'] = $query->asArray()->all();
+        }
 
-        $data['list'] = $list;
-        $data['pages'] = $pages;
 
         return $data;
     }
@@ -196,6 +206,7 @@ class Medical_group_user extends \yii\db\ActiveRecord
             'medical_group_user.*',
             'brand_id'              =>  'b.id',
             'brand_name'            =>  'b.name',
+            'brand_attention'       =>  'b.attention',
             'group_name'            =>  'mg.name'
         ];
         $query->select($select);
