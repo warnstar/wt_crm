@@ -71,13 +71,7 @@ class SiteController extends Controller
             $user_info = (new WeChatAuth())->getUserInfo($code);
         }
 
-        if($user_info){
-            //授权通过，获得用户信息
-            dump($user_info);
-        }else{
-            //授权失败，跳转到正常手机号登陆页面
-
-        }
+        dump($user_info);
 
     }
     public function actionTest(){
