@@ -261,7 +261,7 @@
 
 					<?php if($content) foreach($content as $img):?>
 
-					<img class="head-img mui-action-preview" id="head-img1" src="<?=isset($img->url_object) ? (\common\lib\oss\Oss::IMG_OPTION_ADDR . urlencode($img->url_object) . "@100w") : ""?>"/>
+					<img class="head-img mui-action-preview" id="head-img1" src="<?=isset($img->url_object) ? (\common\lib\oss\Oss::IMG_OPTION_ADDR . urlencode($img->url_object) . "@640w") : ""?>"/>
 					<?php endforeach;?>
 				</span>
 		</li>
