@@ -234,7 +234,7 @@
 					<?php
 						if(!$user['last_mgu'])
 							echo "无疗程";
-						else if($user['start_time_mgu'] < time())
+						else if($user['start_time_mgu'] > time())
 							echo "未开始";
 						else if($user['end_time_mgu'] < time()){
 							echo "已结束";

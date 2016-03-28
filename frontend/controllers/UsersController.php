@@ -9,6 +9,7 @@
 namespace frontend\controllers;
 
 
+use common\models\Note;
 use common\models\Users;
 use common\models\UsersExtra;
 use yii\web\Controller;
@@ -31,6 +32,9 @@ class UsersController extends CommonController
 			$user = (new Users())->detail($user_id);
 			if($user){
 				$data['user'] = $user;
+				if($user['last_mgu']){
+					$data['note'] = (new Note())->find()->where(['mgu_id'=>$user['last_mgu'],'user_view'=>1])->asArray()->all();
+				}
 				
 				return $this->renderPartial("users_detail",$data);
 			}else{
