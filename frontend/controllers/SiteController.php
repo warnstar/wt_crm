@@ -31,7 +31,17 @@ class SiteController extends Controller
             ],
         ];
     }
-
+    /**
+     * @inheritdoc
+     */
+    public function actions()
+    {
+        return [
+            'error' => [
+                'class' => 'yii\web\ErrorAction',
+            ],
+        ];
+    }
 
     public function actionExtra_login(){
 
@@ -53,7 +63,7 @@ class SiteController extends Controller
 
         $session = Yii::$app->session;
         $session->open();
-        dump($get);exit;
+
         $user_info = [];
         if(isset($get['code'])){
             $code = $get['code'];
@@ -67,6 +77,7 @@ class SiteController extends Controller
             //授权失败，跳转到正常手机号登陆页面
 
         }
+        
 
     }
     public function actionTest(){
