@@ -3,6 +3,7 @@ namespace frontend\controllers;
 
 use common\lib\WeChatAuth;
 use common\models\Users;
+use common\models\UsersExtra;
 use yii;
 use yii\web\Controller;
 use yii\filters\AccessControl;
@@ -63,26 +64,49 @@ class SiteController extends Controller
 
         $session = Yii::$app->session;
         $session->open();
+        $accessUser = $session->get("accessUser");
+
 
         $user_info = [];
+        //获取到code，再获取用户信息
         if(isset($get['code'])){
             $code = $get['code'];
             $user_info = (new WeChatAuth())->getUserInfo($code);
         }
 
-        if($user_info){
+
+        if($user_info && $user_info['openid']){
             //授权通过，获得用户信息
-            dump($user_info);
+            $uid = $user_info['openid'];
+            if($accessUser == "user"){
+                //客户通道
+                $user = (new UsersExtra())->getUser($uid);
+                if($user){
+                    //用户已绑定，登陆成功
+                    return $this->renderPartial("/users/user_detail");
+                }else{
+                    //跳转到用户绑定页面
+                    return $this->renderPartial("/users/bind");
+                }
+
+            }else{
+                //职员通道
+
+            }
         }else{
             //授权失败，跳转到正常手机号登陆页面
-
+            //客户通道
+            if($accessUser == "user"){
+                $data['unbind'] = true;
+                return $this->renderPartial("/users/bind",$data);
+            }else{
+                //职员通道
+            }
         }
-        
-
     }
+
+
     public function actionTest(){
-        $auth_url = "http://www.baidu.com";
-        header("location:".$auth_url);
-        //$this->redirect($auth_url);
+        return $this->renderPartial("/users/bind");
     }
 }
