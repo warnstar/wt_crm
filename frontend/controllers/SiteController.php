@@ -210,8 +210,7 @@ class SiteController extends Controller
 
             $session = Yii::$app->session;
             $bind_extra_uid = $session->get("bind_extra_uid");
-            dump($bind_extra_uid);
-            dump($worker);
+
             if($bind_extra_uid){
                 $extra = (new WorkerExtra())->createBind($bind_extra_uid,$worker->id);
                 if($extra){
