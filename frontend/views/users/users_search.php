@@ -63,11 +63,11 @@
 <body>
 
 <nav class="mui-bar mui-bar-tab">
-	<a class="mui-tab-item tab_change_search" href="#">
+	<a class="mui-tab-item mui-active tab_change_search" href="#">
 		<span class="mui-icon mui-icon-search "></span>
 		<span class="mui-tab-label">查询</span>
 	</a>
-	<a class="mui-tab-item mui-active tab_change_list" href="#">
+	<a class="mui-tab-item tab_change_list" href="#">
 		<span class="mui-icon mui-icon-bars"></span>
 		<span class="mui-tab-label">所有</span>
 	</a>
