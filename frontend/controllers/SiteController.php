@@ -1,10 +1,14 @@
 <?php
 namespace frontend\controllers;
 
+use common\lib\MyHelp;
 use common\lib\WeChatAuth;
 
+use yii\helpers\Url;
+use common\models\Users;
 use common\models\UsersExtra;
 
+use common\models\Worker;
 use common\models\WorkerExtra;
 use yii;
 use yii\web\Controller;
@@ -15,8 +19,8 @@ use yii\filters\AccessControl;
 class SiteController extends Controller
 {
 
-    //w/wt_crm/frontend/web/index.php?r=site/test
 
+    public $enableCsrfValidation = false;
     /**
      * @inheritdoc
      */
@@ -27,7 +31,7 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login','extra_login','test','get_user_info', 'error','logout'],
+                        'actions' => ['login','extra_login','test','get_user_info','users_bind_save','users_bind', 'error','logout'],
                         'allow' => true,
                     ]
                 ],
@@ -45,6 +49,9 @@ class SiteController extends Controller
             ],
         ];
     }
+    public function actionIndex(){
+        echo "123";
+    }
 
     public function actionExtra_login(){
 
@@ -56,8 +63,14 @@ class SiteController extends Controller
         }else{
             $session->set("accessUser","user");
         }
-
-        (new WeChatAuth())->UserAuthory();
+        if((new MyHelp())->isWeChat()){
+            /**
+             * 当检测到是微信内置浏览器登陆
+             */
+            (new WeChatAuth())->UserAuthory();
+        }else{
+            $this->redirect(Url::toRoute("site/get_user_info"));
+        }
     }
 
 
@@ -85,6 +98,7 @@ class SiteController extends Controller
                 /**
                  * 客户通道
                  **/
+                //获取用户第三方绑定信息
                 $user = (new UsersExtra())->getUser($uid);
 
                 if($user){
@@ -94,17 +108,32 @@ class SiteController extends Controller
                 }else{
                     //跳转到用户绑定页面
                     $session->set("bind_extra_uid",$uid);
-                    $this->redirect(yii\helpers\Url::toRoute("users/bind"));
+                    $this->redirect(Url::toRoute("site/users_bind"));
                 }
-
             }else{
                 /**
                  * 职员通道
                  **/
-                $user = (new WorkerExtra())->getUser($uid);
-                if($user){
+                $worker = (new WorkerExtra())->getUser($uid);
+                if($worker){
                     //职员已绑定，登陆成功
-                    $session->set("worker_id",$user->id);
+                    $session->set("worker_id",$worker->id);
+
+                    $area_id = (new Worker())->getRangeArea();
+                    $session->set("area_id",$area_id);
+
+                    $session->set("role_id",$worker->role_id);
+
+                    if($worker->role_id == 2){
+                        //客服
+
+                    }else if($worker->role_id == 3){
+                        //对接人员
+
+                    }else{
+                        //大区经理
+
+                    }
                 }else{
                     //跳转到职员绑定页面
                     $session->set("bind_extra_uid",$uid);
@@ -115,15 +144,61 @@ class SiteController extends Controller
             //授权失败，跳转到正常手机号登陆页面
             //客户通道
             if($accessUser == "user"){
-                return $this->renderPartial("/users/bind");
+                $this->redirect(Url::toRoute("site/users_bind"));
             }else{
                 //职员通道
             }
         }
     }
 
+    /**
+     * 用户绑定页面（也可用于普通登陆）
+     * @return string
+     */
+    public function actionUsers_bind(){
+        return $this->renderPartial("users_bind");
+    }
+    /**
+     * 客户绑定
+     * @return mixed
+     */
+    public function actionUsers_bind_save(){
+        $post = Yii::$app->request->post();
+
+        $passport = isset($post['passport']) ? $post['passport'] : null;
+        $name = isset($post['name']) ? $post['name'] : null;
+
+        //验证用户是否存在
+        $user = (new Users())->find()->where(['passport'=>$passport,'name'=>$name])->one();
+        $msg['status'] = 0;
+        if($user){
+            //进行绑定
+            $session = Yii::$app->session;
+            $session->open();
+            $bind_extra_uid = $session->get("bind_extra_uid");
+            if($bind_extra_uid){
+                $extra = (new UsersExtra())->createBind($bind_extra_uid,$user->id);
+                if($extra){
+                    //绑定成功
+                }else{
+                    //绑定失败
+                }
+            }else{
+                //直接登陆
+            }
+
+            //无论无何都是登陆成功
+            $msg['status'] = 1;
+            $msg['url'] = yii\helpers\Url::toRoute("users/detail");
+            $session->set("user_id",$user->id);
+
+        }else{
+            $msg['error'] = "用户不存在,请联系客服！";
+        }
+        return json_encode($msg);
+    }
 
     public function actionTest(){
-
+        $this->goHome();
     }
 }

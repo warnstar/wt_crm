@@ -124,7 +124,7 @@
 
 <script>
 	$("body").on("click",".commit_click",function(){
-		var url = "<?=\yii\helpers\Url::toRoute("users/bind_save")?>";
+		var url = "<?=\yii\helpers\Url::toRoute("site/users_bind_save")?>";
 		var data = {
 			passport :   $(".passport_data").val(),
 			name    :   $(".name_data").val()

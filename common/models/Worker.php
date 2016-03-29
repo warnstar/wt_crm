@@ -276,6 +276,33 @@ class Worker extends \yii\db\ActiveRecord
         return $msg;
     }
 
+
+    public function getRangeArea(){
+        $area_id = 0;
+        switch ($this->role_id){
+            case 2 :
+                //客服
+                break;
+            case 3 :
+                //对接人员
+                break;
+            case 4 :
+                //品牌经理
+                break;
+            case 5 :
+                //区域总监
+                $this_area = (new Area())->find()->where(['id'=>$this->area_id])->one();
+                $area_id = $this_area->parent_id;
+                break;
+            case 6 :
+                //大区经理
+                $area_id = $this->area_id;
+                break;
+            default :
+                break;
+        }
+        return $area_id;
+    }
     public function exist(){
         $data = $this->findOne(['phone'=>$this->phone]);
         if($data){

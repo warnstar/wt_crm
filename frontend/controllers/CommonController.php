@@ -29,10 +29,5 @@ class CommonController extends Controller {
         return true;
     }
 
-    /**
-     * ==============================测试=====================================
-     */
-    public function actionTest(){
-        echo "test123";
-    }
+    
 }

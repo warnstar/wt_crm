@@ -16,6 +16,7 @@ return [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
         ],
+        'defaultRoute'=>'site/get_user_info',
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
