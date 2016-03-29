@@ -110,15 +110,18 @@ class SiteController extends Controller
                     $session->set("area_id",$area_id);
 
                     $session->set("role_id",$worker->role_id);
+                    /**
+                     * 跳转
+                     */
                     if($worker->role_id == 2){
                         //客服
-
+                        echo "暂时未做";exit;
                     }else if($worker->role_id == 3){
                         //对接人员
-
+                        echo "暂时未做";exit;
                     }else{
                         //大区经理
-
+                        $msg['url'] = Url::toRoute("users/search");
                     }
                 }else{
                     //跳转到职员绑定页面
@@ -232,7 +235,6 @@ class SiteController extends Controller
 
             $session->set("role_id",$worker->role_id);
 
-            $session->open();
 
             /**
              * 跳转
