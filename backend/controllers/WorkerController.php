@@ -82,6 +82,11 @@ class WorkerController extends CommonController
             if(isset($post['password']) && $post['password']){
                 $worker->password = md5($post['password']);
             }
+
+            //旧品牌经理则，清理旧品牌的经理
+            if($worker->role_id == 4){
+                $old_brand = (new Brand())->find()->where(['id'=>$worker->brand_id])->one();
+            }
         }else{
             $worker->password = isset($post['password']) ? md5($post['password']) : null;
         }
@@ -102,11 +107,17 @@ class WorkerController extends CommonController
             $msg['error'] = "电话号码不能重复！";
         }else{
             if($worker->save()){
+                if(isset($old_brand)){
+                    $old_brand->manager_id = null;
+                    $old_brand->save();
+                }
+
                 if($worker->role_id == 4){
                     $brand = (new Brand())->find()->where(['id'=>$worker->brand_id])->one();
                     $brand->manager_id = $worker->id;
                     $brand->save();
                 }
+                
                 $msg['status'] = 1;
             }
         }
