@@ -199,4 +199,26 @@ class Area extends \yii\db\ActiveRecord
 
         return $msg;
     }
+
+    public function getAreaMui(){
+        $area_mui = [];
+        $area_higher = $this->find()->where(['parent_id'=>0])->asArray()->all();
+        if($area_higher){
+            foreach ($area_higher as $k=>$v){
+                $area_mui[$k]['text'] = $v['name'];
+                $area_mui[$k]['value'] = $v['id'];
+
+                $childrens = $this->find()->where(['parent_id'=>$v['id']])->asArray()->all();
+                if($childrens){
+                    $child = [];
+                    foreach ($childrens as $kk=>$vv){
+                        $child[$kk]['text'] = $vv['name'];
+                        $child[$kk]['value'] = $vv['id'];
+                    }
+                    $area_mui[$k]['children'] = $child;
+                }
+            }
+        }
+        return $area_mui;
+    }
 }

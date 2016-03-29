@@ -277,6 +277,28 @@ class Worker extends \yii\db\ActiveRecord
     }
 
 
+    public function WeChatLogin($phone,$password){
+        if(!$phone || !$password){
+            $msg['code'] = 5;
+            $msg['error'] = "账户密码不能为空！";
+            return $msg;
+        }
+
+        $worker = (new Worker())->find()->where(['phone'=>$phone,'password'=>$password])->andWhere("role_id IN (2,3,4,5,6)")->one();
+        if($worker){
+            $msg['code'] = 0;
+            $msg['info'] = $worker;
+        }else{
+            $msg['code'] = 8;
+            $msg['error'] = "账户或密码错误";
+        }
+
+        return $msg;
+    }
+    /**
+     * 获取职员的权限区域
+     * @return int|mixed
+     */
     public function getRangeArea(){
         $area_id = 0;
         switch ($this->role_id){

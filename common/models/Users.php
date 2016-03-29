@@ -71,7 +71,7 @@ class Users extends \yii\db\ActiveRecord
      * 搜索（护照号，手机号，病历号）
      * @param null $option
      */
-    public function search($option = null){
+    public function search($option = null,$page = true){
         $query = $this->find();
 
         $select = [
@@ -79,7 +79,8 @@ class Users extends \yii\db\ActiveRecord
             'end_time_mgu'          => 'mgu.end_time',
             'start_time_mgu'        =>  'mgu.start_time',
             'group_name'            =>  'mg.name',
-            'brand_name'            =>  'b.name'
+            'brand_name'            =>  'b.name',
+            'area_name'             =>  'a.name'
         ];
         $query->select($select);
 
@@ -99,6 +100,8 @@ class Users extends \yii\db\ActiveRecord
                 $area_higher_id = $option['area_higher_id'];
                 $query->andWhere("users.area_id in (select id FROM area WHERE parent_id = $area_higher_id)");
             }
+
+
             //筛选医疗团(最后一次参加）
             if(isset($option['medical_group_id']) && $option['medical_group_id']){
                 $query->andWhere(['mg.id'=>(int)$option['medical_group_id']]);
@@ -122,22 +125,30 @@ class Users extends \yii\db\ActiveRecord
         $query->leftJoin(['mgu'=>'medical_group_user'],'users.last_mgu=mgu.id')
             ->leftJoin(['mg'=>'medical_group'],'mgu.medical_group_id=mg.id')
             ->leftJoin(['mgu_all'=>'medical_group_user'],'users.id=mgu_all.user_id')
+            ->leftJoin(['a'=>'area'],'users.area_id=a.id')
             ->leftJoin(['b'=>'brand'],'users.brand_id=b.id');
 
         $query->groupBy("id");
 
-        $pages = new Pagination([
-            'totalCount' => $query->count(),
-            'pageSize'  => 9,
-        ]);
-        $query->offset($pages->offset)
-            ->limit($pages->limit);
+        /**
+         * 是否进行分页
+         */
+        if($page){
+            $pages = new Pagination([
+                'totalCount'    => $query->count(),
+                'pageSize'      => 9,
+            ]);
+            $query->offset($pages->offset)
+                ->limit($pages->limit);
 
 
-        $list = $query->asArray()->all();
+            $list = $query->asArray()->all();
 
-        $data['list'] = $list;
-        $data['pages'] = $pages;
+            $data['list'] = $list;
+            $data['pages'] = $pages;
+        }else{
+            $data['list'] = $query->asArray()->all();
+        }
 
         return $data;
     }

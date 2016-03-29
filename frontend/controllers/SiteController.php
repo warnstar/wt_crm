@@ -21,23 +21,7 @@ class SiteController extends Controller
 
 
     public $enableCsrfValidation = false;
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'actions' => ['login','extra_login','test','get_user_info','users_bind_save','users_bind', 'error','logout'],
-                        'allow' => true,
-                    ]
-                ],
-            ],
-        ];
-    }
+
     /**
      * @inheritdoc
      */
@@ -50,7 +34,7 @@ class SiteController extends Controller
         ];
     }
     public function actionIndex(){
-        echo "123";
+        echo "无权限";
     }
 
     public function actionLogin(){
@@ -126,7 +110,6 @@ class SiteController extends Controller
                     $session->set("area_id",$area_id);
 
                     $session->set("role_id",$worker->role_id);
-                    $session->set("access_type",1);//职员
                     if($worker->role_id == 2){
                         //客服
 
@@ -140,16 +123,18 @@ class SiteController extends Controller
                 }else{
                     //跳转到职员绑定页面
                     $session->set("bind_extra_uid",$uid);
-                    return $this->renderPartial("/worker/bind");
+                    $this->redirect(Url::toRoute("site/worker_bind"));
                 }
             }
         }else{
             //授权失败，跳转到正常手机号登陆页面
             //客户通道
+
             if($accessUser == "user"){
                 $this->redirect(Url::toRoute("site/users_bind"));
             }else{
                 //职员通道
+                $this->redirect(Url::toRoute("site/worker_bind"));
             }
         }
     }
@@ -188,6 +173,7 @@ class SiteController extends Controller
                 }else{
                     //绑定失败
                 }
+                unset($session['bind_extra_uid']);
             }else{
                 //直接登陆
             }
@@ -196,14 +182,80 @@ class SiteController extends Controller
             $msg['status'] = 1;
             $msg['url'] = yii\helpers\Url::toRoute("users/detail");
             $session->set("user_id",$user->id);
-            $session->set("access_type",0);//客户
         }else{
             $msg['error'] = "用户不存在,请联系客服！";
         }
         return json_encode($msg);
     }
 
+    public function actionWorker_bind(){
+        return $this->renderPartial("worker_bind");
+    }
+
+    public function actionWorker_bind_save(){
+        $post = Yii::$app->request->post();
+
+
+        $phone = isset($post['phone']) ? $post['phone'] : null;
+        $password = isset($post['password']) ? md5($post['password']) : null;
+
+        $res = (new Worker())->WeChatLogin($phone,$password);
+
+        $msg['status'] = 0;
+        if($res['code'] == 0){
+            $worker = $res['info'];
+
+            $session = Yii::$app->session;
+            $bind_extra_uid = $session->get("bind_extra_uid");
+            if($bind_extra_uid){
+                $extra = (new WorkerExtra())->createBind($bind_extra_uid,$worker->id);
+                if($extra){
+                    //绑定成功
+                    $worker->wechat = $session->get("bind_extra_wechat");
+                    $worker->save();
+                }else{
+                    //绑定失败
+
+                }
+            }else{
+                //直接登陆
+            }
+
+            //无论无何都是登陆成功
+            $msg['status'] = 1;
+            //职员已绑定，登陆成功
+            $session->set("worker_id",$worker->id);
+            $session->set("brand_id",$worker->brand_id);
+
+            $area_id = (new Worker())->getRangeArea();
+            $session->set("area_id",$area_id);
+
+            $session->set("role_id",$worker->role_id);
+
+            $session->open();
+
+            /**
+             * 跳转
+             */
+            if($worker->role_id == 2){
+                //客服
+                echo "暂时未做";exit;
+            }else if($worker->role_id == 3){
+                //对接人员
+                echo "暂时未做";exit;
+            }else{
+                //大区经理
+                $msg['url'] = Url::toRoute("users/search");
+            }
+        }else{
+            $msg['error'] = $res['error'];
+        }
+        return json_encode($msg);
+    }
+
+
     public function actionTest(){
-        $this->goHome();
+
+
     }
 }

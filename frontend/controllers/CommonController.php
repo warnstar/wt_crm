@@ -28,15 +28,16 @@ class CommonController extends Controller {
         $session = Yii::$app->session;
         $session->open();
 
-        $access_type = $session->get("access_type");
-        if($access_type == 1){
+
+        $access_type = $session->get("accessUser");
+        if($access_type == "worker"){
             //职员通道
             $worker_id = $session->get("worker_id");
             $role_id = $session->get("role_id");
             $area_id = $session->get("area_id");
             $brand_id = $session->get("brand_id");
-            if($worker_id && $role_id && $area_id >= 0 & $brand_id){
-                $this->access_type = $access_type;
+
+            if($worker_id && $role_id && $brand_id){
                 $this->brand_id = $brand_id;
                 $this->role_id = $role_id;
                 $this->area_id = $area_id;
@@ -47,13 +48,11 @@ class CommonController extends Controller {
             //客户通道
             $user_id = $session->get("user_id");
             if($user_id){
-                $this->access_type = $access_type;
                 $this->user_id = $user_id;
                 return true;
             }
         }
-        $this->goHome();
-        return false;
+        return $this->goHome();
     }
 
     

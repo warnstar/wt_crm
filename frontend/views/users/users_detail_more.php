@@ -240,7 +240,7 @@
 					else if($user['end_time'] < time()){
 						echo "已结束";
 					}else{
-						echo "进行中";
+						echo "疗程中";
 					}
 					?>
 			</span></a>
