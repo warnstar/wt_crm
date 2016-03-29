@@ -17,16 +17,43 @@ class CommonController extends Controller {
     //当前登录用户的权限属性
     public $role_id     = 0;
     public $brand_id    = 0;
-    public $area_id     = 0;
-    public $worker_id   = -1;
-
+    public $area_id     = null;
+    public $worker_id   = null;
+    public $user_id     = null;
+    public $access_type = null;//1=职员，0=客户
     public function beforeAction($event) {
 
         $auth   = Yii::$app->authManager;
         $isAjax = Yii::$app->request->getIsAjax();
         $session = Yii::$app->session;
+        $session->open();
 
-        return true;
+        $access_type = $session->get("access_type");
+        if($access_type == 1){
+            //职员通道
+            $worker_id = $session->get("worker_id");
+            $role_id = $session->get("role_id");
+            $area_id = $session->get("area_id");
+            $brand_id = $session->get("brand_id");
+            if($worker_id && $role_id && $area_id >= 0 & $brand_id){
+                $this->access_type = $access_type;
+                $this->brand_id = $brand_id;
+                $this->role_id = $role_id;
+                $this->area_id = $area_id;
+                $this->worker_id = $worker_id;
+                return true;
+            }
+        }else if($access_type == 0){
+            //客户通道
+            $user_id = $session->get("user_id");
+            if($user_id){
+                $this->access_type = $access_type;
+                $this->user_id = $user_id;
+                return true;
+            }
+        }
+        $this->goHome();
+        return false;
     }
 
     

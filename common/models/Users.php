@@ -16,7 +16,7 @@ use yii\data\Pagination;
  * @property integer $status
  * @property integer $cases_code
  * @property integer $area_id
- * @property string $wchat
+ * @property string $wechat
  * @property integer $create_time
  */
 class Users extends \yii\db\ActiveRecord
@@ -37,7 +37,7 @@ class Users extends \yii\db\ActiveRecord
         return [
             [['name', 'passport'], 'required'],
             [['birth', 'sex', 'status', 'area_id', 'create_time','brand_id'], 'integer'],
-            [['name','birth_day', 'passport','cases_code', 'phone', 'wchat'], 'string', 'max' => 255]
+            [['name','birth_day', 'passport','cases_code', 'phone', 'wechat'], 'string', 'max' => 255]
         ];
     }
 

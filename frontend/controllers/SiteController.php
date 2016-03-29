@@ -93,7 +93,7 @@ class SiteController extends Controller
         if($user_info && $user_info['openid']){
             //授权通过，获得用户信息
             $uid = $user_info['openid'];
-
+            $wechat = $user_info['nickname'];
             if($accessUser == "user"){
                 /**
                  * 客户通道
@@ -104,10 +104,12 @@ class SiteController extends Controller
                 if($user){
                     //用户已绑定，登陆成功
                     $session->set("user_id",$user->id);
+                    $session->set("access_type",0);//客户
                     $this->redirect(yii\helpers\Url::toRoute("users/detail"));
                 }else{
                     //跳转到用户绑定页面
                     $session->set("bind_extra_uid",$uid);
+                    $session->set("bind_extra_wechat",$wechat);
                     $this->redirect(Url::toRoute("site/users_bind"));
                 }
             }else{
@@ -118,12 +120,13 @@ class SiteController extends Controller
                 if($worker){
                     //职员已绑定，登陆成功
                     $session->set("worker_id",$worker->id);
+                    $session->set("brand_id",$worker->brand_id);
 
                     $area_id = (new Worker())->getRangeArea();
                     $session->set("area_id",$area_id);
 
                     $session->set("role_id",$worker->role_id);
-
+                    $session->set("access_type",1);//职员
                     if($worker->role_id == 2){
                         //客服
 
@@ -180,6 +183,8 @@ class SiteController extends Controller
                 $extra = (new UsersExtra())->createBind($bind_extra_uid,$user->id);
                 if($extra){
                     //绑定成功
+                    $user->wechat = $session->get("bind_extra_wechat");
+                    $user->save();
                 }else{
                     //绑定失败
                 }
@@ -191,7 +196,7 @@ class SiteController extends Controller
             $msg['status'] = 1;
             $msg['url'] = yii\helpers\Url::toRoute("users/detail");
             $session->set("user_id",$user->id);
-
+            $session->set("access_type",0);//客户
         }else{
             $msg['error'] = "用户不存在,请联系客服！";
         }
