@@ -161,11 +161,11 @@
 </header>
 
 <nav class="mui-bar mui-bar-tab">
-	<a class="mui-tab-item" href="#">
+	<a class="mui-tab-item tab_change_search" href="#">
 		<span class="mui-icon mui-icon-search "></span>
 		<span class="mui-tab-label">查询</span>
 	</a>
-	<a class="mui-tab-item mui-active" href="#">
+	<a class="mui-tab-item mui-active tab_change_list" href="#">
 		<span class="mui-icon mui-icon-bars"></span>
 		<span class="mui-tab-label">所有</span>
 	</a>
@@ -210,6 +210,15 @@
 
 </body>
 <script>
+	$(".tab_change_search").click(function(){
+		var url = "<?=\yii\helpers\Url::toRoute("users/search")?>";
+		location.href = url;
+	});
+	$(".tab_change_list").click(function(){
+		var url = "<?=\yii\helpers\Url::toRoute("users/list")?>";
+		location.href = url;
+	});
+
 	function area_filter(area_id){
 		var url = "<?=\yii\helpers\Url::toRoute("users/list")?>" + "&area_id=" + area_id;
 		location.href = url;
