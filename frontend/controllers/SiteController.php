@@ -53,7 +53,7 @@ class SiteController extends Controller
         echo "123";
     }
 
-    public function actionExtra_login(){
+    public function actionLogin(){
 
         $get = Yii::$app->request->get();
         $session = Yii::$app->session;
