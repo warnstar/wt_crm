@@ -96,7 +96,7 @@ class UsersController extends CommonController
 		if($user_id){
 			$option['user_id'] = $user_id;
 			$groups = (new Medical_group_user())->search($option,false);
-			
+
 			$data['groups'] = $groups['list'];
 
 			return $this->renderPartial("mgu_list",$data);
@@ -175,7 +175,9 @@ class UsersController extends CommonController
 
 		//筛选区域
 		if(isset($get['area_id']) && $get['area_id']){
-			$option['area_id'] = $get['area_id'];
+			if($this->role_id != 6){//大区经理
+				$option['area_id'] = $get['area_id'];
+			}
 		}
 
 		$res = (new Users())->search($option,false);
