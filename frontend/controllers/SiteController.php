@@ -34,7 +34,7 @@ class SiteController extends Controller
         ];
     }
     public function actionIndex(){
-        echo "无权限";
+        $this->redirect(Url::toRoute("site/login"));
     }
 
     public function actionLogin(){
