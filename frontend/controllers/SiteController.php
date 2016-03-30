@@ -42,10 +42,10 @@ class SiteController extends Controller
         $get = Yii::$app->request->get();
         $session = Yii::$app->session;
         $session->open();
-        if(isset($get['accessUser']) && $get['accessUser'] == "worker"){
-            $session->set("accessUser","worker");
-        }else{
+        if(isset($get['accessUser']) && $get['accessUser'] == "user"){
             $session->set("accessUser","user");
+        }else{
+            $session->set("accessUser","worker");
         }
         if((new MyHelp())->isWeChat()){
             /**
