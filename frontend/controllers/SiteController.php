@@ -213,14 +213,14 @@ class SiteController extends Controller
 
             if($bind_extra_uid){
                 $extra = (new WorkerExtra())->createBind($bind_extra_uid,$worker->id);
-//                if($extra){
-//                    //绑定成功
-//                    $worker->wechat = $session->get("bind_extra_wechat");
-//                    $worker->save();
-//                }else{
-//                    //绑定失败
-//
-//                }
+                if($extra){
+                    //绑定成功
+                    $worker->wechat = $session->get("bind_extra_wechat");
+                    $worker->save();
+                }else{
+                    //绑定失败
+
+                }
             }else{
                 //直接登陆
             }
@@ -258,7 +258,7 @@ class SiteController extends Controller
 
 
     public function actionTest(){
-
-
+        $extra = (new WorkerExtra())->createBind("aasd",33);
+        dump($extra);
     }
 }

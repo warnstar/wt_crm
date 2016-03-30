@@ -27,7 +27,7 @@ class WorkerExtra extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['type', 'worker_id', 'create_time'], 'integer'],
+            [['type', 'user_id', 'create_time'], 'integer'],
             [['uid'], 'string', 'max' => 255],
         ];
     }
@@ -41,7 +41,7 @@ class WorkerExtra extends \yii\db\ActiveRecord
             'id' => 'ID',
             'type' => 'Type',
             'uid' => 'Uid',
-            'worker_id' => 'Worker ID',
+            'user_id' => 'Worker ID',
             'create_time' => 'Create Time',
         ];
     }
