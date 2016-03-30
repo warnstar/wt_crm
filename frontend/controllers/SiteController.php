@@ -125,6 +125,7 @@ class SiteController extends Controller
                 }else{
                     //跳转到职员绑定页面
                     $session->set("bind_extra_uid",$uid);
+                    $session->set("bind_extra_wechat",$wechat);
                     $this->redirect(Url::toRoute("site/worker_bind"));
                 }
             }
@@ -210,19 +211,19 @@ class SiteController extends Controller
             $session = Yii::$app->session;
             $bind_extra_uid = $session->get("bind_extra_uid");
 
-            if($bind_extra_uid){
-                $extra = (new WorkerExtra())->createBind($bind_extra_uid,$worker->id);
-                if($extra){
-                    //绑定成功
-                    $worker->wechat = $session->get("bind_extra_wechat");
-                    $worker->save();
-                }else{
-                    //绑定失败
-
-                }
-            }else{
-                //直接登陆
-            }
+//            if($bind_extra_uid){
+//                $extra = (new WorkerExtra())->createBind($bind_extra_uid,$worker->id);
+//                if($extra){
+//                    //绑定成功
+//                    $worker->wechat = $session->get("bind_extra_wechat");
+//                    $worker->save();
+//                }else{
+//                    //绑定失败
+//
+//                }
+//            }else{
+//                //直接登陆
+//            }
 
             //无论无何都是登陆成功
             $msg['status'] = 1;
