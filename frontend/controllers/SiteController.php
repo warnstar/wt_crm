@@ -115,7 +115,7 @@ class SiteController extends Controller
                      */
                     if($worker->role_id == 2){
                         //客服
-                        echo "暂时未做";exit;
+                        $msg['url'] = Url::toRoute("visit/un_visit_list");
                     }else if($worker->role_id == 3){
                         //对接人员
                         echo "暂时未做";exit;
