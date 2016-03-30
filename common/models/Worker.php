@@ -35,7 +35,7 @@ class Worker extends \yii\db\ActiveRecord
         return [
             [['sex', 'role_id', 'brand_id', 'area_id','status', 'create_time'], 'integer'],
             [['role_id'], 'required'],
-            [['name', 'password', 'phone', 'wchat'], 'string', 'max' => 255]
+            [['name', 'password', 'phone', 'wechat'], 'string', 'max' => 255]
         ];
     }
 
@@ -51,7 +51,7 @@ class Worker extends \yii\db\ActiveRecord
             'phone' => 'Phone',
             'sex' => 'Sex',
             'role_id' => 'Role ID',
-            'wchat' => 'Wchat',
+            'wechat' => 'Wechat',
             'brand_id' => 'Brand ID',
             'area_id' => 'Area ID',
             'status'    =>'Status',
