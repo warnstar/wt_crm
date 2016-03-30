@@ -66,6 +66,8 @@ class Medical_group_user extends \yii\db\ActiveRecord
             'brand_id'              =>  'b.id',
             'brand_name'            =>  'b.name',
 
+            'area_name'            =>  'a.name',
+
             'group_name'            =>  'mg.name',
             'group_join_time'       =>  'medical_group_user.create_time'
         ];
@@ -131,6 +133,7 @@ class Medical_group_user extends \yii\db\ActiveRecord
 
         $query->leftJoin(['users'],'medical_group_user.user_id=users.id')
             ->leftJoin(['mg'=>'medical_group'],'medical_group_user.medical_group_id=mg.id')
+            ->leftJoin(['a'=>"area"],'users.area_id=a.id')
             ->leftJoin(['b'=>'brand'],'mg.brand_id=b.id');
 
         /**
@@ -159,12 +162,12 @@ class Medical_group_user extends \yii\db\ActiveRecord
     }
 
     //待访客户
-    public function un_visit_users($option = null){
+    public function un_visit_users($option = null,$page = true){
         //brand_id,
         $option['un_visit'] = true;
 
 
-        $data = $this->search($option);
+        $data = $this->search($option,$page);
 
         return $data;
     }

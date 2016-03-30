@@ -118,14 +118,33 @@
 <body>
 
 <nav class="mui-bar mui-bar-tab">
-	<a class="mui-tab-item1 mui-active1 tab_change_search" href="#">
-		<span class="mui-icon mui-icon-search "></span>
-		<span class="mui-tab-label">查询</span>
-	</a>
-	<a class="mui-tab-item1 tab_change_list" href="#">
-		<span class="mui-icon mui-icon-bars"></span>
-		<span class="mui-tab-label">所有</span>
-	</a>
+	<nav class="mui-bar mui-bar-tab">
+		<?php $role_id = Yii::$app->session->get("role_id");?>
+
+		<?php if($role_id == 2):?>
+			<a class="mui-tab-item1" href="<?=\yii\helpers\Url::toRoute("visit/un_visit_list")?>">
+				<span class="mui-icon mui-icon-star"></span>
+				<span class="mui-tab-label">待仿</span>
+			</a>
+		<?php endif;?>
+
+		<?php if($role_id == 3):?>
+			<a class="mui-tab-item1" href="<?=\yii\helpers\Url::toRoute("visit/un_visit_list")?>">
+				<span class="mui-icon mui-icon-bars"></span>
+				<span class="mui-tab-label">待处理</span>
+			</a>
+		<?php endif;?>
+
+		<a class="mui-tab-item1 mui-active1" href="<?=\yii\helpers\Url::toRoute("users/search")?>">
+			<span class="mui-icon mui-icon-search"></span>
+			<span class="mui-tab-label">查询</span>
+		</a>
+
+		<a class="mui-tab-item1" href="<?=\yii\helpers\Url::toRoute("users/list")?>">
+			<span class="mui-icon mui-icon-bars"></span>
+			<span class="mui-tab-label">所有</span>
+		</a>
+	</nav>
 </nav>
 <div class="mui-content">
 	<form id='login-form' class="mui-input-group">

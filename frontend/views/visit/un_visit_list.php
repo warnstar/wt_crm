@@ -14,6 +14,7 @@
 	<link href="css/mui.poppicker.css" rel="stylesheet" />
 
 	<script src="js/jquery-2.2.2.min.js"></script>
+
 	<script type="text/javascript" charset="UTF-8">
 		var mui_data = {
 			medical_groups  :   <?=$medical_groups?>,
@@ -210,55 +211,51 @@
 	<span class="h-xuanzhe" id="sheng">所有区域</span>
 	<span class="h-xuanzhe" id='tuan'>所有出团</span>
 </header>
-
 <nav class="mui-bar mui-bar-tab">
-	<nav class="mui-bar mui-bar-tab">
-		<?php $role_id = Yii::$app->session->get("role_id");?>
+	<?php $role_id = Yii::$app->session->get("role_id");?>
 
-		<?php if($role_id == 2):?>
-			<a class="mui-tab-item1" href="<?=\yii\helpers\Url::toRoute("visit/un_visit_list")?>">
-				<span class="mui-icon mui-icon-star"></span>
-				<span class="mui-tab-label">待仿</span>
-			</a>
-		<?php endif;?>
+	<?php if($role_id == 2):?>
+	<a class="mui-tab-item1 mui-active1" href="<?=\yii\helpers\Url::toRoute("visit/un_visit_list")?>">
+		<span class="mui-icon mui-icon-star"></span>
+		<span class="mui-tab-label">待仿</span>
+	</a>
+	<?php endif;?>
 
-		<?php if($role_id == 3):?>
-			<a class="mui-tab-item1" href="<?=\yii\helpers\Url::toRoute("visit/un_visit_list")?>">
-				<span class="mui-icon mui-icon-bars"></span>
-				<span class="mui-tab-label">待处理</span>
-			</a>
-		<?php endif;?>
+	<?php if($role_id == 3):?>
+	<a class="mui-tab-item1" href="<?=\yii\helpers\Url::toRoute("visit/un_visit_list")?>">
+		<span class="mui-icon mui-icon-bars"></span>
+		<span class="mui-tab-label">待处理</span>
+	</a>
+	<?php endif;?>
 
-		<a class="mui-tab-item1 " href="<?=\yii\helpers\Url::toRoute("users/search")?>">
-			<span class="mui-icon mui-icon-search"></span>
-			<span class="mui-tab-label">查询</span>
-		</a>
+	<a class="mui-tab-item1 " href="<?=\yii\helpers\Url::toRoute("users/search")?>">
+		<span class="mui-icon mui-icon-search"></span>
+		<span class="mui-tab-label">查询</span>
+	</a>
 
-		<a class="mui-tab-item1 mui-active1" href="<?=\yii\helpers\Url::toRoute("users/list")?>">
-			<span class="mui-icon mui-icon-bars"></span>
-			<span class="mui-tab-label">所有</span>
-		</a>
-	</nav>
+	<a class="mui-tab-item1" href="<?=\yii\helpers\Url::toRoute("users/list")?>">
+		<span class="mui-icon mui-icon-bars"></span>
+		<span class="mui-tab-label">所有</span>
+	</a>
 </nav>
 <div class="mui-content">
 
 	<ul class="mui-table-view mui-table-view-chevron">
 
-
-		<?php if($users) foreach($users as $v):?>
+		<?php if($mgu) foreach($mgu as $v):?>
 		<li class="mui-table-view-cell">
-			<a href="<?=\yii\helpers\Url::toRoute("users/detail_worker") . "&user_id=" . $v['id']?>" class="mui-navigate-right">
-				<span id="name" class="h-row w25"><?=$v['name']?></span>
-				<span id="sex"  class="h-row w5"><?=$v['sex'] == 1 ? "男" : "女"?></span>
+			<a href="<?=\yii\helpers\Url::toRoute("visit/visit_do") . "&id=" . $v['id']?> " class="mui-navigate-right">
+				<span id="name" class="h-row w25"><?=$v['user_name']?></span>
+				<span id="sex"  class="h-row w5"><?=$v['user_sex'] == 1 ? "男" : "女"?></span>
 				<span id="sex"  class="h-row w25"><?=$v['area_name']?></span>
 				<span id="status"  class="h-row w25">
 					<?php
-					if(!$v['last_mgu'])
+					if(!$v['id'])
 						echo "无疗程";
-					else if($v['start_time_mgu'] > time()){
+					else if($v['start_time'] > time()){
 						echo "未开始";
 					}
-					else if($v['end_time_mgu'] < time()){
+					else if($v['end_time'] < time()){
 						echo "已结束";
 					}else{
 						echo "疗程中";
@@ -268,23 +265,14 @@
 			</a>
 		</li>
 		<?php endforeach;?>
-
 	</ul>
 </div>
-
+</div>
 </body>
-<script>
-	$(".tab_change_search").click(function(){
-		var url = "<?=\yii\helpers\Url::toRoute("users/search")?>";
-		location.href = url;
-	});
-	$(".tab_change_list").click(function(){
-		var url = "<?=\yii\helpers\Url::toRoute("users/list")?>";
-		location.href = url;
-	});
 
+<script>
 	function area_filter(area_higher_id,area_id){
-		var url  = "<?=\yii\helpers\Url::toRoute("users/list")?>";
+		var url  = "<?=\yii\helpers\Url::toRoute("visit/un_visit_list")?>";
 		if(area_id == 0){
 			url = url + "&area_higher_id=" + area_higher_id;
 		}else{
@@ -294,9 +282,8 @@
 		location.href = url;
 	}
 	function group_filter(medical_group_id){
-		var url = "<?=\yii\helpers\Url::toRoute("users/list")?>" + "&medical_group_id=" + medical_group_id;
+		var url = "<?=\yii\helpers\Url::toRoute("visit/un_visit_list")?>" + "&medical_group_id=" + medical_group_id;
 		location.href = url;
 	}
-
 </script>
 </html>
