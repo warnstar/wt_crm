@@ -108,7 +108,7 @@ class WorkerController extends CommonController
         }else{
             if($worker->save()){
                 if(isset($old_brand)){
-                    $old_brand->manager_id = null;
+                    $old_brand->manager_id = 0;
                     $old_brand->save();
                 }
 
