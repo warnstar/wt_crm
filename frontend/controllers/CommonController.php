@@ -21,6 +21,7 @@ class CommonController extends Controller {
     public $worker_id   = null;
     public $user_id     = null;
     public $access_type = null;//1=职员，0=客户
+    
     public function beforeAction($event) {
 
         $auth   = Yii::$app->authManager;
