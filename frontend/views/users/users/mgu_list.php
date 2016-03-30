@@ -43,7 +43,7 @@
 	<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed">
 		<?php if($groups) foreach($groups as $v):?>
 		<li class="mui-table-view-cell">
-			<a href="<?=\yii\helpers\Url::toRoute("users/detail_worker") . "&mgu_id=" . $v['id'] . "&user_id=" . $v['user_id']?>">
+			<a href="<?=\yii\helpers\Url::toRoute("users/detail") . "&mgu_id=" . $v['id']?>">
 				<div class="mui-table">
 					<div class="mui-table-cell mui-col-xs-10">
 						<h4 class="mui-ellipsis"><?=$v['group_name']?></h4>

@@ -151,6 +151,61 @@
 		.mui-navigate-right:after, .mui-push-right:after{
 			right: 40px;
 		}
+		//--------
+		  .mui-bar-tab .mui-tab-item1 {
+			  display: table-cell;
+			  overflow: hidden;
+			  width: 1%;
+			  height: 50px;
+			  text-align: center;
+			  vertical-align: middle;
+			  white-space: nowrap;
+			  text-overflow: ellipsis;
+			  color: #929292;
+			  float: left;
+		  }
+
+		.mui-bar-tab .mui-tab-item1.mui-active1 {
+			color: #007aff;
+		}
+
+		.mui-bar-tab .mui-tab-item1 .mui-icon {
+			top: 3px;
+			width: 24px;
+			height: 24px;
+			padding-top: 0;
+			padding-bottom: 0;
+		}
+
+		.mui-bar-tab .mui-tab-item1 .mui-icon ~ .mui-tab-label {
+			font-size: 11px;
+			display: block;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		.mui-bar-tab .mui-tab-item1 .mui-icon:active {
+			background: none;
+		}
+		.mui-tab-item1.mui-plus-hidden, .mui-tab-item1.mui-wechat-hidden
+		{
+			display: table-cell !important;
+		}
+		.mui-bar-tab .mui-tab-item1
+		{
+			display: table-cell;
+			overflow: hidden;
+
+			width: 1%;
+			height: 50px;
+
+			text-align: center;
+			vertical-align: middle;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+
+			color: #929292;
+		}
 	</style>
 </head>
 
@@ -161,11 +216,11 @@
 </header>
 
 <nav class="mui-bar mui-bar-tab">
-	<a class="mui-tab-item tab_change_search" href="#">
+	<a class="mui-tab-item1 tab_change_search" href="#">
 		<span class="mui-icon mui-icon-search "></span>
 		<span class="mui-tab-label">查询</span>
 	</a>
-	<a class="mui-tab-item mui-active tab_change_list" href="#">
+	<a class="mui-tab-item1 mui-active1 tab_change_list" href="#">
 		<span class="mui-icon mui-icon-bars"></span>
 		<span class="mui-tab-label">所有</span>
 	</a>
@@ -173,17 +228,11 @@
 <div class="mui-content">
 
 	<ul class="mui-table-view mui-table-view-chevron">
-		<li class="mui-table-view-cell">
-				<span id="name" class="h-row w25">姓名</span>
-				<span id="sex"  class="h-row w5">性别</span>
-				<span id="sex"  class="h-row w25">所属区域</span>
-				<span id="status"  class="h-row w25">疗程状态</span>
 
-		</li>
 
 		<?php if($users) foreach($users as $v):?>
 		<li class="mui-table-view-cell">
-			<a href="" class="mui-navigate-right">
+			<a href="<?=\yii\helpers\Url::toRoute("users/detail_worker") . "&user_id=" . $v['id']?>" class="mui-navigate-right">
 				<span id="name" class="h-row w25"><?=$v['name']?></span>
 				<span id="sex"  class="h-row w5"><?=$v['sex'] == 1 ? "男" : "女"?></span>
 				<span id="sex"  class="h-row w25"><?=$v['area_name']?></span>

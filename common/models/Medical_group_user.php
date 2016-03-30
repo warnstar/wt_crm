@@ -72,6 +72,7 @@ class Medical_group_user extends \yii\db\ActiveRecord
         $query->select($select);
 
 
+
         if($option){
             //待访问客户
             if(isset($option['un_visit']) && $option['un_visit']){
@@ -149,6 +150,7 @@ class Medical_group_user extends \yii\db\ActiveRecord
             $data['list'] = $list;
             $data['pages'] = $pages;
         }else{
+            
             $data['list'] = $query->asArray()->all();
         }
 

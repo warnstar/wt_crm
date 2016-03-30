@@ -88,7 +88,6 @@ class SiteController extends Controller
                 if($user){
                     //用户已绑定，登陆成功
                     $session->set("user_id",$user->id);
-                    $session->set("access_type",0);//客户
                     $this->redirect(yii\helpers\Url::toRoute("users/detail"));
                 }else{
                     //跳转到用户绑定页面

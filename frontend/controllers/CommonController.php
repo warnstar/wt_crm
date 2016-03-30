@@ -20,8 +20,8 @@ class CommonController extends Controller {
     public $area_id     = null;
     public $worker_id   = null;
     public $user_id     = null;
-    public $access_type = null;//1=职员，0=客户
-    
+    public $accessUser = null;
+
     public function beforeAction($event) {
 
         $auth   = Yii::$app->authManager;
@@ -30,8 +30,8 @@ class CommonController extends Controller {
         $session->open();
 
 
-        $access_type = $session->get("accessUser");
-        if($access_type == "worker"){
+        $this->accessUser = $session->get("accessUser");
+        if($this->accessUser == "worker"){
             //职员通道
             $worker_id = $session->get("worker_id");
             $role_id = $session->get("role_id");
@@ -45,7 +45,7 @@ class CommonController extends Controller {
                 $this->worker_id = $worker_id;
                 return true;
             }
-        }else if($access_type == 0){
+        }else if($this->accessUser == "user"){
             //客户通道
             $user_id = $session->get("user_id");
             if($user_id){
