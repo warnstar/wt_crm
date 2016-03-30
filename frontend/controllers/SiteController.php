@@ -121,7 +121,7 @@ class SiteController extends Controller
                         echo "暂时未做";exit;
                     }else{
                         //大区经理
-                        $msg['url'] = Url::toRoute("users/search");
+                        $this->redirect(yii\helpers\Url::toRoute("users/search"));
                     }
                 }else{
                     //跳转到职员绑定页面
@@ -260,6 +260,6 @@ class SiteController extends Controller
 
 
     public function actionTest(){
-        
+
     }
 }
