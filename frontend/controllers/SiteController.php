@@ -211,8 +211,8 @@ class SiteController extends Controller
             $session = Yii::$app->session;
             $bind_extra_uid = $session->get("bind_extra_uid");
 
-//            if($bind_extra_uid){
-//                $extra = (new WorkerExtra())->createBind($bind_extra_uid,$worker->id);
+            if($bind_extra_uid){
+                $extra = (new WorkerExtra())->createBind($bind_extra_uid,$worker->id);
 //                if($extra){
 //                    //绑定成功
 //                    $worker->wechat = $session->get("bind_extra_wechat");
@@ -221,9 +221,9 @@ class SiteController extends Controller
 //                    //绑定失败
 //
 //                }
-//            }else{
-//                //直接登陆
-//            }
+            }else{
+                //直接登陆
+            }
 
             //无论无何都是登陆成功
             $msg['status'] = 1;
