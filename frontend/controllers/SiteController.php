@@ -100,6 +100,7 @@ class SiteController extends Controller
                  * 职员通道
                  **/
                 $worker = (new WorkerExtra())->getUser($uid);
+
                 if($worker){
                     //职员已绑定，登陆成功
                     $session->set("worker_id",$worker->id);
@@ -213,14 +214,15 @@ class SiteController extends Controller
 
             if($bind_extra_uid){
                 $extra = (new WorkerExtra())->createBind($bind_extra_uid,$worker->id);
-//                if($extra){
-//                    //绑定成功
-//                    $worker->wechat = $session->get("bind_extra_wechat");
-//                    $worker->save();
-//                }else{
-//                    //绑定失败
-//
-//                }
+                if($extra){
+                    //绑定成功
+                    $worker_now = (new Worker())->findOne($worker->id);
+                    $worker_now->wechat = $session->get("bind_extra_wechat");
+                    $worker_now->save();
+                }else{
+                    //绑定失败
+
+                }
             }else{
                 //直接登陆
             }
@@ -258,7 +260,6 @@ class SiteController extends Controller
 
 
     public function actionTest(){
-        $extra = (new WorkerExtra())->createBind("aasd",33);
-        dump($extra);
+        
     }
 }

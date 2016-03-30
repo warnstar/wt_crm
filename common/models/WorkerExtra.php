@@ -57,7 +57,7 @@ class WorkerExtra extends \yii\db\ActiveRecord
 
         $extra = $query->where(['uid'=>$uid])->one();
         if($extra){
-            $user = (new Worker())->find()->where(['id'=>$extra->uid])->one();
+            $user = (new Worker())->find()->where(['id'=>$extra->user_id])->one();
             return $user;
         }else{
             return null;
