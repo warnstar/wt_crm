@@ -94,7 +94,7 @@
 								<td class="project-title"><?=$v['role_name']?></td>
 								<td class="project-title"><?=$v['brand_name']?></td>
 								<td class="project-title"><?=$v['area_name']?></td>
-								<td class="project-title"><?=$v['wchat']?></td>
+								<td class="project-title"><?=$v['wechat']?></td>
 
 								<td >
 									<a href="<?=\yii\helpers\Url::toRoute("worker/detail") . "&id=" . $v['id']?>" class=" btn btn-white btn-sm">查看详情</a>

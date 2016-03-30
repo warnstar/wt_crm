@@ -58,7 +58,7 @@ class Users extends \yii\db\ActiveRecord
             'status' => 'Status',
             'brand_id'=>'Brand_id',
             'area_id' => 'Area ID',
-            'wchat' => 'Wchat',
+            'wechat' => 'Wechat',
             'create_time' => 'Create Time',
         ];
     }
