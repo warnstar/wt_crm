@@ -35,12 +35,8 @@
 						}else{
 							cityResult.innerText =  items[0].text;
 						}
+						area_filter(items[0].value,items[1].value);
 
-						if(items[1].value){
-							area_filter(items[1].value);
-						}else{
-							area_filter(0);
-						}
 						//返回 false 可以阻止选择框的关闭
 						//return false;
 					});
@@ -268,8 +264,14 @@
 		location.href = url;
 	});
 
-	function area_filter(area_id){
-		var url = "<?=\yii\helpers\Url::toRoute("users/list")?>" + "&area_id=" + area_id;
+	function area_filter(area_higher_id,area_id){
+		var url  = "<?=\yii\helpers\Url::toRoute("users/list")?>";
+		if(area_id == 0){
+			url = url + "&area_higher_id=" + area_higher_id;
+		}else{
+			url = url + "&area_id=" + area_id;
+		}
+
 		location.href = url;
 	}
 	function group_filter(medical_group_id){

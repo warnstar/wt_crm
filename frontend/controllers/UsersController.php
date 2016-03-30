@@ -179,6 +179,11 @@ class UsersController extends CommonController
 				$option['area_id'] = $get['area_id'];
 			}
 		}
+		//筛选上级区域
+		if(isset($get['area_higher_id']) && $get['area_higher_id']){
+			$option['area_higher_id'] = $get['area_higher_id'];
+
+		}
 
 		$res = (new Users())->search($option,false);
 		$data['users'] = $res['list'];
@@ -186,36 +191,17 @@ class UsersController extends CommonController
 		/**
 		 * 获取出团列表
 		 */
-		$group_mui = [];
-		$groups = (new Medical_group())->find()->where(['brand_id'=>$this->brand_id])->all();
-		if($groups){
-			foreach ($groups as $k=>$v){
-				$group_mui[$k]['text'] = $v->name;
-				$group_mui[$k]['value'] = $v->id;
-			}
-			$all_group = [
-				"text"  =>   "所有出团",
-				"value" =>   "0"
-			];
-			array_unshift($group_mui,$all_group);
-		}
+		$group_mui = (new Medical_group())->getGroupsMui($this->brand_id);
 		$data['medical_groups'] = json_encode($group_mui);
 
 		/**
 		 * 获取区域列表
 		 */
-		$area_mui = (new Area())->getAreaMui();
-		$all_area = [
-			"text"  =>   "所有区域",
-			"value" =>   "0"
-		];
-		array_unshift($area_mui,$all_area);
+		$area_mui = (new Area())->getAreaMui($this->role_id,$this->area_id);
 		$data['areas'] = json_encode($area_mui);
 		
 
 		return $this->renderPartial("users_list",$data);
 	}
 
-
-	
 }

@@ -200,25 +200,69 @@ class Area extends \yii\db\ActiveRecord
         return $msg;
     }
 
-    public function getAreaMui(){
+    public function getAreaMui($role_id,$area_id){
         $area_mui = [];
-        $area_higher = $this->find()->where(['parent_id'=>0])->asArray()->all();
+        $area_higher = [];
+        if($role_id == 5){
+            //区域总监
+            $area_higher = $this->find()->where(['parent_id'=>$area_id])->asArray()->all();
+        }else if($role_id == 6){
+            //大区经理
+            $this_area = $this->find()->where(['id'=>$area_id])->one();
+            if($this_area){
+                $area_higher = $this->find()->where(['id'=>$this_area->parent_id])->asArray()->all();
+            }
+
+        }else{
+            $area_higher = $this->find()->where(['parent_id'=>0])->asArray()->all();
+        }
+
         if($area_higher){
             foreach ($area_higher as $k=>$v){
                 $area_mui[$k]['text'] = $v['name'];
                 $area_mui[$k]['value'] = $v['id'];
 
-                $childrens = $this->find()->where(['parent_id'=>$v['id']])->asArray()->all();
+                if($role_id == 6){
+                    $childrens = $this->find()->where(['id'=>$area_id])->asArray()->all();
+                }else{
+                    $childrens = $this->find()->where(['parent_id'=>$v['id']])->asArray()->all();
+                }
+
+                $child = [];
                 if($childrens){
-                    $child = [];
                     foreach ($childrens as $kk=>$vv){
                         $child[$kk]['text'] = $vv['name'];
                         $child[$kk]['value'] = $vv['id'];
                     }
+                    $all_child = [
+                        "text"  =>   "所有区域",
+                        "value" =>   0
+                    ];
+                    array_unshift($child,$all_child);
+
                     $area_mui[$k]['children'] = $child;
+                }else{
+                    $all_child = [
+                        "text"  =>   "所有区域",
+                        "value" =>   0
+                    ];
+                    $area_mui[$k]['children'][] = $all_child;
                 }
+
             }
         }
+        $all_area = [
+            "text"  =>   "所有区域",
+            "value" =>   "0",
+            "children"  =>  [
+                [
+                    "text"  =>   "所有区域",
+                    "value" =>   "0"
+                ]
+            ]
+        ];
+        array_unshift($area_mui,$all_area);
+
         return $area_mui;
     }
 }

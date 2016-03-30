@@ -299,9 +299,12 @@ class Worker extends \yii\db\ActiveRecord
      * 获取职员的权限区域
      * @return int|mixed
      */
-    public function getRangeArea(){
+    public function getRangeArea($id){
+
+        $worker = $this->findOne($id);
+
         $area_id = 0;
-        switch ($this->role_id){
+        switch ($worker->role_id){
             case 2 :
                 //客服
                 break;
@@ -313,16 +316,17 @@ class Worker extends \yii\db\ActiveRecord
                 break;
             case 5 :
                 //区域总监
-                $this_area = (new Area())->find()->where(['id'=>$this->area_id])->one();
+                $this_area = (new Area())->find()->where(['id'=>$worker->area_id])->one();
                 $area_id = $this_area->parent_id;
                 break;
             case 6 :
                 //大区经理
-                $area_id = $this->area_id;
+                $area_id = $worker->area_id;
                 break;
             default :
                 break;
         }
+        
         return $area_id;
     }
     public function exist(){

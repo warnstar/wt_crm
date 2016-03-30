@@ -164,5 +164,22 @@ class Medical_group extends \yii\db\ActiveRecord
 
         return $msg;
     }
-    
+
+    public function getGroupsMui($brand_id = 0){
+        $group_mui = [];
+        $groups = (new Medical_group())->find()->where(['brand_id'=>$brand_id])->all();
+        if($groups){
+            foreach ($groups as $k=>$v){
+                $group_mui[$k]['text'] = $v->name;
+                $group_mui[$k]['value'] = $v->id;
+            }
+            $all_group = [
+                "text"  =>   "所有出团",
+                "value" =>   "0"
+            ];
+            array_unshift($group_mui,$all_group);
+        }
+
+        return $group_mui;
+    }
 }

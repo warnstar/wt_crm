@@ -106,7 +106,7 @@ class SiteController extends Controller
                     $session->set("worker_id",$worker->id);
                     $session->set("brand_id",$worker->brand_id);
 
-                    $area_id = (new Worker())->getRangeArea();
+                    $area_id = (new Worker())->getRangeArea($worker->id);
                     $session->set("area_id",$area_id);
 
                     $session->set("role_id",$worker->role_id);
@@ -233,7 +233,7 @@ class SiteController extends Controller
             $session->set("worker_id",$worker->id);
             $session->set("brand_id",$worker->brand_id);
 
-            $area_id = (new Worker())->getRangeArea();
+            $area_id = (new Worker())->getRangeArea($worker->id);
             $session->set("area_id",$area_id);
 
             $session->set("role_id",$worker->role_id);
