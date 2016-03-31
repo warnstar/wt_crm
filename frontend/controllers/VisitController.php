@@ -57,6 +57,10 @@ class VisitController extends CommonController
         $data['visit'] = (new Visit())->detail($id);
 
         $option['visit_id'] = $id;
+        //大区经理的权限范围
+        if($this->role_id !=2 && $this->role_id !=3){
+            $option['user_view'] = 1;
+        }
         $data['visit_notes'] = (new Note())->search($option);
 
 
@@ -131,7 +135,12 @@ class VisitController extends CommonController
 
         if($id){
             $option['mgu_id'] = $id;
-            $option['user_view'] = 1;
+
+            //大区经理的权限范围
+            if($this->role_id !=2 && $this->role_id !=3){
+                $option['user_view'] = 1;
+            }
+
             $data['visit_notes'] = (new Note())->search($option);
         }
 
@@ -265,12 +274,15 @@ class VisitController extends CommonController
     public function actionVisit_note_add(){
         $mgu_id = Yii::$app->request->get("mgu_id");
         if($mgu_id){
-            $data['types'] = (new Note_type())->find()->asArray()->all();
+            $types = (new Note_type())->getMui();
+            $data['types'] = json_encode($types);
             $data['mgu_id'] = $mgu_id;
 
             //异常备注
+
             $data['type'] = Yii::$app->request->get('type');
             $data['visit_id'] = Yii::$app->request->get('visit_id');
+
 
             return $this->renderPartial("visit_note_add",$data);
         }else{
@@ -324,6 +336,7 @@ class VisitController extends CommonController
             //存储备注内容
             if($note->content){
                 if($note->save()){
+
                     $msg['status'] = 1;
                 }else{
                     $note->delete();
@@ -361,19 +374,6 @@ class VisitController extends CommonController
 
 
         return $this->render("error_un_do",$data);
-    }
-    
-    public function actionError_un_do_ajax(){
-        $get = Yii::$app->request->get();
-        if($this->role_id != 1){
-            $get['brand_id'] = $this->brand_id;
-        }
-
-        $res = (new Visit())->undo_error_users($get);
-        $data['list'] = $res['list'];
-        $data['pages'] = $res['pages'];
-
-        return $this->renderPartial("error_un_do_ajax",$data);
     }
 
     //处理问题（对接人员处理问题）

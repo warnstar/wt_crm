@@ -74,4 +74,23 @@ class Note_type extends \yii\db\ActiveRecord
 
         return $msg;
     }
+
+    public function getMui(){
+
+        $types_mui = [];
+        $types = $this->find()->all();
+        if($types){
+            foreach ($types as $k=>$v){
+                $types_mui[$k]['text'] = $v->name;
+                $types_mui[$k]['value'] = $v->id;
+            }
+            $all_types = [
+                "text"  =>   "所有类型",
+                "value" =>   "0"
+            ];
+            array_unshift($types_mui,$all_types);
+        }
+
+        return $types_mui;
+    }
 }

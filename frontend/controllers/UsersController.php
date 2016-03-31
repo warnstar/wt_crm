@@ -9,6 +9,7 @@
 namespace frontend\controllers;
 
 
+use common\lib\Vote;
 use common\models\Area;
 use common\models\Medical_group;
 use common\models\Medical_group_user;
@@ -119,7 +120,10 @@ class UsersController extends CommonController
 
 					if($user['last_mgu']){
 						$option['mgu_id'] = $mgu_id;
-						$option['user_view'] = 1;
+						//大区经理的权限范围
+						if($this->role_id !=2 && $this->role_id !=3){
+							$option['user_view'] = 1;
+						}
 						$data['visit_notes'] = (new Note())->search($option);
 					}
 
@@ -129,7 +133,10 @@ class UsersController extends CommonController
 
 					if($user['last_mgu']){
 						$option['mgu_id'] = $user['last_mgu'];
-						$option['user_view'] = 1;
+						//大区经理的权限范围
+						if($this->role_id !=2 && $this->role_id !=3){
+							$option['user_view'] = 1;
+						}
 						$data['visit_notes'] = (new Note())->search($option);
 					}
 					return $this->renderPartial("users_detail",$data);
@@ -203,5 +210,7 @@ class UsersController extends CommonController
 
 		return $this->renderPartial("users_list",$data);
 	}
-
+	public function actionTest(){
+		 \Thread::getCurrentThread();
+	}
 }
