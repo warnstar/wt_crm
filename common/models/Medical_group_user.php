@@ -90,7 +90,7 @@ class Medical_group_user extends \yii\db\ActiveRecord
                 $query->orWhere("medical_group_user.last_visit = 0");
 
                 //不现实已经结束的
-                $query->orWhere("medical_group_user.end_time > $this_time");
+                $query->andWhere("medical_group_user.end_time >= $this_time");
             }
 
             //获取有待访客户的品牌。
