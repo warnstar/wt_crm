@@ -130,7 +130,7 @@
 		var mask = mui.createMask(function(){return false;});//callback为用户点击蒙版时自动执行的回调；
 		my_show(mask);
 		$.post(url,data,function(msg){
-			mask.close();
+			my_close();
 			if(msg.status){
 				alert("创建异常备注成功");
 				location.href = "<?=\yii\helpers\Url::toRoute("visit/un_visit_list")?>";

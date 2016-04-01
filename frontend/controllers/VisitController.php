@@ -312,6 +312,7 @@ class VisitController extends CommonController
 
         $msg['status'] = 0;
 
+        
 
         if($note->save()){
 
@@ -335,6 +336,7 @@ class VisitController extends CommonController
 
             //存储备注内容
             if($note->content){
+
                 if($note->save()){
 
                     $msg['status'] = 1;

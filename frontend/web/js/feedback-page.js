@@ -56,6 +56,7 @@
 		var fileInput = document.createElement('input');
 		fileInput.setAttribute('type', 'file');
 		fileInput.setAttribute('accept', 'image/*');
+		fileInput.setAttribute('class', 'img_data');
 		fileInput.setAttribute('id', 'image-' + imageIndexIdNum);
 		fileInput.addEventListener('change', function(event) {
 			var file = fileInput.files[0];

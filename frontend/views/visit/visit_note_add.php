@@ -238,10 +238,17 @@
 <script>
 	//提交表单
 	$("body").on('click','.content_type',function(){
+		//loading 遮罩
+		var mask = mui.createMask(function(){});//callback为用户点击蒙版时自动执行的回调；
+		my_show(mask);
+		
 
 		var data = get_data($(this).val());
+		if(data){
+			add_commit(data);
+		}
 
-		add_commit(data);
+		my_close();
 	});
 
 	//设置下拉选框的值
@@ -274,8 +281,8 @@
 			return false;
 		}else{
 			formdata.append('general_note_type',select_data);
-		}
 
+		}
 		/**
 		 * 异常备注情况
 		 */
@@ -297,22 +304,19 @@
 			for(var i=0;i<img_data.length;i++){
 				formdata.append('content_img_'+ i, img_data[i].files[0]);
 			}
+			console.log(img_data);
 		}else if(content_type == 3){
 			var file_data = document.getElementsByClassName("file_data")[0];
 			formdata.append('content_file', file_data.files[0]);
 		}
 
 		return formdata;
+
 	}
 
 	function add_commit(formdata){
 
 		var url = "<?=\yii\helpers\Url::toRoute("visit/visit_note_save")?>";
-
-
-		//loading 遮罩
-		var mask = mui.createMask(function(){return false;});//callback为用户点击蒙版时自动执行的回调；
-		my_show(mask);
 
 
 		$.ajax({
@@ -323,7 +327,7 @@
 			processData: false,  // 告诉jQuery不要去处理发送的数据
 			contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
 			success:function(msg){
-				mask.close();
+
 				if(msg.status){
 					alert("创建成功！");
 					history.go(-1);
@@ -332,7 +336,7 @@
 				}
 			},
 			error:function(XmlHttpRequest,textStatus,errorThrown){
-				mask.close();
+
 //				alert('添加失败!');
 //				console.log(XmlHttpRequest);
 //				console.log(textStatus);
