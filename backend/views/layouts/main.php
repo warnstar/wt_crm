@@ -225,6 +225,7 @@
     $('.menu_index').on('click',function(){
         var index_path = $(this).attr('menu_index');
         $.session.set('menu_index',index_path);
+
     });
 </script>
 </html>

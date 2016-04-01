@@ -13,6 +13,9 @@
 	<link href="css/feedback-page.css" rel="stylesheet" />
 	<link href="css/mui.poppicker.css" rel="stylesheet" />
 
+	<!--loading 显示-->
+	<link rel="stylesheet" type="text/css" href="css/my.css"/>
+	<script src="js/my.js" type="text/javascript" charset="utf-8"></script>
 
 	<script src="js/jquery-2.2.2.min.js"></script>
 
@@ -306,6 +309,12 @@
 
 		var url = "<?=\yii\helpers\Url::toRoute("visit/visit_note_save")?>";
 
+
+		//loading 遮罩
+		var mask = mui.createMask(function(){return false;});//callback为用户点击蒙版时自动执行的回调；
+		my_show(mask);
+
+
 		$.ajax({
 			url:url,
 			type:'POST',
@@ -314,6 +323,7 @@
 			processData: false,  // 告诉jQuery不要去处理发送的数据
 			contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
 			success:function(msg){
+				mask.close();
 				if(msg.status){
 					alert("创建成功！");
 					history.go(-1);
@@ -322,6 +332,7 @@
 				}
 			},
 			error:function(XmlHttpRequest,textStatus,errorThrown){
+				mask.close();
 //				alert('添加失败!');
 //				console.log(XmlHttpRequest);
 //				console.log(textStatus);

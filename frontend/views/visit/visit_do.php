@@ -8,6 +8,10 @@
 	<script src="js/mui.min.js"></script>
 	<link href="css/mui.min.css" rel="stylesheet" />
 
+	<!--loading 显示-->
+	<link rel="stylesheet" type="text/css" href="css/my.css"/>
+	<script src="js/my.js" type="text/javascript" charset="utf-8"></script>
+
 	<script src="js/jquery-2.2.2.min.js"></script>
 
 	<script type="text/javascript" charset="UTF-8">
@@ -369,7 +373,12 @@
 		var data = {
 			id      :   "<?=$mgu['id']?>"
 		};
+		
+		//loading 遮罩
+		var mask = mui.createMask(function(){return false;});//callback为用户点击蒙版时自动执行的回调；
+		my_show(mask);
 		$.post(url,data,function(msg){
+			mask.close();
 			if(msg.status){
 				alert("回访完成！");
 				location.href = "<?=\yii\helpers\Url::toRoute("visit/un_visit_list")?>";

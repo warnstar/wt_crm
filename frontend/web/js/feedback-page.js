@@ -55,7 +55,6 @@
 		}, false);
 		var fileInput = document.createElement('input');
 		fileInput.setAttribute('type', 'file');
-		fileInput.setAttribute('class', 'img_data');
 		fileInput.setAttribute('accept', 'image/*');
 		fileInput.setAttribute('id', 'image-' + imageIndexIdNum);
 		fileInput.addEventListener('change', function(event) {

@@ -13,6 +13,10 @@
 	<link href="css/mui.picker.css" rel="stylesheet" />
 	<link href="css/mui.poppicker.css" rel="stylesheet" />
 
+	<!--loading 显示-->
+	<link rel="stylesheet" type="text/css" href="css/my.css"/>
+	<script src="js/my.js" type="text/javascript" charset="utf-8"></script>
+
 	<script src="js/jquery-2.2.2.min.js"></script>
 
 	<script type="text/javascript" charset="UTF-8">
@@ -121,9 +125,12 @@
 			next_day        :   get_next_day(),
 			notify_user     :   notify_user
 		};
-		
-		$.post(url,data,function(msg){
 
+		//loading 遮罩
+		var mask = mui.createMask(function(){return false;});//callback为用户点击蒙版时自动执行的回调；
+		my_show(mask);
+		$.post(url,data,function(msg){
+			mask.close();
 			if(msg.status){
 				alert("创建异常备注成功");
 				location.href = "<?=\yii\helpers\Url::toRoute("visit/un_visit_list")?>";
