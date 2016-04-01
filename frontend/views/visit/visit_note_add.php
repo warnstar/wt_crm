@@ -248,7 +248,7 @@
 			add_commit(data);
 		}
 
-		my_close();
+
 	});
 
 	//设置下拉选框的值
@@ -318,7 +318,9 @@
 
 		var url = "<?=\yii\helpers\Url::toRoute("visit/visit_note_save")?>";
 
-
+		//loading 遮罩
+		var mask = mui.createMask(function(){return false;});//callback为用户点击蒙版时自动执行的回调；
+		my_show(mask);
 		$.ajax({
 			url:url,
 			type:'POST',
@@ -327,7 +329,7 @@
 			processData: false,  // 告诉jQuery不要去处理发送的数据
 			contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
 			success:function(msg){
-
+				my_close();
 				if(msg.status){
 					alert("创建成功！");
 					history.go(-1);
@@ -336,7 +338,7 @@
 				}
 			},
 			error:function(XmlHttpRequest,textStatus,errorThrown){
-
+				my_close();
 //				alert('添加失败!');
 //				console.log(XmlHttpRequest);
 //				console.log(textStatus);

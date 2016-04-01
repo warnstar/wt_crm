@@ -126,9 +126,8 @@
 			password    :   $(".password_data").val()
 		};
 
-		//loading 遮罩
-		var mask = mui.createMask(function(){return false;});//callback为用户点击蒙版时自动执行的回调；
-		my_show(mask);
+		
+		
 		$.post(url,data,function(msg){
 			my_close();
 			if(msg.status){
