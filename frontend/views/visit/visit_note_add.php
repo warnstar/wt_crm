@@ -238,11 +238,6 @@
 <script>
 	//提交表单
 	$("body").on('click','.content_type',function(){
-		//loading 遮罩
-		var mask = mui.createMask(function(){});//callback为用户点击蒙版时自动执行的回调；
-		my_show(mask);
-		
-
 		var data = get_data($(this).val());
 		if(data){
 			add_commit(data);

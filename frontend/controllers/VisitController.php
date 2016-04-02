@@ -133,6 +133,7 @@ class VisitController extends CommonController
         $data['mgu_id'] = $id;
         $data['mgu'] = (new Medical_group_user())->detail($id);
 
+        $data['visit_notes']  = [];
         if($id){
             $option['mgu_id'] = $id;
 
@@ -358,25 +359,63 @@ class VisitController extends CommonController
 
     //列出异常
     public function actionError_un_do(){
+        $get = Yii::$app->request->get();
         $option = [];
-        if($this->role_id != 1){
-            $option['brand_id'] = $this->brand_id;
+
+        //限制区域
+        if($this->area_id != 0){
+            if($this->role_id == 5){//区域总监
+                $option['area_higher_id'] = $this->area_id;
+            }else if($this->role_id == 6){//大区经理
+                $option['area_id'] = $this->area_id;
+            }
         }
-        $res = (new Visit())->undo_error_users($option);
-        $data['list'] = $res['list'];
-        $data['pages'] = $res['pages'];
+        //限制品牌
+        $option['brand_id'] = $this->brand_id;
 
-        $data['brands'] = (new Brand())->search();
-        $data['areas'] = (new Area())->get_lower(0);
 
-        $data['groups'] = [];
-        if($this->role_id != 1){
-            $data['groups'] = (new Medical_group())->find()->where(['brand_id'=>$this->brand_id])->asArray()->all();
+        //搜索
+        if(isset($get['search']) && $get['search']){
+            $option['search'] = $get['search'];
+        }
+        //筛选出团
+        if(isset($get['medical_group_id']) && $get['medical_group_id']){
+            $option['medical_group_id'] = $get['medical_group_id'];
         }
 
+        //筛选区域
+        if(isset($get['area_id']) && $get['area_id']){
+            if($this->role_id != 6){//大区经理
+                $option['area_id'] = $get['area_id'];
+            }
+        }
+        //筛选上级区域
+        if(isset($get['area_higher_id']) && $get['area_higher_id']){
+            $option['area_higher_id'] = $get['area_higher_id'];
 
-        return $this->render("error_un_do",$data);
+        }
+    
+    
+        $res = (new Visit())->undo_error_users($option,false);
+        $data['mgu'] = $res['list'];
+        
+        /**
+         * 获取出团列表
+         */
+        $group_mui = (new Medical_group())->getGroupsMui($this->brand_id);
+        $data['medical_groups'] = json_encode($group_mui);
+
+        /**
+         * 获取区域列表
+         */
+        $area_mui = (new Area())->getAreaMui($this->role_id,$this->area_id);
+        $data['areas'] = json_encode($area_mui);
+
+
+        return $this->renderPartial("error_un_do",$data);
     }
+
+    
 
     //处理问题（对接人员处理问题）
     public function actionError_do(){
@@ -384,8 +423,19 @@ class VisitController extends CommonController
 
         $data['detail'] = (new Visit())->detail($visit_id);
 
+        $data['visit_notes']  = [];
+        if(isset($data['detail']['mgu_id']) && $data['detail']['mgu_id']){
+            $option['mgu_id'] = $data['detail']['mgu_id'];
 
-        return $this->render("error_do",$data);
+            //大区经理的权限范围
+            if($this->role_id !=2 && $this->role_id !=3){
+                $option['user_view'] = 1;
+            }
+
+            $data['visit_notes'] = (new Note())->search($option);
+        }
+
+        return $this->renderPartial("error_do",$data);
     }
 
 

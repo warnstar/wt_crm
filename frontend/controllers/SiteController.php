@@ -118,7 +118,7 @@ class SiteController extends Controller
                         $this->redirect(yii\helpers\Url::toRoute("visit/un_visit_list"));
                     }else if($worker->role_id == 3){
                         //对接人员
-                        echo "暂时未做";exit;
+                        $this->redirect(yii\helpers\Url::toRoute("visit/error_un_do"));
                     }else{
                         //大区经理
                         $this->redirect(yii\helpers\Url::toRoute("users/search"));
@@ -247,7 +247,7 @@ class SiteController extends Controller
                 $msg['url'] = Url::toRoute("visit/un_visit_list");
             }else if($worker->role_id == 3){
                 //对接人员
-                echo "暂时未做";exit;
+                $msg['url'] = Url::toRoute("visit/error_un_do");
             }else{
                 //大区经理
                 $msg['url'] = Url::toRoute("users/search");

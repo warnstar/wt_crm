@@ -223,7 +223,7 @@
 		<?php endif;?>
 
 		<?php if($role_id == 3):?>
-			<a class="mui-tab-item1" href="<?=\yii\helpers\Url::toRoute("visit/un_visit_list")?>">
+			<a class="mui-tab-item1" href="<?=\yii\helpers\Url::toRoute("visit/error_un_do")?>">
 				<span class="mui-icon mui-icon-bars"></span>
 				<span class="mui-tab-label">待处理</span>
 			</a>

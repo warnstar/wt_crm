@@ -51,15 +51,21 @@ class Visit extends \yii\db\ActiveRecord
             'error_content'=>'Error_content'
         ];
     }
-    public function search($option = null){
+    public function search($option = null,$page = true){
         $query = $this->find();
 
         $select = [
             'visit.*',
-            'brand_id'  =>'b.id',
-            'brand_name'=>'b.name',
-            'user_name'=>'users.name',
-            'user_passport'=>'users.passport',
+            'brand_id'      =>  'b.id',
+            'brand_name'    =>  'b.name',
+            'user_name'     =>  'users.name',
+            'user_passport' =>  'users.passport',
+            'user_sex'      =>  'users.sex',
+
+            'start_time'    =>  'mgu.start_time',
+            'end_time'      =>  'mgu.end_time',
+            'area_name'     =>  'a.name',
+
             'worker_name'=>'w.name'
         ];
         $query->select($select);
@@ -127,22 +133,31 @@ class Visit extends \yii\db\ActiveRecord
             ->leftJoin(['users'],'mgu.user_id=users.id')
             ->leftJoin(['w'=>'worker'],'visit.worker_id=w.id')
             ->leftJoin(['mg'=>'medical_group'],'mgu.medical_group_id=mg.id')
+            ->leftJoin(['a'=>'area'],'users.area_id=a.id')
             ->leftJoin(['b'=>'brand'],'mg.brand_id=b.id');
 
         $query->orderBy("visit.create_time DESC");
 
-        $pages = new Pagination([
-            'totalCount' => $query->count(),
-            'pageSize'  => 9,
-        ]);
-        $query->offset($pages->offset)
-            ->limit($pages->limit);
+        /**
+         * 是否进行分页
+         */
+        if($page){
+            $pages = new Pagination([
+                'totalCount'    => $query->count(),
+                'pageSize'      => 9,
+            ]);
+            $query->offset($pages->offset)
+                ->limit($pages->limit);
 
 
-        $list = $query->asArray()->all();
+            $list = $query->asArray()->all();
 
-        $data['list'] = $list;
-        $data['pages'] = $pages;
+            $data['list'] = $list;
+            $data['pages'] = $pages;
+        }else{
+
+            $data['list'] = $query->asArray()->all();
+        }
         return $data;
     }
 
@@ -158,12 +173,12 @@ class Visit extends \yii\db\ActiveRecord
     }
 
     //待处理客户
-    public function undo_error_users($option = null){
+    public function undo_error_users($option = null,$page = true){
 
         $option['undo_error'] = true;
 
 
-        $data = $this->search($option);
+        $data = $this->search($option,$page);
 
         return $data;
     }
@@ -197,6 +212,7 @@ class Visit extends \yii\db\ActiveRecord
 
             'brand_id'  =>'b.id',
             'brand_name'=>'b.name',
+            'brand_attention'=>'b.attention',
 
             'user_id'       =>'u.id',
             'user_name'     =>'u.name',
@@ -209,6 +225,8 @@ class Visit extends \yii\db\ActiveRecord
 
             'start_time_mgu'    =>  'mgu.start_time',
             'end_time_mgu'      =>  'mgu.end_time',
+            
+            'group_name'        =>  'mg.name',
 
             'worker_name'=>'w.name'
         ];
