@@ -52,6 +52,7 @@ class UsersController extends CommonController
 				if($mgu_id){
 					$data['user'] = (new Medical_group_user())->detail($mgu_id);
 
+					$data['visit_notes'] = [];
 					if($user['last_mgu']){
 						$option['mgu_id'] = $mgu_id;
 						$option['user_view'] = 1;
@@ -62,6 +63,7 @@ class UsersController extends CommonController
 				}else{
 					$data['user'] = $user;
 
+					$data['visit_notes'] = [];
 					if($user['last_mgu']){
 						$option['mgu_id'] = $user['last_mgu'];
 						$option['user_view'] = 1;
@@ -118,6 +120,7 @@ class UsersController extends CommonController
 				if($mgu_id){
 					$data['user'] = (new Medical_group_user())->detail($mgu_id);
 
+					$data['visit_notes'] = [];
 					if($user['last_mgu']){
 						$option['mgu_id'] = $mgu_id;
 						//大区经理的权限范围
@@ -131,6 +134,7 @@ class UsersController extends CommonController
 				}else{
 					$data['user'] = $user;
 
+					$data['visit_notes'] = [];
 					if($user['last_mgu']){
 						$option['mgu_id'] = $user['last_mgu'];
 						//大区经理的权限范围
@@ -139,6 +143,7 @@ class UsersController extends CommonController
 						}
 						$data['visit_notes'] = (new Note())->search($option);
 					}
+
 					return $this->renderPartial("users_detail",$data);
 				}
 
@@ -210,7 +215,58 @@ class UsersController extends CommonController
 
 		return $this->renderPartial("users_list",$data);
 	}
+
+	public function actionAdd(){
+		/**
+		 * 获取区域列表
+		 */
+		$area_mui = (new Area())->getAreaMui($this->role_id,$this->area_id);
+		$data['areas'] = json_encode($area_mui);
+
+
+		return $this->renderPartial("users_add",$data);
+	}
+
+	public function actionSave(){
+		$post = Yii::$app->request->post();
+		$user = new Users();
+
+
+		if(isset($post['id']) && $post['id']){
+			$user = (new Users())->findOne($post['id']);
+		}
+		$user->name = isset($post['name']) ? $post['name'] : null;
+		$user->sex = isset($post['sex']) ? $post['sex'] : null;
+		$user->birth = isset($post['birth']) ? strtotime($post['birth']) : null;
+		$user->birth_day = date("md",$user->birth);
+		$user->phone = isset($post['phone']) ? $post['phone'] : null;
+		$user->passport = isset($post['passport']) ? $post['passport'] : null;
+		$user->area_id = isset($post['area_id']) ? $post['area_id'] : null;
+		$user->cases_code = isset($post['cases_code']) ? $post['cases_code'] : null;
+
+		//创建的时候
+		if(!$user->id){
+            if($this->role_id != 1){
+                $user->brand_id = $this->brand_id;
+            }
+			$user->create_time = time();
+		}
+		$msg['status'] = 0;
+
+		if($user->exist()){
+			$msg['error'] = "护照号和病历号不能重复！";
+		}else{
+
+			if($user->save()){
+				$msg['status'] = 1;
+			}else{
+				$msg['error'] = "操作失败！";
+			}
+		}
+
+		return json_encode($msg);
+	}
 	public function actionTest(){
-		 \Thread::getCurrentThread();
+
 	}
 }

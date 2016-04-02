@@ -153,6 +153,7 @@
 		</div>
 	</form>
 	<a id='login' href="#" class="mui-btn mui-btn-block mui-btn-primary search_click">搜索</a>
+	<a id='login' href="<?=\yii\helpers\Url::toRoute("users/add")?>" class="mui-btn mui-btn-block mui-btn-primary">添加客户</a>
 </div>
 </body>
 <script src="js/jquery-2.2.2.min.js"></script>

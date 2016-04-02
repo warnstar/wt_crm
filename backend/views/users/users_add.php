@@ -231,7 +231,7 @@
 			area_id     :   $(".area_lower_data").val()
 		};
 
-		console.log(data);
+		
 		$.post(url,data,function(msg){
 			if(msg.status){
 				alert("操作成功！");
