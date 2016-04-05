@@ -86,7 +86,7 @@ $privilege = Yii::$app->session->get("worker");
 							</tbody>
 						</table>
 						<div class="pages" style="width:80%;margin:0 auto;text-align: center;">
-							<?php $pages->route = "visit/error_un_do_ajax";?>
+							<?php $pages->route = "group/list_ajax";?>
 							<?=
 							\yii\widgets\LinkPager::widget([
 									'pagination' => $pages,
