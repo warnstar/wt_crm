@@ -33,14 +33,14 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label">品牌介绍</label>
                         <div class="col-sm-10">
-                            <textarea maxlength="200" type="text" class="form-control desc_data" style="height:68px;" name="desc"></textarea>
+                            <textarea maxlength="500" type="text" class="form-control desc_data" style="height:68px;" name="desc"></textarea>
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">注意事项</label>
                         <div class="col-sm-10">
-                            <textarea maxlength="200" type="text" class="form-control attention_data" name="notice" style="height:68px;"></textarea>
+                            <textarea maxlength="500" type="text" class="form-control attention_data" name="notice" style="height:68px;"></textarea>
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>
