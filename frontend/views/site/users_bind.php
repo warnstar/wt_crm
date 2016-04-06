@@ -95,6 +95,8 @@
 		}
 		.logo{
 			margin-top: 50px;
+			height:130px;
+			back
 		}
 	</style>
 </head>
