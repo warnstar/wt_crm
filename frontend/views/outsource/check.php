@@ -136,11 +136,7 @@
 			_csrf   :   "<?=Yii::$app->request->csrfToken?>"
 		};
 
-		//loading 遮罩
-		var mask = mui.createMask(function(){return false;});//callback为用户点击蒙版时自动执行的回调；
-		my_show(mask);
 		$.post(url,data,function(msg){
-			my_close();
 			console.log(msg);
 			if(msg.status){
 				location.href = msg.url;
