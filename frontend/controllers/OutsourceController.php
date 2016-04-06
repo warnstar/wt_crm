@@ -6,6 +6,7 @@ use common\models\Note;
 use common\models\Users;
 use yii;
 use yii\web\Controller;
+use yii\helpers\Url;
 /**
  * Site controller
  */
@@ -31,7 +32,29 @@ class OutsourceController extends Controller
         return $this->renderPartial("check");
     }
 
+    public function actionCheck_save(){
 
+        $user_name = Yii::$app->request->post('name');
+        $passport = Yii::$app->request->post('passport');
+
+        $msg['status'] = 0;
+        if($user_name && $passport){
+            $users = (new Users())->find()->where(['name'=>$user_name,'passport'=>$passport])->one();
+            if($users){
+                $msg['status'] = 1;
+                $msg['url'] = Url::toRoute("outsource/detail");
+                Yii::$app->session->set("user_id",$users->id);
+            }else{
+                $msg['error'] = "客户不存在！";
+            }
+        }else{
+            $msg['error'] = "姓名或护照号不能为空！";
+        }
+
+        return json_encode($msg);
+    }
+
+    
     public function actionMgu_list(){
         $session = Yii::$app->session;
         $session->open();
@@ -42,15 +65,18 @@ class OutsourceController extends Controller
             $option['user_id'] = $user_id;
             $groups = (new Medical_group_user())->search($option,false);
             $data['groups'] = $groups['list'];
-            return $this->renderPartial("outsource/mgu_list",$data);
+            return $this->renderPartial("mgu_list",$data);
         }else{
-            return "无权限";
+            return $this->redirect(Url::toRoute("outsource/index"));
         }
     }
 
     public function actionDetail(){
-        
-        $user_id = 14;
+
+        $session = Yii::$app->session;
+        $session->open();
+
+        $user_id = $session->get("user_id");
 
         if($user_id){
             $user = (new Users())->detail($user_id);
@@ -67,7 +93,7 @@ class OutsourceController extends Controller
                         $data['visit_notes'] = (new Note())->search($option);
                     }
 
-                    return $this->renderPartial("outsource/users_detail_more",$data);
+                    return $this->renderPartial("users_detail_more",$data);
                 }else{
                     $data['user'] = $user;
 
@@ -77,14 +103,14 @@ class OutsourceController extends Controller
                         $option['user_view'] = 1;
                         $data['visit_notes'] = (new Note())->search($option);
                     }
-                    return $this->renderPartial("outsource/users_detail",$data);
+                    return $this->renderPartial("users_detail",$data);
                 }
 
             }else{
-                return "用户不存在";
+                return $this->redirect(Url::toRoute("outsource/index"));
             }
         }else{
-            return "无权限";
+            return $this->redirect(Url::toRoute("outsource/index"));
         }
     }
 }

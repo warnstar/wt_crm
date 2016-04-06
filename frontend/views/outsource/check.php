@@ -115,7 +115,7 @@
 	</form>
 
 	<div class="mui-content-padded">
-		<button id='login' class="mui-btn mui-btn-block mui-btn-primary commit_click">登录</button>
+		<button id='login' class="mui-btn mui-btn-block mui-btn-primary commit_click">搜索</button>
 
 	</div>
 	<div class="mui-content-padded oauth-area">
@@ -129,7 +129,7 @@
 
 <script>
 	$("body").on("click",".commit_click",function(){
-		var url = "<?=\yii\helpers\Url::toRoute("outsource/users_detail")?>";
+		var url = "<?=\yii\helpers\Url::toRoute("outsource/check_save")?>";
 		var data = {
 			passport :   $(".passport_data").val(),
 			name    :   $(".name_data").val(),
@@ -141,6 +141,7 @@
 		my_show(mask);
 		$.post(url,data,function(msg){
 			my_close();
+			console.log(msg);
 			if(msg.status){
 				location.href = msg.url;
 			}else{
