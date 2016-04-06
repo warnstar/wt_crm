@@ -153,7 +153,11 @@
 		</div>
 	</form>
 	<a id='login' href="#" class="mui-btn mui-btn-block mui-btn-primary search_click">搜索</a>
+
+	<!----大区经理不能添加客户--->
+	<?php if($role_id == 2 || $role_id == 3):?>
 	<a id='login' href="<?=\yii\helpers\Url::toRoute("users/add")?>" class="mui-btn mui-btn-block mui-btn-primary">添加客户</a>
+	<?php endif;?>
 </div>
 </body>
 <script src="js/jquery-2.2.2.min.js"></script>

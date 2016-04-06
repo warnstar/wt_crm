@@ -290,7 +290,7 @@
 
 </div>
 <div class="mui-content-padded beizhu-b">
-	<a type="button" href="<?=\yii\helpers\Url::toRoute("users/mgu_list_worker") . "&user_id=" . $user['user_id']?>" class="mui-btn mui-btn-primary mui-btn-outlined">
+	<a type="button" href="<?=\yii\helpers\Url::toRoute("outsource/mgu_list")?>" class="mui-btn mui-btn-primary mui-btn-outlined">
 		查看健康足迹
 	</a>
 </div>

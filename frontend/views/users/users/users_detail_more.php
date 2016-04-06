@@ -228,10 +228,7 @@
 			<a>HN<span class="mui-pull-right"><?=$user['cases_code']?></span></a>
 		</li>
 		<li class="mui-table-view-cell">
-			<a>疗程名称<span class="mui-pull-right"><?=$user['group_name']?></span></a>
-		</li>
-		<li class="mui-table-view-cell">
-			<a>状态<span class="mui-pull-right">
+			<a>疗程状态<span class="mui-pull-right">
 					<?php
 					if(!$user['last_mgu'])
 						echo "无疗程";

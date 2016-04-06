@@ -258,7 +258,7 @@ class SiteController extends Controller
         return json_encode($msg);
     }
 
-
+    
     public function actionTest(){
         
     }

@@ -32,7 +32,8 @@ class Brand extends \yii\db\ActiveRecord
         return [
             [['name'], 'required'],
             [['manager_id', 'create_time'], 'integer'],
-            [['name', 'desc', 'attention'], 'string', 'max' => 255]
+            [['desc', 'attention'], 'string', 'max' => 1024],
+            [['name'], 'string', 'max' => 255]
         ];
     }
 
