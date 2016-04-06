@@ -43,7 +43,7 @@ class OutsourceController extends Controller
             if($users){
                 $msg['status'] = 1;
                 $msg['url'] = Url::toRoute("outsource/detail");
-                Yii::$app->session->set("user_id",$users->id);
+                Yii::$app->session->set("outsource_user_id",$users->id);
             }else{
                 $msg['error'] = "客户不存在！";
             }
@@ -54,12 +54,12 @@ class OutsourceController extends Controller
         return json_encode($msg);
     }
 
-    
+
     public function actionMgu_list(){
         $session = Yii::$app->session;
         $session->open();
 
-        $user_id = $session->get("user_id");
+        $user_id = $session->get("outsource_user_id");
 
         if($user_id){
             $option['user_id'] = $user_id;
@@ -76,7 +76,7 @@ class OutsourceController extends Controller
         $session = Yii::$app->session;
         $session->open();
 
-        $user_id = $session->get("user_id");
+        $user_id = $session->get("outsource_user_id");
 
         if($user_id){
             $user = (new Users())->detail($user_id);
