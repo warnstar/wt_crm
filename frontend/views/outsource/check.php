@@ -106,11 +106,11 @@
 	<form id='login-form' class="mui-input-group">
 		<div class="mui-input-row">
 			<label>护照号</label>
-			<input id='passport' type="text" class="mui-input-clear mui-input passport_data" placeholder="请输入账号">
+			<input id='passport' type="text" class="mui-input-clear mui-input passport_data" placeholder="请输入护照号">
 		</div>
 		<div class="mui-input-row">
 			<label>姓名</label>
-			<input id='name' type="text" class="mui-input-clear mui-input name_data" placeholder="请输入账号">
+			<input id='name' type="text" class="mui-input-clear mui-input name_data" placeholder="请输入姓名">
 		</div>
 	</form>
 
