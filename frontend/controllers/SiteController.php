@@ -157,11 +157,13 @@ class SiteController extends Controller
     public function actionUsers_bind_save(){
         $post = Yii::$app->request->post();
 
-        $passport = isset($post['passport']) ? $post['passport'] : null;
-        $name = isset($post['name']) ? $post['name'] : null;
+        $cases_code = Yii::$app->request->post('cases_code');
+        $birth = Yii::$app->request->post('birth');
 
         //验证用户是否存在
-        $user = (new Users())->find()->where(['passport'=>$passport,'name'=>$name])->one();
+        $birth = strtotime($birth);
+        $user = (new Users())->find()->where(['cases_code'=>$cases_code,'birth'=>$birth])->one();
+
         $msg['status'] = 0;
         if($user){
             //进行绑定

@@ -107,12 +107,12 @@
 <div class="mui-content">
 	<form id='login-form' class="mui-input-group">
 		<div class="mui-input-row">
-			<label>护照号</label>
-			<input id='passport' type="text" class="mui-input-clear mui-input passport_data" placeholder="请输入账号">
+			<label>HN</label>
+			<input id='passport' type="text" class="mui-input-clear mui-input cases_data" placeholder="请输入病历号号">
 		</div>
 		<div class="mui-input-row">
-			<label>姓名</label>
-			<input id='name' type="text" class="mui-input-clear mui-input name_data" placeholder="请输入账号">
+			<label>生日</label>
+			<input id='name' type="text" class="mui-input-clear mui-input birth_data" placeholder="请输入出生日期(19910305)">
 		</div>
 	</form>
 
@@ -133,8 +133,8 @@
 	$("body").on("click",".commit_click",function(){
 		var url = "<?=\yii\helpers\Url::toRoute("site/users_bind_save")?>";
 		var data = {
-			passport :   $(".passport_data").val(),
-			name    :   $(".name_data").val()
+			cases_code :   $(".cases_data").val(),
+			birth    :   $(".birth_data").val()
 		};
 
 		//loading 遮罩

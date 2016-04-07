@@ -35,12 +35,14 @@ class OutsourceController extends Controller
 
     public function actionCheck_save(){
 
-        $user_name = Yii::$app->request->post('name');
-        $passport = Yii::$app->request->post('passport');
+        $cases_code = Yii::$app->request->post('cases_code');
+        $birth = Yii::$app->request->post('birth');
 
         $msg['status'] = 0;
-        if($user_name && $passport){
-            $users = (new Users())->find()->where(['name'=>$user_name,'passport'=>$passport])->one();
+        if($cases_code && $birth){
+            $birth = strtotime($birth);
+            $users = (new Users())->find()->where(['cases_code'=>$cases_code,'birth'=>$birth])->one();
+
             if($users){
                 $msg['status'] = 1;
                 $msg['url'] = Url::toRoute("outsource/detail");
