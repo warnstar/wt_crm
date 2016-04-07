@@ -53,6 +53,8 @@ class UsersController extends CommonController
 					$data['user'] = (new Medical_group_user())->detail($mgu_id);
 
 					$data['visit_notes'] = [];
+
+					$data['mgu_id'] = 0;
 					if($user['last_mgu']){
 						$option['mgu_id'] = $mgu_id;
 						$option['user_view'] = 1;
@@ -62,6 +64,7 @@ class UsersController extends CommonController
 					return $this->renderPartial("users/users_detail_more",$data);
 				}else{
 					$data['user'] = $user;
+					$data['mgu_id'] = 0;
 
 					$data['visit_notes'] = [];
 					if($user['last_mgu']){
@@ -135,10 +138,11 @@ class UsersController extends CommonController
 				}else{
 					$data['user'] = $user;
 
-					$data['mgu_id'] = $mgu_id;
+					$data['mgu_id'] = 0;
 					$data['visit_notes'] = [];
 					if($user['last_mgu']){
 						$option['mgu_id'] = $user['last_mgu'];
+						$data['mgu_id'] = $option['mgu_id'];
 						//大区经理的权限范围
 						if($this->role_id !=2 && $this->role_id !=3){
 							$option['user_view'] = 1;
