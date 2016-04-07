@@ -59,7 +59,7 @@ class VisitController extends CommonController
         $option['visit_id'] = $id;
         $data['visit_notes'] = (new Note())->search($option);
 
-
+        
         return $this->render("visit_detail",$data);
     }
 

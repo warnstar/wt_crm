@@ -43,12 +43,10 @@ class VisitController extends CommonController
             $option['mgu_id'] = $get['mgu_id'];
         }
 
-        $visits = (new Visit())->search($option);
+        $res = (new Visit())->search($option,false);
+        $data['list'] = $res['list'];
 
-        $data['visits'] = $visits['list'];
-        $data['pages'] = $visits['pages'];
-
-        return $this->render("visit_list",$data);
+        return $this->renderPartial("visit_list",$data);
     }
 
     //回访详情
@@ -62,9 +60,8 @@ class VisitController extends CommonController
             $option['user_view'] = 1;
         }
         $data['visit_notes'] = (new Note())->search($option);
-
-
-        return $this->render("visit_detail",$data);
+        
+        return $this->renderPartial("visit_detail",$data);
     }
 
     //待回访列表
@@ -120,7 +117,6 @@ class VisitController extends CommonController
          */
         $area_mui = (new Area())->getAreaMui($this->role_id,$this->area_id);
         $data['areas'] = json_encode($area_mui);
-
 
         return $this->renderPartial("un_visit_list",$data);
     }

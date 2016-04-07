@@ -120,6 +120,7 @@ class UsersController extends CommonController
 				if($mgu_id){
 					$data['user'] = (new Medical_group_user())->detail($mgu_id);
 
+					$data['mgu_id'] = $mgu_id;
 					$data['visit_notes'] = [];
 					if($user['last_mgu']){
 						$option['mgu_id'] = $mgu_id;
@@ -134,6 +135,7 @@ class UsersController extends CommonController
 				}else{
 					$data['user'] = $user;
 
+					$data['mgu_id'] = $mgu_id;
 					$data['visit_notes'] = [];
 					if($user['last_mgu']){
 						$option['mgu_id'] = $user['last_mgu'];

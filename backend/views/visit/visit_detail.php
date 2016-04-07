@@ -73,7 +73,7 @@
 						<label class="col-sm-2 control-label">回访状态</label>
 
 						<div class="col-sm-10">
-							<input type="text" disabled class="form-control" value="<?=$visit['type'] == 1 ? "正常" : "异常"?> " name="passport" >
+							<input type="text" disabled class="form-control" value="<?=$visit['type'] == 1 ? "正常" : "异常"?>" name="passport" >
 						</div>
 					</div>
 
