@@ -4,6 +4,7 @@ namespace frontend\controllers;
 use common\models\Medical_group_user;
 use common\models\Note;
 use common\models\Users;
+use common\models\Visit;
 use yii;
 use yii\web\Controller;
 use yii\helpers\Url;
@@ -86,6 +87,7 @@ class OutsourceController extends Controller
                 if($mgu_id){
                     $data['user'] = (new Medical_group_user())->detail($mgu_id);
 
+                    $data['mgu_id'] = $mgu_id;
                     $data['visit_notes'] = [];
                     if($user['last_mgu']){
                         $option['mgu_id'] = $mgu_id;
@@ -112,5 +114,35 @@ class OutsourceController extends Controller
         }else{
             return $this->redirect(Url::toRoute("outsource/index"));
         }
+    }
+
+    //回访列表
+    public function  actionVisit_list(){
+        $get = Yii::$app->request->get();
+        $option = [];
+
+        if(isset($get['mgu_id']) && $get['mgu_id']){
+            $option['mgu_id'] = $get['mgu_id'];
+        }
+
+        $res = (new Visit())->search($option,false);
+        $data['list'] = $res['list'];
+
+        return $this->renderPartial("visit_list",$data);
+    }
+
+    //回访详情
+    public function actionVisit_detail(){
+        $id = Yii::$app->request->get("id");
+        $data['visit'] = (new Visit())->detail($id);
+
+        $option['visit_id'] = $id;
+        //大区经理的权限范围
+
+        $option['user_view'] = 1;
+
+        $data['visit_notes'] = (new Note())->search($option);
+
+        return $this->renderPartial("visit_detail",$data);
     }
 }

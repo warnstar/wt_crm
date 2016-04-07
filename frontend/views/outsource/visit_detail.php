@@ -1,19 +1,10 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: wchuang
- * Date: 2016/3/28
- * Time: 14:55
- */
-?>
-
 <!DOCTYPE html>
 <html>
 
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-	<title>详情</title>
+	<title>疗程信息</title>
 	<script src="js/mui.min.js"></script>
 	<link href="css/mui.min.css" rel="stylesheet" />
 	<script type="text/javascript" charset="UTF-8">
@@ -204,11 +195,11 @@
 	.beizhu-b a{
 		margin: 0 auto;
 		display: block;
-		width:40%;
 	}
 	#foot{
 		margin-bottom: 30px;
 	}
+
 </style>
 
 <body>
@@ -216,66 +207,56 @@
 	<ul class="mui-table-view">
 
 		<li class="mui-table-view-cell">
-			<a>姓名<span class="mui-pull-right"><?=$user['name']?></span></a>
+			<a>回访时间<span class="mui-pull-right"><?=date("Y-m-d H:m:s",$visit['create_time'])?></span></a>
 		</li>
 		<li class="mui-table-view-cell">
-			<a>年龄<span class="mui-pull-right"><?=date("Y",time())-date("Y",$user['birth'])?></span></a>
+			<a>客户姓名<span class="mui-pull-right"><?=$visit['user_name']?></span></a>
 		</li>
 		<li class="mui-table-view-cell">
-			<a>性別<span class="mui-pull-right"><?=$user['sex'] == 1 ? "男" : "女"?></span></a>
+			<a>HN<span class="mui-pull-right"><?=$visit['user_passport']?></span></a>
 		</li>
 		<li class="mui-table-view-cell">
-			<a>HN<span class="mui-pull-right"><?=$user['cases_code']?></span></a>
-		</li>
-		<li class="mui-table-view-cell">
-			<a>疗程状态<span class="mui-pull-right">
+			<a>回访状态<span class="mui-pull-right">
 					<?php
-						if(!$user['last_mgu'])
-							echo "无疗程";
-						else if($user['start_time_mgu'] > time())
-							echo "未开始";
-						else if($user['end_time_mgu'] < time()){
-							echo "已结束";
-						}else{
-							echo "进行中";
-						}
+					if($visit['type'] == 1)
+						echo "正常";
+					else
+						echo "异常";
 					?>
-			</span></a>
+				</span></a>
 		</li>
 		<li class="mui-table-view-cell">
-			<p class="beizhu-p">注意事项</p>
-			<span class="mui-pull-left beizhu"><?=$user['brand_attention']?></span>
+			<a>已通知<span class="mui-pull-right"><?=$visit['notify_user']?></span></a>
 		</li>
+
 	</ul>
-
-
 	<?php if($visit_notes) foreach($visit_notes as $v):?>
-	<ul class="mui-table-view">
-		<?php if($v['content_type'] == 2):?>
-		<li class="mui-table-view-cell">
-			<p  class="beizhu-p"><?=$v['type_name'] ? $v['type_name'] : "异常备注"?></p>
+		<ul class="mui-table-view">
+			<?php if($v['content_type'] == 2):?>
+				<li class="mui-table-view-cell">
+					<p  class="beizhu-p"><?=$v['type_name'] ? $v['type_name'] : "异常备注"?></p>
 				<span class=" head mui-pull-left beizhu">
 					<?php $content = json_decode($v['content']);?>
 
 					<?php if($content) foreach($content as $img):?>
 
-					<img class="head-img mui-action-preview" id="head-img1" src="<?=isset($img->url_object) ? (\common\lib\oss\Oss::IMG_OPTION_ADDR . urlencode($img->url_object) . "@640w") : ""?>"/>
+						<img class="head-img mui-action-preview" id="head-img1" src="<?=isset($img->url_object) ? (\common\lib\oss\Oss::IMG_OPTION_ADDR . urlencode($img->url_object) . "@640w") : ""?>"/>
 					<?php endforeach;?>
 				</span>
-		</li>
-		<?php endif;?>
+				</li>
+			<?php endif;?>
 
-		<?php if($v['content_type'] == 1):?>
-		<li class="mui-table-view-cell">
-			<p class="beizhu-p"><?=$v['type_name'] ? $v['type_name'] : "异常备注"?></p>
-			<span class="mui-pull-left beizhu"><?=$v['content']?></span>
+			<?php if($v['content_type'] == 1):?>
+				<li class="mui-table-view-cell">
+					<p class="beizhu-p"><?=$v['type_name'] ? $v['type_name'] : "异常备注"?></p>
+					<span class="mui-pull-left beizhu"><?=$v['content']?></span>
 
-		</li>
-		<?php endif;?>
+				</li>
+			<?php endif;?>
 
-		<?php if($v['content_type'] == 3):?>
-		<li class="mui-table-view-cell">
-			<p class="beizhu-p"><?=$v['type_name'] ? $v['type_name'] : "异常备注"?></p>
+			<?php if($v['content_type'] == 3):?>
+				<li class="mui-table-view-cell">
+					<p class="beizhu-p"><?=$v['type_name'] ? $v['type_name'] : "异常备注"?></p>
 				<span class="mui-pull-left beizhu">
 					<?php $content = json_decode($v['content']);?>
 
@@ -283,15 +264,14 @@
 						<a href="<?=isset($file->url) ? $file->url : ""?>"><?=isset($file->name) ? $file->name : "文件"?></a>
 					<?php endforeach;?>
 				</span>
-		</li>
-		<?php endif;?>
-	</ul>
+				</li>
+			<?php endif;?>
+		</ul>
 	<?php endforeach;?>
-
 </div>
 <div class="mui-content-padded beizhu-b">
-	<a type="button" href="<?=\yii\helpers\Url::toRoute("users/mgu_list")?>" class="mui-btn mui-btn-primary mui-btn-outlined">
-		查看健康足迹
+	<a href="javascript:history.go(-1)" class="mui-btn mui-btn-primary mui-btn-outlined">
+		返回
 	</a>
 </div>
 <div id="foot">
