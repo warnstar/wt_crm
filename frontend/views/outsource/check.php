@@ -111,7 +111,7 @@
 			<input id='passport' type="text" class="mui-input-clear mui-input cases_data" placeholder="请输入病历号">
 		</div>
 		<div class="mui-input-row">
-			<label>生日</label>
+			<label>出生日期</label>
 			<input id='name' type="text" class="mui-input-clear mui-input birth_data" placeholder="请输入出生日期(19910305)">
 		</div>
 	</form>
