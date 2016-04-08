@@ -163,7 +163,7 @@ class SiteController extends Controller
         //验证用户是否存在
         $birth = strtotime($birth);
         $user = (new Users())->find()->where(['cases_code'=>$cases_code,'birth'=>$birth])->one();
-
+        
         $msg['status'] = 0;
         if($user){
             //进行绑定

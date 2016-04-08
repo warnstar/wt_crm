@@ -139,7 +139,6 @@
 		};
 
 		$.post(url,data,function(msg){
-			console.log(msg);
 			if(msg.status){
 				location.href = msg.url;
 			}else{

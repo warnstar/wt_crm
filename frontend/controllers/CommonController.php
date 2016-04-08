@@ -48,6 +48,7 @@ class CommonController extends Controller {
         }else if($this->accessUser == "user"){
             //客户通道
             $user_id = $session->get("user_id");
+            
             if($user_id){
                 $this->user_id = $user_id;
                 return true;
