@@ -107,12 +107,12 @@
 <div class="mui-content">
 	<form id='login-form' class="mui-input-group">
 		<div class="mui-input-row">
-			<label>HN</label>
-			<input id='passport' type="text" class="mui-input-clear mui-input cases_data" placeholder="请输入病历号">
+			<label style="width: 35%">HN</label>
+			<input style="width: 65%" id='passport' type="text" class="mui-input-clear mui-input cases_data" placeholder="请输入病历号">
 		</div>
 		<div class="mui-input-row">
-			<label>出生日期</label>
-			<input id='name' type="text" class="mui-input-clear mui-input birth_data" placeholder="请输入出生日期(19910305)">
+			<label style="width: 35%">出生日期</label>
+			<input style="width: 65%" id='name' type="text" class="mui-input-clear mui-input birth_data" placeholder="出生日期(19910305)">
 		</div>
 	</form>
 
