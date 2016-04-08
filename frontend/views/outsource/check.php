@@ -108,7 +108,7 @@
 	<form id='login-form' class="mui-input-group">
 		<div class="mui-input-row">
 			<label>HN</label>
-			<input id='passport' type="text" class="mui-input-clear mui-input cases_data" placeholder="请输入病历号号">
+			<input id='passport' type="text" class="mui-input-clear mui-input cases_data" placeholder="请输入病历号">
 		</div>
 		<div class="mui-input-row">
 			<label>生日</label>
