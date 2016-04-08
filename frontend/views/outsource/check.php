@@ -112,7 +112,7 @@
 		</div>
 		<div class="mui-input-row">
 			<label style="width: 35%">出生日期</label>
-			<input style="width: 65%" id='name' type="text" class="mui-input-clear mui-input birth_data" placeholder="出生日期(19910305)">
+			<input style="width: 65%" id='name' type="text" class="mui-input-clear mui-input birth_data" placeholder="例：19910305">
 		</div>
 	</form>
 
