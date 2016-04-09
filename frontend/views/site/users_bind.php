@@ -88,8 +88,8 @@
 			border: solid 1px #aaa;
 		}
 		.logo img{
-			width: 100px;
-			height: 100px;
+			width: 100%;
+			/*height: 100px;*/
 			margin: 0 auto;
 			display: block;
 		}
