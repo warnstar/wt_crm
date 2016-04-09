@@ -41,8 +41,16 @@ class OutsourceController extends Controller
         $msg['status'] = 0;
         if($cases_code && $birth){
             $birth = strtotime($birth);
-            $users = (new Users())->find()->where(['cases_code'=>$cases_code,'birth'=>$birth])->one();
-
+            $users_all = (new Users())->find()->where(['cases_code'=>$cases_code])->all();
+            $users = null;
+            //因时间格式存在时分秒的错乱，需要格式化调整
+            if($users_all){
+                foreach ($users_all  as $v){
+                    if(date("Ymd",$v->birth) == date("Ymd",$birth)){
+                        $users = $v;
+                    }
+                }
+            }
             if($users){
                 $msg['status'] = 1;
                 $msg['url'] = Url::toRoute("outsource/detail");

@@ -163,20 +163,29 @@ class SiteController extends Controller
 
         //验证用户是否存在
         $birth = strtotime($birth);
-        $user = (new Users())->find()->where(['cases_code'=>$cases_code,'birth'=>$birth])->one();
+        $users_all = (new Users())->find()->where(['cases_code'=>$cases_code])->all();
+        $users = null;
+        //因时间格式存在时分秒的错乱，需要格式化调整
+        if($users_all){
+            foreach ($users_all  as $v){
+                if(date("Ymd",$v->birth) == date("Ymd",$birth)){
+                    $users = $v;
+                }
+            }
+        }
 
         $msg['status'] = 0;
-        if($user){
+        if($users){
             //进行绑定
             $session = Yii::$app->session;
             $session->open();
             $bind_extra_uid = $session->get("bind_extra_uid");
             if($bind_extra_uid){
-                $extra = (new UsersExtra())->createBind($bind_extra_uid,$user->id);
+                $extra = (new UsersExtra())->createBind($bind_extra_uid,$users->id);
                 if($extra){
                     //绑定成功
-                    $user->wechat = $session->get("bind_extra_wechat");
-                    $user->save();
+                    $users->wechat = $session->get("bind_extra_wechat");
+                    $users->save();
                 }else{
                     //绑定失败
                 }
@@ -188,7 +197,7 @@ class SiteController extends Controller
             //无论无何都是登陆成功
             $msg['status'] = 1;
             $msg['url'] = yii\helpers\Url::toRoute("users/detail");
-            $session->set("user_id",$user->id);
+            $session->set("user_id",$users->id);
         }else{
             $msg['error'] = "用户不存在,请联系客服！";
         }
