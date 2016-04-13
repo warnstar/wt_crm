@@ -170,7 +170,7 @@
 	}
 
 	#head-img1 {
-		float: right;
+		float: left;
 		width: 40px;
 		height: 40px;
 		margin-right: 2px;
@@ -193,6 +193,7 @@
 		position: static;
 	}
 	.beizhu{
+		width:100%;
 		padding: 0 8px;
 		font-size: 14px;
 	}
@@ -269,6 +270,7 @@
 						<img class="head-img mui-action-preview" id="head-img1" src="<?=isset($img->url_object) ? (\common\lib\oss\Oss::IMG_OPTION_ADDR . urlencode($img->url_object) . "@640w") : ""?>"/>
 					<?php endforeach;?>
 				</span>
+					<p style="font-size: 12px;"><span style="float: right;"><?=date("Y年m月d日 H:m:s",$v['create_time'])?></span></p>
 				</li>
 			<?php endif;?>
 
@@ -276,7 +278,7 @@
 				<li class="mui-table-view-cell">
 					<p class="beizhu-p"><?=$v['type_name'] ? $v['type_name'] : "异常备注"?></p>
 					<span class="mui-pull-left beizhu"><?=$v['content']?></span>
-
+					<p style="font-size: 12px;"><span style="float: right;"><?=date("Y年m月d日 H:m:s",$v['create_time'])?></span></p>
 				</li>
 			<?php endif;?>
 
@@ -290,6 +292,7 @@
 						<a href="<?=isset($file->url) ? $file->url : ""?>"><?=isset($file->name) ? $file->name : "文件"?></a>
 					<?php endforeach;?>
 				</span>
+					<p style="font-size: 12px;"><span style="float: right;"><?=date("Y年m月d日 H:m:s",$v['create_time'])?></span></p>
 				</li>
 			<?php endif;?>
 		</ul>
