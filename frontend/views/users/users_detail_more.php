@@ -297,7 +297,7 @@
 		查看健康足迹
 	</a>
 
-	<a href="<?=\yii\helpers\Url::toRoute("visit/visit_list") . "&mgu_id=" . $mgu_id?>"  type="button" class="mui-btn mui-btn-primary mui-btn-outlined">
+	<a style="margin-top: 10px;" href="<?=\yii\helpers\Url::toRoute("visit/visit_list") . "&mgu_id=" . $mgu_id?>"  type="button" class="mui-btn mui-btn-primary mui-btn-outlined">
 		回访记录
 	</a>
 </div>
