@@ -82,7 +82,7 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label">品牌</label>
 
-						<select style="width: 90px;float: left;" class="form-control m-b" name="brand">
+						<select style="width: 90px;float: left;" class="form-control m-b brand_data" name="brand">
 							<option value="0">品牌</option>
 							<?php if(isset($brands) && $brands) foreach($brands as $v):?>
 								<option value="<?=$v['id']?>"><?=$v['name']?></option>
@@ -231,7 +231,7 @@
 			area_id     :   $(".area_lower_data").val()
 		};
 
-		
+
 		$.post(url,data,function(msg){
 			if(msg.status){
 				alert("操作成功！");
