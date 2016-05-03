@@ -79,15 +79,14 @@ class Medical_group_user extends \yii\db\ActiveRecord
             //待访问客户
             if(isset($option['un_visit']) && $option['un_visit']){
                 //当前处于疗程
+                //或者未访问过
                 //当前时间（算今天结束后的时间）
                 $this_time = time();
-                $query->andWhere("medical_group_user.start_time <= $this_time && medical_group_user.end_time > $this_time");
+                $query->andWhere("medical_group_user.start_time <= $this_time && medical_group_user.end_time > $this_time OR medical_group_user.last_visit = 0");
 
-                //获取待访问的（当前时间小于要访问的时间）
+                //获取待访问的（当前时间大于要访问的时间）
                 $query->andWhere("medical_group_user.next_visit <= $this_time");
-
-                //未访问过，
-                $query->orWhere("medical_group_user.last_visit = 0");
+                
 
                 //不现实已经结束的
                 $query->andWhere("medical_group_user.end_time >= $this_time");
