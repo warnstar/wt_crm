@@ -84,8 +84,16 @@
 
 						<select style="width: 90px;float: left;" class="form-control m-b brand_data" name="brand">
 							<option value="0">品牌</option>
+							<?php
+							/**
+							 * 获取当前职员的品牌
+							 * 默认显示职员所属的品牌
+							 */
+								$worker_flag = (isset($_SESSION['worker']['role_id']) && $_SESSION['worker']['role_id'] != 1) ? true : false;
+								$default_brand_id  = ( $worker_flag && $_SESSION['worker']['brand_id'] ) ? $_SESSION['worker']['brand_id'] : 0;
+							?>
 							<?php if(isset($brands) && $brands) foreach($brands as $v):?>
-								<option value="<?=$v['id']?>"><?=$v['name']?></option>
+								<option <?=$default_brand_id == $v['id'] ? 'selected=true' : ''?> value="<?=$v['id']?>"><?=$v['name']?></option>
 							<?php endforeach;?>
 						</select>
 					</div>

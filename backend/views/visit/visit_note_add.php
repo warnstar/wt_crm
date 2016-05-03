@@ -58,7 +58,7 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label">选项</label>
 						<div class="col-sm-9">
-							<label class="radio-inline"><input class="user_view" type="checkbox">能否让用户查看</label>
+							<label class="radio-inline"><input class="user_view" type="checkbox">能让用户查看</label>
 						</div>
 					</div>
 
