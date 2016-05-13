@@ -11,8 +11,8 @@ namespace common\lib;
 
 class WeChatAuth
 {
-	private $AppID = "Am5pKSScsVRUWrK2";
-	private $AppSecret = "53MSvJwZr04qtDqjtFCZE0PCFDHWK0";
+	private $AppID = "wxfe2945cb27f0b393";
+	private $AppSecret = "7decd7d737c1121737428c28f75e8b66";
 	private $server_api = "http://wtfront.xlooit.com/index.php?r=site/get_user_info";
 
 
