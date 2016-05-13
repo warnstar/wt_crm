@@ -13,7 +13,7 @@ class WeChatAuth
 {
 	private $AppID = "Am5pKSScsVRUWrK2";
 	private $AppSecret = "53MSvJwZr04qtDqjtFCZE0PCFDHWK0";
-	private $server_api = "http://front.china-lifechoice.com/index.php?r=site/get_user_info";
+	private $server_api = "http://wtfront.xlooit.com/index.php?r=site/get_user_info";
 
 
 	public function UserAuthory(){
